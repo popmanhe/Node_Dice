@@ -172,7 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app" />
-    <Folder Include="app\api" />
     <Folder Include="app\helper" />
     <Folder Include="app\sockets\" />
     <Folder Include="app\templates" />
