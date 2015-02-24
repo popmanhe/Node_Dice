@@ -1,0 +1,471 @@
+/**
+==============================================================
+ * Sentir - Responsive admin & dashboard template
+ * Version 	1.1.0
+ * Release	June 03, 2014
+==============================================================
+**/
+
+
+
+/**
+=================================
+LARGE DESKTOP > 1200px
+=================================
+**/
+@media (min-width: 1200px) {
+
+}
+
+
+
+
+
+/**
+=================================
+STANDARD DESKTOP 992px <> 1200px
+=================================
+**/
+@media (min-width: 992px) and (max-width: 1199px) {
+	 
+	 
+}
+
+
+
+
+/**
+=================================
+TABLET < 1025px
+=================================
+**/
+@media (max-width: 1025px) {
+	/**
+	-------------------------------------------
+	MAIN LAYOUT
+	-------------------------------------------
+	**/
+	.sidebar-left,
+	.sidebar-right{
+		overflow-y: auto;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
+		-moz-overflow-scrolling: touch;
+		-o-overflow-scrolling: touch;
+		overflow-scrolling: touch;
+	}
+}
+
+
+
+
+
+/**
+=================================
+SMALL DESKTOP 768px <> 991px
+=================================
+**/
+@media (min-width: 768px) and (max-width: 1199px) {
+	/**
+	-------------------------------------------
+	MAIN LAYOUT
+	-------------------------------------------
+	**/
+	body{overflow-x: hidden;}
+	.wrapper{overflow-x: hidden;}
+	.top-navbar.toggle{
+		left: 250px;
+		right: -250px;
+	}
+	.sidebar-left{
+		left: -250px;
+		top: 0;
+	}
+	.sidebar-left.toggle{
+		left: 0px;
+	}
+	.icon-dinamic{
+		filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	.icon-dinamic.rotate-180{
+		filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+		-webkit-transform: rotate(180deg);
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+		transform: rotate(180deg);
+	}
+	.page-content{
+		margin-left: 0px;
+	}
+	.page-content.toggle{
+		margin-left: 250px;
+		margin-right: -250px;
+	}
+	.page-content.toggle-left{
+		margin-left: -250px;
+		margin-right: 250px;
+	}
+	
+ 
+}
+
+
+
+
+/**
+=================================
+TABLET < 800px
+=================================
+**/
+@media (max-width: 800px) {
+	/**
+	-------------------------------------------
+	MAIN LAYOUT
+	-------------------------------------------
+	**/
+	body{
+		padding-top: 120px;
+	}
+	.wrapper{overflow-x: hidden;}
+	.top-navbar{
+		height: auto;
+	}
+	.logo-brand {
+		width: 100%;
+		height: 60px;
+		position: relative;
+		padding-left: 10px;
+		text-align: left;
+	}
+	.top-nav-content{
+		margin-left: 0px;
+		height: 60px;
+	}
+	 
+	/**
+	-------------------------------------------
+	TOP MAIN NAVIGATION
+	-------------------------------------------
+	**/
+	body.top-navigation{
+		padding-top: 170px;
+	}
+	.top-main-navigation{
+		top: 120px;
+	}
+	.top-main-navigation.full-top{
+		top: 60px;
+	}
+
+}
+
+
+
+
+/**
+=================================
+TABLET < 767px
+=================================
+**/
+@media (max-width: 767px) {
+	/**
+	-------------------------------------------
+	MAIN LAYOUT
+	-------------------------------------------
+	**/
+	body{
+		padding-top: 120px;
+	}
+	.wrapper{overflow-x: hidden;}
+	.top-navbar{
+		height: auto;
+	}
+	.top-navbar.toggle{
+		left: 250px;
+		right: -250px;
+	}
+	.logo-brand {
+		width: 100%;
+		height: 60px;
+		position: relative;
+	}
+	.top-nav-content{
+		margin-left: 0px;
+		height: auto;
+		padding: 0;
+	}
+	.sidebar-left{
+		top: 0;
+		left: -250px;
+	}
+	.sidebar-right{
+		top: 60px;
+		right: -250px;
+		bottom: 0;
+		width: 250px;
+	}
+	.sidebar-left.toggle{
+		left: 0px;
+	}
+	.page-content{
+		margin-left: 0px;
+		left: 0;
+	}
+	.page-content.toggle{
+		left: 0;
+		margin-left: 250px;
+		margin-right: -250px;
+	}
+	.page-content.toggle-left{
+		margin-left: -250px;
+		margin-right: 250px;
+	}
+	.sidebar-right.toggle-left{
+		right: 0px;
+	}
+	.nav-dropdown-content{
+		height: auto;
+		max-width: 100%;
+	}
+	
+	.btn-collapse-sidebar-right{
+		top: -60px;
+	}
+	.btn-collapse-nav{
+		display: block;
+	}
+	.icon-dinamic{
+		filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	.icon-dinamic.rotate-180{
+		filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+		-webkit-transform: rotate(180deg);
+		-moz-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		-o-transform: rotate(180deg);
+		transform: rotate(180deg);
+	}
+	.icon-plus{
+		-webkit-transition:All 0.2 ease;
+		-moz-transition:All 0.2s ease;
+		-o-transition:All 0.2s ease;
+	}
+	.icon-plus.rotate-45{
+		filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+		-webkit-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		transform: rotate(45deg);
+	}
+	.top-nav-content .navbar-nav > li > a {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		height: auto;
+	}
+	
+	.top-nav-content .navbar-nav > li > a .icon-count {
+		top: 10px;
+		right: auto;
+		left: 40px;
+	}
+	ul.nav-user{
+		right: 0px;
+		left: 0px;
+		text-align: center;
+		position: relative;
+		margin-left: 50px;
+		margin-right: 50px;
+	}
+	ul.nav-user li.dropdown{
+		display: block;
+	}
+	ul.nav-user li.dropdown .dropdown-menu{
+		text-align: left;
+		left: 0;
+		right: 0;
+	}
+	ul.nav-user li.dropdown a.dropdown-toggle{
+		height: 60px;
+		max-width: 100%;
+	}
+	.navbar-collapse {
+	  max-height: 280px;
+	}
+	
+	/**
+	-------------------------------------------
+	MASONRY
+	-------------------------------------------
+	**/
+	.container-masonry ol{
+		-moz-column-count: 2;
+		-webkit-column-count: 2;
+		column-count: 2;
+	}
+	
+	
+	
+	 
+	 
+	
+	 
+	
+	
+	/**
+	-------------------------------------------
+	TOP MAIN NAVIGATION
+	-------------------------------------------
+	**/
+	body.top-navigation{
+		padding-top: 120px;
+	}
+	.top-main-navigation{
+		top: 120px;
+	}
+	.top-main-navigation .navbar{
+		min-height: 0px;
+	}
+	.btn-collapse-main-navigation{
+		display: block;
+	}
+	
+	
+	/**
+	-------------------------------------------
+	MEDIA LIBRARY
+	-------------------------------------------
+	**/
+	.media-menu ul.menus li.menu-item{
+		display: block;
+	}
+	.media-menu ul.menus li.menu-item a{
+		border-right: none;
+		border-bottom: 1px solid #F3F8FE;
+	}
+	
+}
+
+
+
+
+/**
+=================================
+PHONE < 640px
+=================================
+**/
+@media (max-width: 640px){
+
+}
+
+
+
+
+/**
+=================================
+PHONE < 600px
+=================================
+**/
+@media (max-width: 600px){
+
+ 
+}
+
+
+
+/**
+=================================
+PHONE < 548px
+=================================
+**/
+@media (max-width: 548px){
+
+	/**
+	-------------------------------------------
+	PRICING TABLE
+	-------------------------------------------
+	**/
+	.pricing-table-wrap{
+		margin: 40px 0;
+	}
+	.table-item{
+		width: 100%;
+		margin-bottom: 40px;
+		margin-top: 0;
+	}
+	.table-item.best-choice{
+		margin-left: 0;
+		margin-right: 0;
+		margin-top: 0px;
+		margin-bottom: 40px;
+	}
+	.table-item:first-child,
+	.table-item:last-child{
+		border-radius: 5px;
+	}
+}
+
+
+
+/**
+=================================
+PHONE < 480px
+=================================
+**/
+@media (max-width: 480px){
+	.login-header{
+		height: 140px;
+	}
+	.login-header .logo{
+		margin-top: 50px;
+	}
+	.login-wrapper{
+		max-width: 250px;
+		margin: 150px auto 0;
+	}
+	
+	/**
+	-------------------------------------------
+	MASONRY
+	-------------------------------------------
+	**/
+	.container-masonry ol{
+		-moz-column-count: 1;
+		-webkit-column-count: 1;
+		column-count: 1;
+	}
+}
+
+
+
+
+/**
+=================================
+PHONE < 360px
+=================================
+**/
+@media (max-width: 360px){
+
+}
+
+
+
+
+/**
+=================================
+PHONE < 320px
+=================================
+**/
+@media (max-width: 320px){
+}

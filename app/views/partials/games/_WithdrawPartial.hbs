@@ -1,0 +1,35 @@
+﻿<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">WITHDRAW</h3>
+        <div class="right-content">
+            <a class="btn btn-success btn-sm btn-rounded-lg" href="@Url.Action("Withdraw","Account")">
+                <i class="fa fa-cog"></i>
+            </a>
+            <button class="btn btn-success btn-rounded-lg to-collapse" data-toggle="collapse" data-target="#withdrawPanelBody"><i class="fa fa-chevron-up"></i></button>
+        </div>
+    </div>
+    <div class="panel-body" id="withdrawPanelBody">
+        <div class="form-group">
+            <label for="balance">Amount</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="dropdown-toggle hand" data-toggle="dropdown" data-bind="text: coinName"></span>
+                    <ul class="dropdown-menu square primary margin-list-rounded with-triangle">
+                        <li><a data-bind="click: switchCoins.bind($data,'BTC')">BTC</a></li>
+                        <li><a data-bind="click: switchCoins.bind($data,'NXT')">NXT</a></li>
+                    </ul> <span class="caret"></span>
+                </span>
+                <input type="text" data-bind="value: withdawalAmount" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address">Withdrawal Address</label>
+            <div class="input-group">
+                <span class="input-group-addon">@@</span>
+                <input type="text" data-bind="value: withdrawalAddress" class="form-control" />
+                <span class="input-group-addon hand glyphicon glyphicon-floppy-disk" title="Save withdrawal address" data-bind="click: saveWithdrawalAddress"><i></i></span>
+            </div>
+        </div>
+        <a class="btn btn-info" data-bind="click: withdraw">Withdraw</a>
+    </div>
+</div>

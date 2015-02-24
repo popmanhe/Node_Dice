@@ -1,0 +1,26 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-heading">
+        HEIGHT HISTORY(LAST 15)
+        <a class="btn btn-default btn-sm btn-rounded-lg pull-right" data-bind="click: refreshHeightHistory">
+            <i class="fa fa-refresh"></i>
+        </a>
+    </div>
+    <div class="panel-body">
+        <table class="table table-th-block table-hover">
+            <thead>
+                <tr>
+                    <th>Height</th>
+                    <th>Nonce</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: heightHistoryArray">
+                <tr>
+                    <td data-bind="text: h"></td>
+                    <td data-bind="text: n"></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="http://blockchain.info/" target="_blank" class="help-block">Check more block heights. <i class="fa fa-external-link"></i></a>
+    </div>
+</div>

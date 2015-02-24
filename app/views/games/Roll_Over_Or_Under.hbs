@@ -1,0 +1,35 @@
+﻿<div class="col-sm-12">
+    <h1 class="page-heading">Over or Under</h1>
+</div>
+
+<div class="col-sm-5 col-md-4 col-lg-3">
+    {{> games/_SaltPartial}}
+    {{> games/_CoinBalancePartial}}
+    {{> games/_WithdrawPartial}}
+</div>
+<div class="col-sm-7 col-md-8 col-lg-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Bet
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8">
+                    {{> games/_OUBetPartial}}
+                    
+                </div>
+                <div class="col-md-4">
+                    {{> games/_AutoBetPartial}}
+                </div>
+                 
+            </div>
+        </div>
+    </div>
+    {{> games/_BetHistoryPartial}}
+</div>
+
+{{#contentFor  "pageScripts"}}
+<script src="/js/baseVM.js"></script>
+<script src="/js/overunder.js"></script>
+{{/contentFor }}
+

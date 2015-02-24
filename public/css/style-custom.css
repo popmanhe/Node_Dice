@@ -1,0 +1,96 @@
+﻿input[readonly] {
+    background-color: #eee !important;
+}
+
+.font-large {
+    font-size: 16px;
+}
+
+.hand {
+    cursor: pointer !important;
+}
+
+.pagination > .active > a {
+    background-color: #8CC152;
+    border-color: #8CC152;
+}
+
+.pagination.separated > li > a {
+    margin: 0px 5px;
+}
+
+.pagination > li > a {
+    width: 40px;
+    text-align: center;
+}
+
+.more-margin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.bg-dark .help-block {
+    color: #eee;
+}
+
+.with-nav-tabs.panel-primary .nav-tabs > li > a {
+    color: #37BC9B;
+}
+
+.bg-dark div {
+    color: grey;
+}
+
+    .bg-dark div.progress-bar {
+        color: #fff;
+    }
+
+    .bg-dark div a {
+        color: #37BC9B;
+    }
+
+ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
+    color: #fff;
+    height: initial;
+    display: inline-block;
+    padding: 1px 5px;
+    line-height: 18px;
+    border-radius: 2px;
+    border-bottom: initial;
+    background-color: #8CC152;
+}
+
+.pagination {
+    margin: 10px 0;
+}
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 0; /* Ensure div tag stays behind content; -999 might work, too. */
+}
+
+.stretch {
+    width: 100%;
+    height: 100%;
+}
+
+.panel{
+    background: rgba(238, 238, 238, 0.76);
+}
+
+.modal-backdrop {
+    z-index: 3;
+}
+
+.loginWrapper a, .loginWrapper a:hover {
+    border-bottom: 0px;
+}
+
+.modal-content {
+    background: #37BC9B;
+    padding: 20px 20px;
+}

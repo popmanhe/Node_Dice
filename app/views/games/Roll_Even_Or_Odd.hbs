@@ -1,0 +1,55 @@
+﻿<div class="col-sm-12">
+    <h1 class="page-heading">Even Or Odd</h1>
+</div>
+
+<div class="col-sm-5 col-md-4 col-lg-3">
+    {{> games/_SaltPartial}}
+    {{> games/_CoinBalancePartial}}
+    {{> games/_WithdrawPartial}}
+</div>
+<div class="col-sm-7 col-md-8 col-lg-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Bet
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="the-box">
+                        {{> games/_BetPartial}}
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button class="btn btn-success btn-perspective btn-lg"
+                                        data-bind="click: submitBet.bind($data,0), enable: buttonEnable()">
+                                    ROLL EVEN
+                                </button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button class="btn btn-danger btn-perspective btn-lg"
+                                        data-bind="click: submitBet.bind($data,1), enable: buttonEnable()">
+                                    ROLL ODD
+                                </button>
+                            </div><div class="col-xs-4">
+                                <button class="btn btn-info btn-perspective btn-lg"
+                                        data-bind="click: initBet, enable: buttonEnable()==false, visible: restartVisible">
+                                    Restart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    {{> games/_AutoBetPartial}}
+                </div>
+                <div class="col-md-12">
+                    {{> games/_RandNumPartial}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{> games/_BetHistoryPartial}}
+</div>
+{{#contentFor  "pageScripts"}}
+<script src="/js/baseVM.js"></script>
+<script src="/js/evenodd.js"></script>
+{{/contentFor }}

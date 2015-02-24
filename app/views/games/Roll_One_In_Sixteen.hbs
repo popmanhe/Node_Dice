@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "CCROLL.COM One In Sixteen";
+}
+
+<div class="col-sm-12">
+    <h1 class="page-heading">One In Sixteen</h1>
+</div>
+
+<div class="col-sm-5 col-md-4 col-lg-3">
+
+    @Html.Partial("_SaltPartial")
+    @Html.Partial("_CoinBalancePartial")
+    @Html.Partial("_WithdrawPartial")
+
+</div>
+<div class="col-sm-7 col-md-8 col-lg-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Bet
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="the-box">
+                        @Html.Partial("_BetPartial")
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    @Html.Partial("_OISPartial")
+                </div>
+                <div class="col-md-12">
+                    @Html.Partial("_RandNumPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Action("BetHistoryPartial", "Games")
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/js/oneinsixteen")
+}

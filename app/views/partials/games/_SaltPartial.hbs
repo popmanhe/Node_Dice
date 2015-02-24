@@ -1,0 +1,25 @@
+﻿<div class="panel panel-warning">
+    <div class="panel-heading">
+        PROVABLE FAIR
+    </div>
+    <div class="panel-body">
+        <form>
+            <div class="form-group">
+                <label>Client Salt</label>
+                <div class="input-group">
+                    <input type="text" class="form-control"  data-bind="value: clientsalt"  />
+                    <span class="input-group-addon hand glyphicon glyphicon-floppy-disk" title="Update client salt" data-bind="click: saveClientSalt"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Server Salt</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" data-bind="value: serversalt" readonly="readonly" />
+                </div>
+            </div>
+        </form>
+        <hr> <p data-bind="html: rule">
+           </p>
+    </div>
+
+</div>
