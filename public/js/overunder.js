@@ -80,7 +80,7 @@ $(function () {
         /* Use websocket only */
         ou_socket = io.connect('http://localhost:3000/overunder', { transports: ['websocket'] });
     }
-    pageStart();
+    getBetHistory();
     
     registerOverUnderEvents();
     //if (isAuthenticated)
@@ -93,22 +93,33 @@ function registerOverUnderEvents(socket) {
         showResult(roll);
         addToBetHistory(myBetsArray, roll);
     });
-
+    
     ou_socket.on('allbets', function (roll) {
         addToBetHistory(allBetsArray, roll);
     });
+    
+    ou_socket.on('getMyBets', function (result) {
+        $(result).each(function (i) {
+            addToBetHistory(myBetsArray, result[i], 1);
+        });
+    })
+    ou_socket.on('getAllBets', function (result) {
+        $(result).each(function (i) {
+            addToBetHistory(allBetsArray, result[i], 1);
+        });
+    })
 }
 function showResult(result) {
     var win = true;
-    if ((koVM.selectedNumber() * 1 <= 49.5 && result.dice * 1 <= koVM.selectedNumber() * 1) 
-     || (koVM.selectedNumber() * 1 >= 50.5 && result.dice * 1 >= koVM.selectedNumber() * 1)) {
+    if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1) 
+     || (result.selNum * 1 >= 50.5 && result.rollNum * 1 >= result.selNum * 1)) {
         if (koVM.numberofRolls() == 1) //Don't show notification when auto betting
             showNotification('', 'Dice:' + result.dice + '. You won', 'success');
-        koVM.balance((koVM.balance() * 1 + koVM.betAmount() * (koVM.payout() - 1)).toFixed(10));
+        koVM.balance((koVM.balance() * 1 + result.amount * (koVM.payout() - 1)).toFixed(10));
     }
     else {
         if (koVM.numberofRolls() == 1) //Don't show notification when auto betting
-            showNotification('', 'Dice:' + result.dice + '. You lost', 'danger');
+            showNotification('', 'Dice:' + result.rollNum + '. You lost', 'danger');
         koVM.balance((koVM.balance() - koVM.betAmount()).toFixed(10));
         win = false;
     }
@@ -141,46 +152,29 @@ function showResult(result) {
     else
         koVM.betted(false);
 };
-function addToBetHistory(betsArray, result) {
+function addToBetHistory(betsArray, result, reverse) {
     var bet = {
-        dice: result.dice,
-        w: koVM.betAmount(),
-        gt: result.gt,
-        sn: result.sn,
+        dice: result.rollNum,
+        w: result.amount,
+        gt: result.betTime,
+        sn: result.selNum,
         unit: result.unit
     };
     if (betsArray().length > 100)
         betsArray().pop();
-    betsArray.unshift(convertBetResult(bet));
+    if (!reverse)
+        betsArray.unshift(convertBetResult(bet));
+    else
+        betsArray.push(convertBetResult(bet));
 }
 
 
-function pageStart() {
+function getBetHistory() {
     
-    //getMyBets();
-        //getAllBets();
+    ou_socket.emit('getMyBets', '');
+    ou_socket.emit('getAllBets', '');
    
 }
-function getMyBets() {
-    ou_socket.emit('getmybets', function (result) {
-        $(result).each(function (i) {
-            myBetsArray.push(convertBetResult(result[i]));
-        });
-    });
-}
-
-function getAllBets() {
-    ou_socket.emit('getallbets', function (result) {
-        $(result).each(function (i) {
-            allBetsArray.push(convertBetResult(result[i]));
-            
-            if (result[i].w >= koVM.highRoll()) {
-                highRollArray.push(convertBetResult(result[i]));
-            }
-        });
-    });
-}
-
 function convertBetResult(bet) {
     bet.gt = moment(bet.gt).format('YYYY-MM-DD HH:mm:ss');
     bet.dice = parseFloat(bet.dice);

@@ -39,7 +39,7 @@ module.exports = function (io) {
                         selNum: clientBet.sn,
                         unit: clientBet.coinName,
                         betTime: new Date(),
-                        rollNumer: clientBet.sn,
+                        rollNum: num,
                         betId: uuid.v4()
                     });
                     bet.save(function (err) {
@@ -49,21 +49,21 @@ module.exports = function (io) {
                     
                     //return number to the client and show the result on the page.
                     socket.emit('roll', {
-                        dice: num, 
+                        rollNum: num, 
                         nonce: u.nonce, 
-                        gt: bet.betTime, 
-                        sn: bet.selNum,
+                        betTime: bet.betTime, 
+                        selNum: bet.selNum,
                         amount: bet.amount,
                         unit: bet.unit
                     });
                     
                     //Here, every bet is sent to every one who is in over/under game. 
                     //But you may not want to do that.
-                    nsp.to('overunder').emit('allbets', { 
-                        dice: num, 
+                    nsp.to('overunder').emit('allbets', {
+                        rollNum: num, 
                         nonce: u.nonce, 
-                        gt: bet.betTime, 
-                        sn: bet.selNum,
+                        betTime: bet.betTime, 
+                        selNum: bet.selNum,
                         amount: bet.amount,
                         unit: bet.unit
                     });
@@ -71,6 +71,18 @@ module.exports = function (io) {
                 }
             });
            
+        });
+        
+        socket.on('getMyBets', function () {
+            betHelper.getBetsByUser(session.userid, function (err, bets) {
+                socket.emit('getMyBets', bets);
+            });
+        });
+        
+        socket.on('getAllBets', function () {
+            betHelper.getAllBets(function (err, bets) {
+                socket.emit('getAllBets', bets);
+            });
         });
     });
 }

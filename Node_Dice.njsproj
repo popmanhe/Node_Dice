@@ -52,9 +52,6 @@
     <Compile Include="public\js\modernizr-2.7.2.js" />
     <Compile Include="public\js\moment.min.js" />
     <Compile Include="public\js\morris.js" />
-    <Compile Include="public\js\mpevenodd.js" />
-    <Compile Include="public\js\mpOnInSixteen.js" />
-    <Compile Include="public\js\OnInSixteen.js" />
     <Compile Include="public\js\overunder.js" />
     <Compile Include="public\js\raphael.js" />
     <Compile Include="public\js\respond.js" />
