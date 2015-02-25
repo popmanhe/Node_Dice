@@ -20,6 +20,7 @@ module.exports = function (io) {
             session.save();
             var user = userHelper.CreateNewUser(session.userid);
             socket.emit('newUser', {
+                userid: user.guid,
                 clientSalt: user.clientSalt, 
                 funds: user.funds,
                 hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
@@ -35,6 +36,7 @@ module.exports = function (io) {
                 else {
                     if (u) {
                         socket.emit('existingUser', {
+                            userid: u.guid,
                             clientSalt: u.clientSalt , 
                             funds: u.funds,
                             nonce: u.nonce,

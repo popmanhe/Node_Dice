@@ -1,7 +1,7 @@
 /**
  * Copyright 2014 Node Dice
  *
- * Created by Neo on 2/08/2014
+ * Created by Neo on 2015/02/08
  */
 
 'use strict';
@@ -44,8 +44,6 @@ var exphbs = require('express-handlebars')({
 if (process.env.SITE_USER) {
     app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
 }
-
-
 
 /*set up session for express*/
 var sessionStore = new MongoStore(config.mongoStore);

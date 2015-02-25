@@ -1,6 +1,6 @@
 ﻿var baseVM = {
     userGuid: ko.observable(''),
-    username: ko.observable(''),
+    //username: ko.observable(''),
     coinName: ko.observable('BTC'),
     serversalt: ko.observable(''),
     encrypted: ko.observable(),
@@ -152,7 +152,7 @@ function registerSocketEvents(socket) {
 
 function setUser(user) {
     $.cookie('newUser', 0);
-    baseVM.userGuid(user.guid);
+    baseVM.userGuid(user.userid);
     baseVM.clientsalt(user.clientSalt);
     baseVM.serversalt(user.hashedServerSalt);
     baseVM.funds = user.funds;

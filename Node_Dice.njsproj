@@ -29,13 +29,11 @@
     <Compile Include="app\sockets.js" />
     <Compile Include="app\sockets\s_common.js" />
     <Compile Include="app\sockets\s_overunder.js" />
-    <Compile Include="public\js\accountmanage.js" />
     <Compile Include="public\js\apps.js" />
     <Compile Include="public\js\baseVM.js" />
     <Compile Include="public\js\bootstrap-progressbar.js" />
     <Compile Include="public\js\bootstrap.js" />
     <Compile Include="public\js\bootstrap.min.js" />
-    <Compile Include="public\js\evenodd.js" />
     <Compile Include="public\js\jquery-1.10.2.js" />
     <Compile Include="public\js\jquery-1.10.2.min.js" />
     <Compile Include="public\js\jquery.gritter.js" />
@@ -147,10 +145,6 @@
     <Compile Include="app\helper\userHelper.js" />
     <Compile Include="app\helper\logger.js" />
     <Compile Include="app\helper\mailer.js" />
-    <Content Include="app\templates\message-projectplan-received.html" />
-    <Content Include="app\templates\message-received.html" />
-    <Content Include="app\templates\new-contact-message.html" />
-    <Content Include="app\templates\new-projectplan-message.html" />
     <Compile Include="app\views\http\index.js" />
     <Content Include="obj\Debug\homesite.njsproj.FileListAbsolute.txt" />
     <Content Include="public\helper\upgrade.html" />
@@ -163,7 +157,6 @@
     <Folder Include="app" />
     <Folder Include="app\helper" />
     <Folder Include="app\sockets\" />
-    <Folder Include="app\templates" />
     <Folder Include="app\views" />
     <Folder Include="app\views\http" />
     <Folder Include="app\views\layouts" />

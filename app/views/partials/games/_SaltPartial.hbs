@@ -7,19 +7,16 @@
             <div class="form-group">
                 <label>Client Salt</label>
                 <div class="input-group">
-                    <input type="text" class="form-control"  data-bind="value: clientsalt"  />
+                    <input type="text" class="form-control" data-bind="value: clientsalt" />
                     <span class="input-group-addon hand glyphicon glyphicon-floppy-disk" title="Update client salt" data-bind="click: saveClientSalt"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Server Salt</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" data-bind="value: serversalt" readonly="readonly" />
-                </div>
-            </div>
         </form>
+
+        <label>Server Salt</label>
+        <p style="word-break:break-all" data-bind="html: serversalt"></p>
         <hr> <p data-bind="html: rule">
-           </p>
+        </p>
     </div>
 
 </div>

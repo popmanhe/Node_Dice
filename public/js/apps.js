@@ -201,8 +201,8 @@ $(document).ready(function () {
 });
 $(function () {
     
-    if (typeof koVM !== 'undefined')
-        koVM.username($('#profile_username').text());
+    //if (typeof koVM !== 'undefined')
+    //    koVM.username($('#profile_username').text());
 
 });
 toastr.options = {
@@ -305,73 +305,3 @@ jQuery.cookie = function (name, value, options) {
         return cookieValue;
     }
 };
-/**************Login******************************/
-$("#btnRegister").on("click", function () {
-    var user = {
-        UserName: $('#UserName').val()
-        , Password: $("#Password").val()
-        , Email: $("#Email").val()
-    };
-    login(user);
-});
-$("#btnLogin").on("click", function () {
-    var user = {
-        UserName: $('#UserName').val()
-        , Password: $("#Password").val()
-    };
-    $.post('/account/Login'
-           , {
-        __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
-        ,
-        UserName: user.UserName
-        , Password: user.Password
-    }
-               , function (result) {
-        switch (result.s) {
-            case 0:
-                $(result.m).each(function (i, m) { showNotification('', m, 'danger'); });
-                break;
-            case 2:
-                koVM.depositAddress(result.m);
-            case 1:
-                koVM.username($('#UserName').val());
-                $('#loginModal').modal('hide');
-                $('#Profilepartial').load('/account/profilepartial');
-                pageStart();
-        }
-    });
-});
-
-$("#btnSkip").on("click", function () {
-    var user = {
-        UserName: $('#UserName').val()
-        , Password: ''
-        , Email: ''
-    };
-    login(user);
-});
-
-function login(user) {
-    $.post('/account/Register'
-            , {
-        __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
-        ,
-        UserName: user.UserName
-        , Password: user.Password
-        , Email: user.Email
-    }
-                , function (result) {
-        switch (result.s) {
-            case 0:
-                $(result.m).each(function (i, m) { showNotification('', m, 'danger'); });
-                break;
-            case 2:
-                koVM.depositAddress(result.m);
-            case 1:
-                koVM.username($('#UserName').val());
-                $('#loginModal').modal('hide');
-                $('#Profilepartial').load('/account/profilepartial');
-                pageStart();
-        }
-    });
-}

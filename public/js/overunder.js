@@ -89,12 +89,16 @@ $(function () {
 
 function registerOverUnderEvents(socket) {
     //events from server
-    ou_socket.on('roll', function (roll) {
-        showResult(roll);
-        addToBetHistory(myBetsArray, roll);
-    });
+    //ou_socket.on('roll', function (roll) {
+    //    showResult(roll);
+    //    addToBetHistory(myBetsArray, roll);
+    //});
     
     ou_socket.on('allbets', function (roll) {
+        if (roll.userid == koVM.userGuid()) {
+            showResult(roll);
+            addToBetHistory(myBetsArray, roll);
+        }
         addToBetHistory(allBetsArray, roll);
     });
     
@@ -114,13 +118,13 @@ function showResult(result) {
     if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1) 
      || (result.selNum * 1 >= 50.5 && result.rollNum * 1 >= result.selNum * 1)) {
         if (koVM.numberofRolls() == 1) //Don't show notification when auto betting
-            showNotification('', 'Dice:' + result.dice + '. You won', 'success');
+            showNotification('', 'Dice:' + result.rollNum + '. You won', 'success');
         koVM.balance((koVM.balance() * 1 + result.amount * (koVM.payout() - 1)).toFixed(10));
     }
     else {
         if (koVM.numberofRolls() == 1) //Don't show notification when auto betting
             showNotification('', 'Dice:' + result.rollNum + '. You lost', 'danger');
-        koVM.balance((koVM.balance() - koVM.betAmount()).toFixed(10));
+        koVM.balance((koVM.balance() - result.amount).toFixed(10));
         win = false;
     }
     //process auto betting

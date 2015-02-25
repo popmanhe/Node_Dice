@@ -47,19 +47,20 @@ module.exports = function (io) {
                     });
                     //Todo: process bet's result here
                     
-                    //return number to the client and show the result on the page.
-                    socket.emit('roll', {
-                        rollNum: num, 
-                        nonce: u.nonce, 
-                        betTime: bet.betTime, 
-                        selNum: bet.selNum,
-                        amount: bet.amount,
-                        unit: bet.unit
-                    });
+                    ////return number to the client and show the result on the page.
+                    //socket.emit('roll', {
+                    //    rollNum: num, 
+                    //    nonce: u.nonce, 
+                    //    betTime: bet.betTime, 
+                    //    selNum: bet.selNum,
+                    //    amount: bet.amount,
+                    //    unit: bet.unit
+                    //});
                     
                     //Here, every bet is sent to every one who is in over/under game. 
                     //But you may not want to do that.
                     nsp.to('overunder').emit('allbets', {
+                        userid: session.userid,
                         rollNum: num, 
                         nonce: u.nonce, 
                         betTime: bet.betTime, 
@@ -67,10 +68,8 @@ module.exports = function (io) {
                         amount: bet.amount,
                         unit: bet.unit
                     });
-
                 }
             });
-           
         });
         
         socket.on('getMyBets', function () {
