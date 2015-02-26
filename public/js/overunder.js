@@ -68,27 +68,16 @@ koVM.buttonEnable = ko.computed(function () {
 /*Knockoujs view model*/
 
 /* Page functions */
-//var socket;
 $(function () {
     ko.applyBindings(koVM);
-    
-    //var socket;
-    //if (typeof (WebSocket) != "function") {
-    //    socket = io.connect('http://localhost:3000/overunder');
-    //}
-    //else {
-    //    /* Use websocket only */
-    //    socket = io.connect('http://localhost:3000/overunder', { transports: ['websocket'] });
-    //}
     getBetHistory();
     
     registerOverUnderEvents();
-    //if (isAuthenticated)
-        //pageStart();
+
 });
 
 function registerOverUnderEvents() {
-      
+    
     socket.on('allbets', function (roll) {
         if (roll.userid == koVM.userGuid()) {
             showResult(roll);

@@ -50,11 +50,7 @@
         socket.emit('clientSalt', baseVM.clientsalt());
     },
     refreshBalance: function () {
-        //proxy.server.refreshBalance(baseVM.coinName())
-        //.done(function (result) {
-        //    baseVM.balance((result * 1).toFixed(8));
-        //    showNotification('', 'Balance updated.', 'success');
-        //});
+        
     },
     copyBalance: function () {
         baseVM.withdawalAmount(baseVM.balance());
