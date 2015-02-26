@@ -10,7 +10,7 @@
 var _ = require('lodash');
 
 
-// default is production environment
+// default is development environment
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Load app configuration

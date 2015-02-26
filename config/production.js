@@ -8,13 +8,13 @@
 
 module.exports = {
     mongodb: {
-        hostaddress: '127.0.0.1',
+        hostaddress: 'mongodb://localhost',
         port: 27017,
         dbname: 'node_dice'
     },
     mongostore:
  {
-        url: 'mongodb://localhost/' + this.mongodb.dbname,
+        url: 'mongodb://localhost/node_dice',
         autoRemove: 'interval',
         autoRemoveInterval: 10 // In minutes. Default 
     },
