@@ -9,18 +9,20 @@ var config = require("../../config"),
     uuid = require('node-uuid'),
     userHelper = require('../helper/userHelper'),
     betHelper = require('../helper/betHelper'),
-    rollDice = require('../helper/cryptoroll');
+    rollDice = require('../helper/cryptoroll'),
+    gameName = 'overunder';
 
 module.exports = function (io) {
     
-    var nsp = io.of('/overunder');
-    nsp.on('connection', function (socket) {
+    
+    io.on('connection', function (socket) {
         
-        socket.join('overunder');
+        socket.join(gameName);
         
         var session = socket.handshake.session;
         //return a 
         socket.on('roll', function (clientBet) {
+           
             userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce", function (err, u) {
                 if (err)
                     socket.emit('roll', { clientSalt: '', error: err });
@@ -47,19 +49,9 @@ module.exports = function (io) {
                     });
                     //Todo: process bet's result here
                     
-                    ////return number to the client and show the result on the page.
-                    //socket.emit('roll', {
-                    //    rollNum: num, 
-                    //    nonce: u.nonce, 
-                    //    betTime: bet.betTime, 
-                    //    selNum: bet.selNum,
-                    //    amount: bet.amount,
-                    //    unit: bet.unit
-                    //});
-                    
-                    //Here, every bet is sent to every one who is in over/under game. 
-                    //But you may not want to do that.
-                    nsp.to('overunder').emit('allbets', {
+                                      
+                    //Here, every bet is sent to everyone who is in over/under game. 
+                    io.to(gameName).emit('allbets', {
                         userid: session.userid,
                         rollNum: num, 
                         nonce: u.nonce, 

@@ -44,7 +44,7 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
         this.betted(true);
         
         koVM.selectedNumber(d == 0 ? koVM.rollUnder() : koVM.rollOver());
-        ou_socket.emit('roll', { w: this.betAmount(), sn: this.selectedNumber(), coinName: this.coinName() });
+        socket.emit('roll', { w: this.betAmount(), sn: this.selectedNumber(), coinName: this.coinName() });
     }
 });
 
@@ -68,18 +68,18 @@ koVM.buttonEnable = ko.computed(function () {
 /*Knockoujs view model*/
 
 /* Page functions */
-var ou_socket;
+//var socket;
 $(function () {
     ko.applyBindings(koVM);
     
-    var socket;
-    if (typeof (WebSocket) != "function") {
-        ou_socket = io.connect('http://localhost:3000/overunder');
-    }
-    else {
-        /* Use websocket only */
-        ou_socket = io.connect('http://localhost:3000/overunder', { transports: ['websocket'] });
-    }
+    //var socket;
+    //if (typeof (WebSocket) != "function") {
+    //    socket = io.connect('http://localhost:3000/overunder');
+    //}
+    //else {
+    //    /* Use websocket only */
+    //    socket = io.connect('http://localhost:3000/overunder', { transports: ['websocket'] });
+    //}
     getBetHistory();
     
     registerOverUnderEvents();
@@ -88,13 +88,8 @@ $(function () {
 });
 
 function registerOverUnderEvents(socket) {
-    //events from server
-    //ou_socket.on('roll', function (roll) {
-    //    showResult(roll);
-    //    addToBetHistory(myBetsArray, roll);
-    //});
-    
-    ou_socket.on('allbets', function (roll) {
+      
+    socket.on('allbets', function (roll) {
         if (roll.userid == koVM.userGuid()) {
             showResult(roll);
             addToBetHistory(myBetsArray, roll);
@@ -102,12 +97,12 @@ function registerOverUnderEvents(socket) {
         addToBetHistory(allBetsArray, roll);
     });
     
-    ou_socket.on('getMyBets', function (result) {
+    socket.on('getMyBets', function (result) {
         $(result).each(function (i) {
             addToBetHistory(myBetsArray, result[i], 1);
         });
     })
-    ou_socket.on('getAllBets', function (result) {
+    socket.on('getAllBets', function (result) {
         $(result).each(function (i) {
             addToBetHistory(allBetsArray, result[i], 1);
         });
@@ -175,8 +170,8 @@ function addToBetHistory(betsArray, result, reverse) {
 
 function getBetHistory() {
     
-    ou_socket.emit('getMyBets', '');
-    ou_socket.emit('getAllBets', '');
+    socket.emit('getMyBets', '');
+    socket.emit('getAllBets', '');
    
 }
 function convertBetResult(bet) {

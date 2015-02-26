@@ -65,12 +65,12 @@ io.use(socketHandshake({
     secret: config.cookieSecret, 
     parser: cookieParser()
 }));
-io.of('/overunder').use(socketHandshake({
-    store: sessionStore, 
-    key: 'connect.sid', 
-    secret: config.cookieSecret, 
-    parser: cookieParser()
-}));
+//io.of('/overunder').use(socketHandshake({
+//    store: sessionStore, 
+//    key: 'connect.sid', 
+//    secret: config.cookieSecret, 
+//    parser: cookieParser()
+//}));
 //config express in all environments
 app.disable('x-powered-by');
 

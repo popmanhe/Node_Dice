@@ -44,13 +44,7 @@
     saveWithdrawalAddress: function () {
         
         socket.emit('withdrawalAddress', baseVM.coinName(), baseVM.withdrawalAddress());
-        //proxy.server.saveWithdrawalAddress(baseVM.coinName(), baseVM.withdrawalAddress())
-        //.done(function (result) {
-        //    if (result)
-        //        showNotification('', 'Withdrawal address has been updated.', 'success');
-        //    else
-        //        showNotification('', 'Update withdrawal address failed.', 'danger');
-        //});
+       
     },
     saveClientSalt: function () {
         socket.emit('clientSalt', baseVM.clientsalt());
@@ -66,8 +60,8 @@
         baseVM.withdawalAmount(baseVM.balance());
     },
     generateAddress: function () {
-        //proxy.server.generateAddress(baseVM.coinName())
-        //.done(function (result) { baseVM.depositAddress(result); });
+        //get new btc/nxt address
+        //not implemented
     }
 };
 var autoBetVM = {
@@ -84,9 +78,9 @@ var myBetsArray = ko.observableArray();
 var allBetsArray = ko.observableArray();
 var highRollArray = ko.observableArray();
 
-
+var socket;
 $(function () {
-    var socket;
+    
     if (typeof (WebSocket) != "function") {
         socket = io();
     }
@@ -124,31 +118,6 @@ function registerSocketEvents(socket) {
             showNotification('', 'Update withdrawal address failed.', 'danger');
     });
 }
-//proxy.client.addToAllBets = function (bet) {
-//    if (allBetsArray().length > 100)
-//        allBetsArray().pop();
-//    allBetsArray.unshift(convertBetResult(bet));
-//    //allBetsArray.sort(descendant);
-
-//    if (bet.w > koVM.highRoll()) {
-//        if (highRollArray().length > 100)
-//            highRollArray().pop();
-//        highRollArray.unshift(convertBetResult(bet));
-//        ////highRollArray.sort(descendant);
-//    }
-//}
-
-//proxy.client.showNotification = function (title, content, type) {
-//    showNotification(title, content, type);
-//}
-
-//if (!isAuthenticated) {
-//    $('#loginModal').modal({
-//        keyboard: true,
-//        backdrop: 'static'
-//    });
-//    $('#loginModal').modal('show');
-//}
 
 function setUser(user) {
     $.cookie('newUser', 0);
@@ -172,17 +141,3 @@ function setCoin() {
     }
 }
 
-
-function descendant(a, b) {
-    return a.gt == b.gt ? 0 : (a.gt < b.gt ? 1 : -1)
-}
-
-function getHeightHistory() {
-    heightHistoryArray.removeAll();
-    proxy.server.getHeightHistory().done(function (result) {
-        $(result).each(function (i) {
-            //if (heightHistoryArray().indexOf(result[i]) == -1)
-            heightHistoryArray.push(result[i]);
-        });
-    });
-}
