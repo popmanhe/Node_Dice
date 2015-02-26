@@ -12,8 +12,7 @@ module.exports = {
         port: 27017,
         dbname: 'node_dice'
     },
-    mongostore:
- {
+    mongoStore: {
         url: 'mongodb://localhost/node_dice',
         autoRemove: 'interval',
         autoRemoveInterval: 10 // In minutes. Default 

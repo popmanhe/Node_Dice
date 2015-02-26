@@ -17,9 +17,6 @@ module.exports = {
     clientRoot: rootPath + '/public',
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
-    blog: {
-        API_KEY: process.env.BLOG_KEY
-    },
     app: {
         name: process.env.NODE_ENV === 'production' ? pkg.name + ' (' + pkg.version + ')' : pkg.name + ' [' + pkg.version + ']',
         version: pkg.version,
@@ -28,9 +25,9 @@ module.exports = {
     mail: {
         enable: true,
         transport: 'SMTP',
-        fromaddress: ' eRealm Info & Tech <hello@erealm.cn>',
+        fromaddress: '',
         options: {
-            host: "smtp.mailgun.org",
+            host: "smtp.gmail.com",
             port:465,
             secureConnection: true,
             requiresAuth: true,
@@ -40,8 +37,6 @@ module.exports = {
             }
         }
     },
-//    dbManage:process.env.DB_MANAGE,
-//    dbManage:'wojiubuxinninengcaidao',
     support: '',
     projectName: '',
     copyrightName: ''
