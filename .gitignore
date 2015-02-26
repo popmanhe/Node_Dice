@@ -1,9 +1,8 @@
 public/vendor/*
 
 node_modules/*
-
+logs/*
 .idea/
 .DS_Store
 .tmp/
-logs/
 tests/coverage.html
