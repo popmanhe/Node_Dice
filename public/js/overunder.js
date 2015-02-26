@@ -87,7 +87,7 @@ $(function () {
         //pageStart();
 });
 
-function registerOverUnderEvents(socket) {
+function registerOverUnderEvents() {
       
     socket.on('allbets', function (roll) {
         if (roll.userid == koVM.userGuid()) {

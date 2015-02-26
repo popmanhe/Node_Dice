@@ -95,10 +95,10 @@ $(function () {
     else {
         socket.emit('newUser', '');
     }
-    registerSocketEvents(socket);
+    registerSocketEvents();
 });
 
-function registerSocketEvents(socket) {
+function registerSocketEvents() {
     socket.on('existingUser', function (data) {
         setUser(data);
     });
