@@ -6,3 +6,4 @@ logs/*
 .DS_Store
 .tmp/
 tests/coverage.html
+*.log
