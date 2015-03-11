@@ -40,9 +40,7 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
             showNotification('', 'Balance not enough.', 'danger');
             return;
         }
-        
         this.betted(true);
-        
         koVM.selectedNumber(d == 0 ? koVM.rollUnder() : koVM.rollOver());
         socket.emit('roll', { w: this.betAmount(), sn: this.selectedNumber(), coinName: this.coinName() });
     }
@@ -69,6 +67,13 @@ koVM.buttonEnable = ko.computed(function () {
 
 /* Page functions */
 $(function () {
+    //Be able to bind nested view model in one page.
+    ko.bindingHandlers.stopBinding = {
+        init: function () {
+            return { controlsDescendantBindings: true };
+        }
+    };
+
     ko.applyBindings(koVM);
     getBetHistory();
     

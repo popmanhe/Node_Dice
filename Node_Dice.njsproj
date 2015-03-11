@@ -27,6 +27,7 @@
     <Compile Include="app\helper\cryptoroll.js" />
     <Compile Include="app\helper\dbHelper.js" />
     <Compile Include="app\sockets.js" />
+    <Compile Include="app\sockets\s_chat.js" />
     <Compile Include="app\sockets\s_common.js" />
     <Compile Include="app\sockets\s_overunder.js" />
     <Compile Include="public\js\apps.js" />
@@ -34,6 +35,7 @@
     <Compile Include="public\js\bootstrap-progressbar.js" />
     <Compile Include="public\js\bootstrap.js" />
     <Compile Include="public\js\bootstrap.min.js" />
+    <Compile Include="public\js\chat.js" />
     <Compile Include="public\js\jquery-1.10.2.js" />
     <Compile Include="public\js\jquery-1.10.2.min.js" />
     <Compile Include="public\js\jquery.gritter.js" />
@@ -62,8 +64,6 @@
     <Compile Include="public\js\toastr.js" />
     <None Include="public\js\jquery-1.10.2.intellisense.js" />
     <None Include="public\js\jquery.validate-vsdoc.js" />
-    <Content Include="app\views\games\Roll_Even_Or_Odd.hbs" />
-    <Content Include="app\views\games\Roll_One_In_Sixteen.hbs" />
     <Content Include="app\views\games\Roll_Over_Or_Under.hbs" />
     <Content Include="app\views\http\Support.hbs" />
     <Content Include="app\views\http\Verification.hbs" />
