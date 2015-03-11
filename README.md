@@ -8,6 +8,11 @@ Session uses mongodb as session store, so the site can be expanded to multiple s
 
 Before you run this site, please set up connection to mongodb in config/developement.js or production.js.
 
+<ul>
+<li>2015-02-24: First commit; Basic features added.</li>
+<li>2015-03-11:  Add chat functionality</li>
+</ul>
+
 If you have any questions, contact me at: popman.he@gmail.com.
 
 I am also open for coding jobs. I have 15+ years of design/coding experience. 
