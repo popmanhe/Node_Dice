@@ -146,14 +146,14 @@
                 <div class="tab-pane fade in active" data-bind="stopBinding: true" id="online-chat">
                     <div class="col-sm-12 action-chat" id="chatBox">
 
-                        <ul class="list-group" style="max-height: 700px;overflow-y: auto;" data-bind="foreach: chatArray">
+                        <ul class="list-group" id="chatList" style="max-height: 700px;overflow-y: auto;" data-bind="foreach: chatArray">
                             <li class="chat-item list-group-item">
                                 <span data-bind="text: chatTime"></span> <span data-bind="text: chatUser"></span>: <br />
                                 <label class="text-info" data-bind="text: chatMsg"></label>
                             </li>
                         </ul>
                         <hr />
-                        <form role="form">
+                        <form data-bind="submit: sendMsg">
                             <div class="form-group">
                                 <label>Message:</label>
                                 <input type="text" data-bind="value: enterMsg" class="form-control rounded" placeholder="Enter message">
