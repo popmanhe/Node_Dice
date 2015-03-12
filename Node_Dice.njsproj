@@ -24,6 +24,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Compile Include="app\helper\betHelper.js" />
+    <Compile Include="app\helper\chatHelper.js" />
     <Compile Include="app\helper\cryptoroll.js" />
     <Compile Include="app\helper\dbHelper.js" />
     <Compile Include="app\sockets.js" />

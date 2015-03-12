@@ -3,10 +3,10 @@
     chatButtonEnable: ko.observable(1),
     sendMsg: function () {
         if (this.enterMsg().length > 0) {
-            socket.emit('sendChat', { msg: this.enterMsg() });
+            socket.emit('sendChat', { chatMsg: this.enterMsg() });
             if (chatArray().length > 100)
                 chatArray.shift();
-            chatArray.push({ chatUser: 'Neo', chatTime: moment(new Date()).format('YYYY-MM-DD HH:mm'), chatMsg: this.enterMsg() });
+            chatArray.push({ chatUser: '' , chatTime: moment(new Date()).format('YYYY-MM-DD HH:mm'), chatMsg: this.enterMsg() });
             this.chatButtonEnable(0);
             this.enterMsg('');
             var container=$('#chatList')
@@ -20,10 +20,17 @@ var chatArray = ko.observableArray();
 
 $(function () {
     ko.applyBindings(chatVM, document.getElementById("chatBox"));
+    socket.emit('getChats', '');
+    socket.on('getChats', function (result) {
+        if (result.length > 0) {
+            $(result).each(function (i) {
+                chatArray.unshift({ chatUser: result[i].chatUser, chatTime: moment(result[i].chatTime).format('YYYY-MM-DD HH:mm'), chatMsg: result[i].chatMsg });
+            })}
+    });
     socket.on('recvChat', function (result) {
         if (chatArray().length > 100)
             chatArray.shift();
-        chatArray.push({ chatUser: 'Neo', chatTime: moment(result.chatTime).format('YYYY-MM-DD HH:mm'), chatMsg: result.chatMsg });
+        chatArray.push({ chatUser: result.chatUser, chatTime: moment(result.chatTime).format('YYYY-MM-DD HH:mm'), chatMsg: result.chatMsg });
         var container = $('#chatList')
         container.animate({ scrollTop: container.height() + 20000 }, 1000);
     });

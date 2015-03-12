@@ -24,8 +24,8 @@ var userSchema = new mongoose.Schema({
             depositAddress: String,
             withdrawAddress: String
         }]
-});
-
+}, { autoIndex: false });
+userSchema.index({guid: 1})
 
 //userSchema.plugin(ttl, { ttl: 3600000 * 24, reap: false });
 //betSchema.plugin(ttl, { ttl: 3600000, reap: false });

@@ -19,11 +19,11 @@ var betSchema = new mongoose.Schema({
     amount: Number,
     selNum: Number,
     unit: String,
-    betTime: Date,
+    betTime: { type: Date, expires: 60 * 60 * 24 * 30 },
     rollNum: Number,
     betId: String
-});
-
+}, { autoIndex: false });
+betSchema.index({betTime: -1, userid: 1});
 var betModel = mongoose.model('Bet', betSchema);
 
 module.exports = {
