@@ -91,8 +91,13 @@ $(function () {
 
 function registerSocketEvents() {
     socket.on('existingUser', function (data) {
-        setUser(data);
-        $("#spinner").hide();
+        if (data.clientSalt == '' && data.error == 'session expired') { 
+            socket.emit('newUser', ''); //session expired and create a new user
+        }
+        else {
+            setUser(data);
+            $("#spinner").hide();
+        }
     });
     
     socket.on('newUser', function (data) {
