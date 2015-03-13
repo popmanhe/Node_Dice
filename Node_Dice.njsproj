@@ -117,6 +117,7 @@
     <Content Include="public\img\img-file\document-file.jpg" />
     <Content Include="public\img\img-file\picture-file.jpg" />
     <Content Include="public\img\img-file\video-file.jpg" />
+    <Content Include="public\img\loading.gif" />
     <Content Include="public\img\logo-login%402x.png" />
     <Content Include="public\img\logo-login.png" />
     <Content Include="public\img\photo\large\img%402x.jpg" />

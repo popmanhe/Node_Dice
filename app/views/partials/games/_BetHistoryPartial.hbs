@@ -9,7 +9,7 @@
                 </ul>
             </div>
             <div class="tab-content">
-                <div class="tab-pane fade in " id="tab1">
+                <div class="tab-pane fade in" id="tab1">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="table-responsive">
@@ -19,15 +19,15 @@
                                              
                                             <th>Time</th>
                                             <th>Bet on</th>
-                                            <th>Lucky Number</th>
+                                            <th>Lucky Number</th>                                            
                                             <th>Wager</th>
                                             <th>Payout</th>
                                             <th>Profit</th>
                                         </tr>
                                     </thead>
-                                    <tbody data-bind="foreach: myBetsArray">
+                                    <tbody data-bind="foreach: {data: myBetsArray }">
                                         <tr>
-                                            
+
                                             <td data-bind="text: gt"></td>
                                             <td data-bind="text: sn"></td>
                                             <td>
@@ -59,7 +59,7 @@
                                             <th>Profit</th>
                                         </tr>
                                     </thead>
-                                    <tbody data-bind="foreach: allBetsArray">
+                                    <tbody data-bind="foreach: {data: allBetsArray }">
                                         <tr>
 
                                             <td data-bind="text: gt"></td>

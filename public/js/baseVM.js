@@ -33,11 +33,6 @@
         this.betAmount((0.00000001).toFixed(8));
     },
     maxAmount: function () {
-        //var self = this;
-        //proxy.server.getMaxAmount()
-        //   .done(function (result) {
-        //    self.betAmount((result).toFixed(8));
-        //});
         return 10;
     },
     withdraw: function () { },
@@ -97,10 +92,12 @@ $(function () {
 function registerSocketEvents() {
     socket.on('existingUser', function (data) {
         setUser(data);
+        $("#spinner").hide();
     });
     
     socket.on('newUser', function (data) {
         setUser(data);
+        $("#spinner").hide();
     });
     
     socket.on('clientSalt', function (data) {

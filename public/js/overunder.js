@@ -35,7 +35,6 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
         koVM.numberofRolls(1);
     },
     submitBet: function (d) {
-        
         if (koVM.balance() < koVM.betAmount()) {
             showNotification('', 'Balance not enough.', 'danger');
             return;
@@ -43,7 +42,7 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
         this.betted(true);
         koVM.selectedNumber(d == 0 ? koVM.rollUnder() : koVM.rollOver());
         socket.emit('roll', { w: this.betAmount(), sn: this.selectedNumber(), coinName: this.coinName() });
-    }
+    } 
 });
 
 koVM.rollUnder = ko.computed(function () {

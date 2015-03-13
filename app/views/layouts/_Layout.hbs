@@ -28,6 +28,10 @@
     <![endif]-->
 </head>
 <body class="tooltips">
+    <div id="spinner" class="spinnercontainer">
+        <div class="spinner">
+        </div>
+    </div>
     <!--
     ===========================================================
     BEGIN PAGE
@@ -138,15 +142,14 @@
                 <li><a href="#online-user-sidebar" data-toggle="tab"><i class="fa fa-users"></i></a></li>
                  <li><a href="#setting-sidebar" data-toggle="tab"><i class="fa fa-cogs"></i></a></li>
             </ul>
-        </div><!-- /.sidebar-right-heading -->
+        </div><!-- /.sidebar-right-heading -->        
         <!-- END SIDEBAR RIGHT HEADING -->
         <!-- BEGIN SIDEBAR RIGHT -->        
         <div class="sidebar-right sidebar-nicescroller">
             <div class="tab-content">
                 <div class="tab-pane fade in active" data-bind="stopBinding: true" id="online-chat">
                     <div class="col-sm-12 action-chat" id="chatBox">
-
-                        <ul class="list-group" id="chatList" style="max-height: 700px;overflow-y: auto;" data-bind="foreach: chatArray">
+                        <ul class="list-group" id="chatList" style="max-height: 700px;overflow-y: auto;" data-bind="foreach: {data: chatArray, afterAdd: chatFadeIn}">
                             <li class="chat-item list-group-item">
                                 <span data-bind="text: chatTime"></span> <span data-bind="text: chatUser"></span>: <br />
                                 <label class="text-info" data-bind="text: chatMsg"></label>
@@ -254,48 +257,6 @@
                                     <i class="fa fa-mobile-phone device-status"></i>
                                     Nikita Carter
                                     <span class="small-caps">2 minutes</span>
-                                </a>
-                            </li>
-
-                            <li class="static">OFFLINE USERS</li>
-                            <li>
-                                <a href="#fakelink">
-                                    <span class="user-status danger"></span>
-                                    <img src="/img/avatar/avatar.jpg" class="ava-sidebar img-circle" alt="Avatar">
-                                    Craig Dixon
-                                    <span class="small-caps">Last seen 2 hours ago</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#fakelink">
-                                    <span class="user-status danger"></span>
-                                    <img src="/img/avatar/avatar.jpg" class="ava-sidebar img-circle" alt="Avatar">
-                                    Mikayla King
-                                    <span class="small-caps">Last seen yesterday</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#fakelink">
-                                    <span class="user-status danger"></span>
-                                    <img src="/img/avatar/avatar.jpg" class="ava-sidebar img-circle" alt="Avatar">
-                                    Richard Dixon
-                                    <span class="small-caps">Last seen Feb 20, 2014 05:45:50</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#fakelink">
-                                    <span class="user-status danger"></span>
-                                    <img src="/img/avatar/avatar.jpg" class="ava-sidebar img-circle" alt="Avatar">
-                                    Brenda Fuller
-                                    <span class="small-caps">Last seen Feb 15, 2014 11:35:50</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#fakelink">
-                                    <span class="user-status danger"></span>
-                                    <img src="/img/avatar/avatar.jpg" class="ava-sidebar img-circle" alt="Avatar">
-                                    Ryan Ortega
-                                    <span class="small-caps">Last seen Jan 20, 2014 03:45:50</span>
                                 </a>
                             </li>
                         </ul>
