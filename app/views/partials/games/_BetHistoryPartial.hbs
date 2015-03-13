@@ -84,23 +84,25 @@
                                 <table class="table table-th-block table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Bet Id</th>
-                                            <th>User Name</th>
+
                                             <th>Time</th>
-                                            <th>He bets</th>
-                                            <th style="width: 300px">Random Number</th>
+                                            <th>Bet on</th>
+                                            <th>Lucky Number</th>
                                             <th>Wager</th>
+                                            <th>Payout</th>
                                             <th>Profit</th>
                                         </tr>
                                     </thead>
-                                    <tbody data-bind="foreach: highRollArray">
+                                    <tbody data-bind="foreach: {data: highRollArray }">
                                         <tr>
-                                            <td data-bind="text: bid" class="col-sm-1"></td>
-                                            <td data-bind="text: uname"></td>
+
                                             <td data-bind="text: gt"></td>
-                                            <td data-bind="text: sn1" class="col-sm-2"></td>
-                                            <td class="text-danger" style="width: 300px;word-wrap:break-word;word-break:break-all;" data-bind="text: rn1"></td>
+                                            <td data-bind="text: sn"></td>
+                                            <td>
+                                                <p class="text-danger" data-bind="text: dice"></p>
+                                            </td>
                                             <td data-bind="text: w"></td>
+                                            <td data-bind="text: payout + 'x'"></td>
                                             <td data-bind="html: pf"></td>
                                         </tr>
                                     </tbody>

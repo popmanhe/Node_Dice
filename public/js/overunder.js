@@ -14,6 +14,7 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
     //restartVisible: ko.observable(true),
     under: ko.observable(-1),
     gameId: ko.observable(5),
+    highRollers: ko.observable(0.00001),
     selectedNumber: ko.observable(0),
     //functions
     showSecret: function (data, event) {
@@ -82,22 +83,29 @@ $(function () {
 
 function registerOverUnderEvents() {
     
+    
     socket.on('allbets', function (roll) {
         if (roll.userid == koVM.userGuid()) {
             showResult(roll);
             addToBetHistory(myBetsArray, roll);
         }
         addToBetHistory(allBetsArray, roll);
+        if (roll.amount >= koVM.highRollers())
+            addToBetHistory(highRollArray, roll);
     });
-    
+
+    //retrieve bet history from database
     socket.on('getMyBets', function (result) {
         $(result).each(function (i) {
             addToBetHistory(myBetsArray, result[i], 1);
         });
     })
+
     socket.on('getAllBets', function (result) {
         $(result).each(function (i) {
             addToBetHistory(allBetsArray, result[i], 1);
+            if (result[i].amount >= koVM.highRollers())
+                addToBetHistory(highRollArray, result[i], 1);
         });
     })
 }
@@ -144,6 +152,8 @@ function showResult(result) {
     else
         koVM.betted(false);
 };
+ 
+
 function addToBetHistory(betsArray, result, reverse) {
     var bet = {
         dice: result.rollNum,
@@ -159,8 +169,6 @@ function addToBetHistory(betsArray, result, reverse) {
     else
         betsArray.push(convertBetResult(bet));
 }
-
-
 function getBetHistory() {
     
     socket.emit('getMyBets', '');
