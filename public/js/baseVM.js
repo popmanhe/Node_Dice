@@ -33,7 +33,7 @@
         this.betAmount((0.00000001).toFixed(8));
     },
     maxAmount: function () {
-        return 10;
+        this.betAmount(10);
     },
     withdraw: function () { },
     saveWithdrawalAddress: function () {
