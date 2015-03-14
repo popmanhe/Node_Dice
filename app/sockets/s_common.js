@@ -60,5 +60,9 @@ module.exports = function (io) {
             userHelper.SaveClientSalt(session.userid, clientSalt);
             socket.emit('clientSalt', '')
         });
+
+        socket.on('disconnect', function () {
+            io.emit('userDisconnected', {userName: session.username});
+        });
     });
 }
