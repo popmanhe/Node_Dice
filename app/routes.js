@@ -13,7 +13,7 @@ module.exports = function(app, exphbs) {
     var seo_title = 'bit coin btc nxt altcoin dice game';
     app.use(function(req, res, next) {
         var logger = require('./helper/logger');
-        logger.info('Request: ', req.originalUrl);
+        logger.info((new Date()) + ' Request: ', req.originalUrl);
         next();
     });
     

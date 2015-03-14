@@ -28,11 +28,11 @@ var betModel = mongoose.model('Bet', betSchema);
 
 module.exports = {
     Bet : betModel,
-    getBetsByUser: function (userid, callback) {
+    GetBetsByUser: function (userid, callback) {
         var query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },
-    getAllBets: function (callback) {
+    GetAllBets: function (callback) {
         var query = betModel.find({}, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     }

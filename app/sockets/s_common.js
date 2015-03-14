@@ -53,6 +53,7 @@ module.exports = function (io) {
         //update client salt
         socket.on('clientSalt', function (clientSalt) {
             userHelper.SaveClientSalt(session.userid, clientSalt);
+            socket.emit('clientSalt', '')
         });
     });
 }

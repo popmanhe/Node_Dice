@@ -65,14 +65,14 @@ module.exports = function (io) {
         });
         
         socket.on('getMyBets', function () {
-            betHelper.getBetsByUser(session.userid, function (err, bets) {
-                if (err) return console.error('getBetsByUser error:' + err);
+            betHelper.GetBetsByUser(session.userid, function (err, bets) {
+                if (err) return console.error('GetBetsByUser error:' + err);
                 socket.emit('getMyBets', bets);
             });
         });
         
         socket.on('getAllBets', function () {
-            betHelper.getAllBets(function (err, bets) {
+            betHelper.GetAllBets(function (err, bets) {
                 if (err) return console.error('getAllBets error:' + err);
                 socket.emit('getAllBets', bets);
             });

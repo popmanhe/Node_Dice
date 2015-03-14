@@ -4,7 +4,7 @@ module.exports = function (io) {
     io.on('connection', function (socket) {
                
         socket.on('getChats', function () {
-            chatHelper.getChats(function (err, chats) {
+            chatHelper.GetChats(function (err, chats) {
                 if (err) return console.error('getChats error:' + err);
                 socket.emit('getChats', chats);
             });
@@ -12,7 +12,7 @@ module.exports = function (io) {
 
         socket.on('sendChat', function (chat) {
             chat.chatTime = new Date();
-            chatHelper.addChat(chat, function (err) {
+            chatHelper.AddChat(chat, function (err) {
                 if (err) return console.error('sendChat error:' + err);
             });
             socket.broadcast.emit('recvChat', {

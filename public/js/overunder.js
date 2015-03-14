@@ -17,9 +17,6 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
     highRollers: ko.observable(0.00001),
     selectedNumber: ko.observable(0),
     //functions
-    showSecret: function (data, event) {
-        $(event.currentTarget).next().toggle();
-    },
     initBet: function () {
         this.randNum('?????');
         this.serversalt('');
@@ -82,8 +79,7 @@ $(function () {
 });
 
 function registerOverUnderEvents() {
-    
-    
+   
     socket.on('allbets', function (roll) {
         if (roll.userid == koVM.userGuid()) {
             showResult(roll);

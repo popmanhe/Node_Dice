@@ -56,7 +56,7 @@ module.exports = {
         userModel.findOne({ guid: userid }, fields, callback);
     },
     SaveClientSalt : function (userid, clientSalt) {
-        userModel.findOne({ guid: session.userid }, "clientSalt", function (err, u) {
+        userModel.findOne({ guid: userid }, "clientSalt", function (err, u) {
             if (err)
                 socket.emit('savingClientSalt', { 'clientSalt': clientSalt, error: err });
             else {

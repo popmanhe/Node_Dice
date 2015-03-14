@@ -37,9 +37,7 @@
     },
     withdraw: function () { },
     saveWithdrawalAddress: function () {
-        
         socket.emit('withdrawalAddress', baseVM.coinName(), baseVM.withdrawalAddress());
-       
     },
     saveClientSalt: function () {
         socket.emit('clientSalt', baseVM.clientsalt());
@@ -106,6 +104,7 @@ function registerSocketEvents() {
     });
     
     socket.on('clientSalt', function (data) {
+        if (data == '')
         showNotification('', 'Client salt has been updated.', 'success');
     });
     
