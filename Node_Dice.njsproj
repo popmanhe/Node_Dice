@@ -69,6 +69,9 @@
     <Content Include="app\views\http\Support.hbs" />
     <Content Include="app\views\http\Verification.hbs" />
     <Content Include="app\views\layouts\_Layout.hbs" />
+    <Content Include="app\views\partials\common\_ChatPartial.hbs" />
+    <Content Include="app\views\partials\common\_NameUserPartial.hbs" />
+    <Content Include="app\views\partials\common\_OnlineUserPartial.hbs" />
     <Content Include="app\views\partials\games\Faq.hbs" />
     <Content Include="app\views\partials\games\_AutoBetPartial.hbs" />
     <Content Include="app\views\partials\games\_BetHistoryPartial.hbs" />
@@ -89,7 +92,6 @@
     <Content Include="public\css\font-awesome.min.css" />
     <Content Include="public\css\jquery.gritter.css" />
     <Content Include="public\css\morris.css" />
-    <Content Include="public\css\Site.css" />
     <Content Include="public\css\style-custom.css" />
     <Content Include="public\css\style-responsive.css" />
     <Content Include="public\css\style.css" />
@@ -165,6 +167,7 @@
     <Folder Include="app\views\games\" />
     <Folder Include="app\views\partials\" />
     <Folder Include="app\views\partials\games\" />
+    <Folder Include="app\views\partials\common\" />
     <Folder Include="bin" />
     <Folder Include="build" />
     <Folder Include="config" />

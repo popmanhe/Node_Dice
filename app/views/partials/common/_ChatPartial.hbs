@@ -1,0 +1,17 @@
+﻿<div class="col-sm-12 action-chat" id="chatBox">
+    <ul class="list-group" id="chatList" style="max-height: 700px;overflow-y: auto;" data-bind="foreach: {data: chatArray, afterAdd: chatFadeIn}">
+        <li class="chat-item list-group-item">
+            <span data-bind="text: chatTime"></span> <span data-bind="text: chatUser" class="text-danger"></span>: <br />
+            <label class="text-info" data-bind="text: chatMsg"></label>
+        </li>
+    </ul>
+    <hr />
+    <form data-bind="submit: sendMsg">
+        <div class="form-group">
+            <label>Message:</label>
+            <input type="text" data-bind="value: enterMsg" class="form-control rounded" placeholder="Enter message">
+        </div>
+
+        <button type="button" data-bind="click: sendMsg, enable: chatButtonEnable" class="btn btn-default">Send</button>
+    </form>
+</div>

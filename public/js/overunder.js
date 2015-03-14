@@ -14,7 +14,7 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
     //restartVisible: ko.observable(true),
     under: ko.observable(-1),
     gameId: ko.observable(5),
-    highRollers: ko.observable(0.00001),
+    highRollers: ko.observable(1),
     selectedNumber: ko.observable(0),
     //functions
     initBet: function () {

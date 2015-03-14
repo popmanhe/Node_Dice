@@ -15,6 +15,7 @@ var uuid = require('node-uuid'),
 /*user schema*/
 var userSchema = new mongoose.Schema({
     guid: String,
+    userName: String,
     clientSalt: String,
     serverSalt: String,
     nonce: Number,
@@ -36,10 +37,11 @@ var userModel = mongoose.model('User', userSchema);
 /*exports models*/
 module.exports = {
     User : userModel,
-    CreateNewUser: function (userid) {
+    CreateNewUser: function (userid, username) {
         var user = new userModel(
             {
                 guid : userid,
+                userName: username,
                 serverSalt : uuid.v4(),
                 clientSalt : uuid.v4(),
                 nonce : 0,

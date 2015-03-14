@@ -3,10 +3,10 @@
     chatButtonEnable: ko.observable(1),
     sendMsg: function () {
         if (this.enterMsg().length > 0) {
-            socket.emit('sendChat', { chatMsg: this.enterMsg() });
+            socket.emit('sendChat', {chatMsg: this.enterMsg() });
             if (chatArray().length > 100)
                 chatArray.shift();
-            chatArray.push({ chatUser: '' , chatTime: moment(new Date()).format('YYYY-MM-DD HH:mm'), chatMsg: this.enterMsg() });
+            chatArray.push({ chatUser: baseVM.userName() , chatTime: moment(new Date()).format('YYYY-MM-DD HH:mm'), chatMsg: this.enterMsg() });
             this.chatButtonEnable(0);
             this.enterMsg('');
             scrollToBottom();

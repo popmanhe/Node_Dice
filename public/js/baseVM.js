@@ -1,6 +1,6 @@
 ﻿var baseVM = {
     userGuid: ko.observable(''),
-    //username: ko.observable(''),
+    userName: ko.observable(''),
     coinName: ko.observable('BTC'),
     serversalt: ko.observable(''),
     encrypted: ko.observable(),
@@ -82,7 +82,7 @@ $(function () {
         socket.emit('existingUser', '');
     }
     else {
-        socket.emit('newUser', '');
+        createNewUser();
     }
     registerSocketEvents();
 });
@@ -90,7 +90,7 @@ $(function () {
 function registerSocketEvents() {
     socket.on('existingUser', function (data) {
         if (data.clientSalt == '' && data.error == 'session expired') { 
-            socket.emit('newUser', ''); //session expired and create a new user
+            createNewUser(); //session expired and create a new user
         }
         else {
             setUser(data);
@@ -100,7 +100,6 @@ function registerSocketEvents() {
     
     socket.on('newUser', function (data) {
         setUser(data);
-        $("#spinner").hide();
     });
     
     socket.on('clientSalt', function (data) {
@@ -116,9 +115,19 @@ function registerSocketEvents() {
     });
 }
 
+function createNewUser() {
+    $("#spinner").hide();
+    $('#nameUserModal').modal({ backdrop: 'static' });
+    $('#saveUserName').click(function () {
+        socket.emit('newUser', $('#txtNameUser').val());
+        $('#nameUserModal').modal('hide');
+    });
+   
+}
 function setUser(user) {
     $.cookie('newUser', 0);
     baseVM.userGuid(user.userid);
+    baseVM.userName(user.userName);
     baseVM.clientsalt(user.clientSalt);
     baseVM.serversalt(user.hashedServerSalt);
     baseVM.funds = user.funds;

@@ -16,7 +16,7 @@ var chatModel = mongoose.model('Chat', chatSchema);
 module.exports = {
     Chat: chatModel,
     GetChats: function (callback) { 
-        chatModel.find({},'chatTime chatMsg', {limit: 100}).sort({chatTime: -1}).exec(callback);
+        chatModel.find({},'chatUser chatTime chatMsg', {limit: 100}).sort({chatTime: -1}).exec(callback);
     },
     AddChat: function (chat, callback) {
         var c = new chatModel({
