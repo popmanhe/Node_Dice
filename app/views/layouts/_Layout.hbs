@@ -139,7 +139,6 @@
         <div class="sidebar-right-heading">
             <ul class="nav nav-tabs square nav-justified">
                 <li class="active"><a href="#online-chat" data-toggle="tab"><i class="fa fa-comments"></i></a></li>
-                <li><a href="#online-user-sidebar" data-toggle="tab"><i class="fa fa-users"></i></a></li>
             </ul>
         </div><!-- /.sidebar-right-heading -->        
         <!-- END SIDEBAR RIGHT HEADING -->
@@ -149,9 +148,7 @@
                 <div class="tab-pane fade in active" data-bind="stopBinding: true" id="online-chat">
                     {{> common/_ChatPartial}}
                 </div>
-                <div class="tab-pane fade in" id="online-user-sidebar">
-                    {{> common/_OnlineUserPartial}}
-                </div>
+                 
             </div><!-- /.tab-content -->
         </div><!-- /.sidebar-right -->
         <!-- END SIDEBAR RIGHT -->
@@ -173,8 +170,6 @@
                 &copy; 2015 <a href="#fakelink">Node Dice</a><br />
             </footer>
             <!-- END FOOTER -->
-
-
         </div>
         <!-- /.page-content
         @Html.Action("LoginModal", "Account") -->

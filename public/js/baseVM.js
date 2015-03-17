@@ -2,7 +2,10 @@
     userGuid: ko.observable(''),
     userName: ko.observable(''),
     coinName: ko.observable('BTC'),
+    clientsalt: ko.observable(''),
     serversalt: ko.observable(''),
+    preClientSalt: ko.observable(''),
+    preServerSalt: ko.observable(''),
     encrypted: ko.observable(),
     randNum: ko.observable('?????'),
     betted: ko.observable(false),
@@ -12,7 +15,6 @@
     withdawalAmount: ko.observable(),
     withdrawalAddress: ko.observable(),
     betAmount: ko.observable((0.00000001).toFixed(8)),
-    clientsalt: ko.observable(''),
     switchCoins: function (coinName) {
         baseVM.coinName(coinName);
         setCoin();
@@ -102,9 +104,15 @@ function registerSocketEvents() {
         setUser(data);
     });
     
-    socket.on('clientSalt', function (data) {
-        if (data == '')
-        showNotification('', 'Client salt has been updated.', 'success');
+    socket.on('savingClientSalt', function (data) {
+        if (data.error) {
+            showNotification('', data.error, 'danger');
+        }
+        else {
+            baseVM.preClientSalt(data.clientSalt);
+            baseVM.preServerSalt(data.serverSalt);
+            showNotification('', 'Client salt has been updated.', 'success');
+        }
     });
     
     socket.on('withdrawalAddress', function (result) {
@@ -122,7 +130,6 @@ function createNewUser() {
         socket.emit('newUser', $('#txtNameUser').val());
         $('#nameUserModal').modal('hide');
     });
-   
 }
 function setUser(user) {
     $.cookie('newUser', 0);
@@ -132,6 +139,10 @@ function setUser(user) {
     baseVM.serversalt(user.hashedServerSalt);
     baseVM.funds = user.funds;
     setCoin();
+    if (onlineUsersArray) {
+        if (onlineUsersArray.indexOf(user) == -1)
+            onlineUsersArray.push(user);
+    }
 }
 
 function setCoin() {

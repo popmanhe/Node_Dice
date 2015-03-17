@@ -20,7 +20,8 @@
         $(element).fadeIn(800);
     }
 };
-var chatArray = ko.observableArray();
+var chatArray = ko.observableArray(),
+    onlineUsersArray = ko.observableArray();
 
 $(function () {
     ko.applyBindings(chatVM, document.getElementById("chatBox"));
@@ -40,6 +41,10 @@ $(function () {
         var container = $('#chatList')
         container.animate({ scrollTop: container.height() + 20000 }, 1000);
     });
+    
+    //socket.on('userDisconnected', function (username) {
+    //    onlineUsersArray.remove(function (item) { return item.userName == username })
+    // });
 });
 
 function scrollToBottom() {

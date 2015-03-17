@@ -57,12 +57,16 @@ module.exports = function (io) {
         
         //update client salt
         socket.on('clientSalt', function (clientSalt) {
-            userHelper.SaveClientSalt(session.userid, clientSalt);
-            socket.emit('clientSalt', '')
+            userHelper.SaveClientSalt(session.userid, clientSalt, function (err, oldSalt) {
+                if (err)
+                    socket.emit('savingClientSalt', err);
+                else
+                    socket.emit('savingClientSalt', oldSalt);
+            });
         });
 
-        socket.on('disconnect', function () {
-            io.emit('userDisconnected', {userName: session.username});
-        });
+        //socket.on('disconnect', function () {
+        //    io.emit('userDisconnected', {userName: session.username});
+        //});
     });
 }

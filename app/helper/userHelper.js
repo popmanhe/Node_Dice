@@ -57,14 +57,21 @@ module.exports = {
     GetUserById: function (userid, fields, callback) {
         userModel.findOne({ guid: userid }, fields, callback);
     },
-    SaveClientSalt : function (userid, clientSalt) {
-        userModel.findOne({ guid: userid }, "clientSalt", function (err, u) {
+    SaveClientSalt : function (userid, clientSalt, callback) {
+        userModel.findOne({ guid: userid }, "clientSalt serverSalt", function (err, u) {
             if (err)
-                socket.emit('savingClientSalt', { 'clientSalt': clientSalt, error: err });
+                callback({ error: err }, null);
             else {
-                //increase nonce
+               
+                var _clientSalt, _serverSalt;
+                _clientSalt = u.clientSalt;
+                _serverSalt = u.serverSalt;
+
                 u.clientSalt = clientSalt;
+                u.serverSalt = uuid.v4();
+                u.nonce = 0;
                 u.save();
+                callback(null,{ clientSalt: _clientSalt, serverSalt: _serverSalt })
             }
         });
     }
