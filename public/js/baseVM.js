@@ -7,7 +7,6 @@
     preClientSalt: ko.observable(''),
     preServerSalt: ko.observable(''),
     encrypted: ko.observable(),
-    randNum: ko.observable('?????'),
     betted: ko.observable(false),
     balance: ko.observable(),
     funds: [],
@@ -50,9 +49,12 @@
     copyBalance: function () {
         baseVM.withdawalAmount(baseVM.balance());
     },
+    toggleRefreshBalance: ko.observable(true),
     generateAddress: function () {
-        //get new btc/nxt address
-        //not implemented
+        if (this.toggleRefreshBalance()) {
+            this.toggleRefreshBalance(false);
+            socket.emit('newBtcAddr', '');
+        }
     }
 };
 var autoBetVM = {
@@ -121,6 +123,16 @@ function registerSocketEvents() {
         else
             showNotification('', 'Update withdrawal address failed.', 'danger');
     });
+
+    socket.on('newBtcAddress', function (result) { 
+        if (result.error)
+            showNotification('', 'Getting new BTC address failed.', 'danger');
+        else {
+            baseVM.depositAddress(result.address);
+            showNotification('', 'A new BTC address updated.', 'success');
+        }
+        baseVM.toggleRefreshBalance(true);
+    });
 }
 
 function createNewUser() {
@@ -157,4 +169,3 @@ function setCoin() {
         });
     }
 }
-

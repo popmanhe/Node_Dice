@@ -9,7 +9,8 @@
 var uuid = require('node-uuid'),
     dbhelp = require("./dbHelper"),
     db = dbhelp.db,
-    mongoose = dbhelp.mongoose;
+    mongoose = dbhelp.mongoose,
+    btcHelper = require('./bitcoinHelper.js');
 
 /*view models*/
 /*user schema*/
@@ -74,5 +75,11 @@ module.exports = {
                 callback(null,{ clientSalt: _clientSalt, serverSalt: _serverSalt })
             }
         });
+    },
+    GetNewBtcAddress: function (userid, callback) {
+        btcHelper.GetNewAddress(function (err, addr) { 
+            callback(err, { address: addr });
+        });
+        
     }
 };

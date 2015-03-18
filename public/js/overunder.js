@@ -17,12 +17,6 @@ var koVM = $.extend({}, baseVM, autoBetVM, {
     highRollers: ko.observable(1),
     selectedNumber: ko.observable(0),
     //functions
-    initBet: function () {
-        this.randNum('?????');
-        this.serversalt('');
-        this.betted(false);
-        this.getRandNum();
-    },
     inc: function () { koVM.payout(koVM.payout() + 0.5); },
     dec: function () { koVM.payout() >= 2.5 ? koVM.payout(koVM.payout() - 0.5) : 2; },
     clickBet: function (d) {

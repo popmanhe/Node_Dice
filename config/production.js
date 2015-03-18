@@ -17,5 +17,14 @@ module.exports = {
         autoRemove: 'interval',
         autoRemoveInterval: 10 // In minutes. Default 
     },
-    port: 80
+    port: 80,
+    bitcoin:
+    {
+        host: 'rpc.blockchain.info',
+        port: 443,
+        ssl: true,
+        user: 'your identification',
+        pass: 'your password'
+    }
+
 };

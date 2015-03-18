@@ -65,8 +65,14 @@ module.exports = function (io) {
             });
         });
 
-        //socket.on('disconnect', function () {
-        //    io.emit('userDisconnected', {userName: session.username});
-        //});
+        //get new bitcion address
+        socket.on('newBtcAddr', function () { 
+            userHelper.GetNewBtcAddress(session.userid, function (err, addr) {
+                if (err)
+                    socket.emit('newBtcAddress', err);
+                else
+                    socket.emit('newBtcAddress', addr);
+            });
+        })
     });
 }
