@@ -12,6 +12,7 @@ The site is built on
 <ul>
 <li>2015-02-24: First commit; Basic features added.</li>
 <li>2015-03-11:  Add chat functionality. Chat messages can be saved to database and kept for a week(using mongodb TTL index).</li>
+<li>2015-03-18  Get bitcoin address from Blockchain.info and can be saved to user account.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>

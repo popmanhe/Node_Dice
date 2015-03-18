@@ -24,7 +24,9 @@ var userSchema = new mongoose.Schema({
             coinName: String,
             balance: Number,
             depositAddress: String,
-            withdrawAddress: String
+            withdrawAddress: String,
+            withdrawAmount: Number,
+            profit: Number,
         }]
 }, { autoIndex: false });
 userSchema.index({guid: 1})
@@ -46,8 +48,18 @@ module.exports = {
                 serverSalt : uuid.v4(),
                 clientSalt : uuid.v4(),
                 nonce : 0,
-                funds: [{ coinName: 'BTC', balance: 1000, depositAddress: '', withdrawAddress: '' },
-                        { coinName: 'NXT', balance: 10000000, depositAddress: '', withdrawAddress: '' }]
+                funds: [{
+                            coinName: 'BTC', 
+                            depositAddress: '', balance: 1000, 
+                            withdrawAddress: '', withdrawAmount: 0,
+                            profit: 0
+                        },
+                        {
+                            coinName: 'NXT', 
+                            depositAddress: '', balance: 10000000, 
+                            withdrawAddress: '', withdrawAmount: 0,
+                            profit: 0
+                        }]
             });
         
         user.save(function (err) {
@@ -77,10 +89,10 @@ module.exports = {
         });
     },
     GetNewBtcAddress: function (userid, callback) {
-        btcHelper.GetNewAddress(function (err, addr) {
+        btcHelper.GetNewAddress(userid, function (err, addr) {
             userModel.findOne({ guid: userid }, "funds", function (err, u) {
                 if (err)
-                    callback(err, null);
+                    {callback(err, null);}
                 else {
                     u.funds[0].depositAddress = addr;
                     u.save();
@@ -90,5 +102,20 @@ module.exports = {
             
         });
         
+    },
+    GetBalance: function (userid, unit, callback) {
+        //set unit=BTC for now
+        btcHelper.GetBalance(userid, function (err, amount) { 
+            userModel.findOne({ guid: userid }, "funds", function (err, u) {
+                if (err)
+                    {callback(err, null);}
+                else {
+                    u.funds[0].balance = amount;
+                    u.save();
+                    var f = u.funds[0];
+                    callback(err, { balance: f.balance + f.profit - f.withdrawAmount });
+                }
+            });
+        });
     }
 };

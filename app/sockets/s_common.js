@@ -66,13 +66,23 @@ module.exports = function (io) {
         });
 
         //get new bitcion address
-        socket.on('newBtcAddr', function () { 
+        socket.on('newBtcAddr', function () {
             userHelper.GetNewBtcAddress(session.userid, function (err, addr) {
                 if (err)
                     socket.emit('newBtcAddress', err);
                 else
                     socket.emit('newBtcAddress', addr);
             });
-        })
+        });
+
+        //get user balance
+        socket.on('getBalance', function (unit) {
+            userHelper.GetBalance(session.userid, unit, function (err, addr) {
+                if (err)
+                    socket.emit('getBalance', err);
+                else
+                    socket.emit('getBalance', addr);
+            });
+        });
     });
 }

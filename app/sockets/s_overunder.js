@@ -23,13 +23,13 @@ module.exports = function (io) {
         //return a 
         socket.on('roll', function (clientBet) {
            
-            userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce", function (err, u) {
+            userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce funds", function (err, u) {
                 if (err)
                     socket.emit('roll', { clientSalt: '', error: err });
                 else {
                     //increase nonce
                     u.nonce++;
-                    u.save();
+                   
                     //get lucky number
                     var num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
                     var bet = new betHelper.Bet({
@@ -48,8 +48,10 @@ module.exports = function (io) {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
-                    
-                                      
+                    u.funds[0].profit += 0;
+                    u.save(function (err) {
+                        if (err) return console.error('Saving user\'s profit error:' + err);
+                    });                                      
                     //Here, every bet is sent to everyone who is in over/under game. 
                     io.to(gameName).emit('allbets', {
                         userid: session.userid,

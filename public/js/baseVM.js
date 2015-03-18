@@ -44,15 +44,18 @@
         socket.emit('clientSalt', baseVM.clientsalt());
     },
     refreshBalance: function () {
-        
+        if (this.toggleButton()) {
+            this.toggleButton(false);
+            socket.emit('getBalance', this.coinName());
+        }
     },
     copyBalance: function () {
         baseVM.withdawalAmount(baseVM.balance());
     },
-    toggleRefreshBalance: ko.observable(true),
+    toggleButton: ko.observable(true),
     generateAddress: function () {
-        if (this.toggleRefreshBalance()) {
-            this.toggleRefreshBalance(false);
+        if (this.toggleButton()) {
+            this.toggleButton(false);
             socket.emit('newBtcAddr', '');
         }
     }
@@ -131,7 +134,17 @@ function registerSocketEvents() {
             baseVM.depositAddress(result.address);
             showNotification('', 'A new BTC address updated.', 'success');
         }
-        baseVM.toggleRefreshBalance(true);
+        baseVM.toggleButton(true);
+    });
+
+    socket.on('getBalance', function (result) { 
+        if (result.code)
+            showNotification('', 'Getting balance failed.', 'danger');
+        else {
+            baseVM.balance(result.balance);
+            showNotification('', 'Balance updated.', 'success');
+        }
+        baseVM.toggleButton(true);
     });
 }
 
