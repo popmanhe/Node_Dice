@@ -18,5 +18,13 @@ module.exports = {
         url: 'mongodb://localhost/node_dice',
         autoRemove: 'interval',
         autoRemoveInterval: 10 // In minutes. Default 
+    },
+    bitcoin:
+    {
+        host: 'rpc.blockchain.info',
+        port: 443,
+        ssl: true,
+        user: 'your identification',
+        pass: 'your password'
     }
 };
