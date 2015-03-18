@@ -125,7 +125,7 @@ function registerSocketEvents() {
     });
 
     socket.on('newBtcAddress', function (result) { 
-        if (result.error)
+        if (result.code)
             showNotification('', 'Getting new BTC address failed.', 'danger');
         else {
             baseVM.depositAddress(result.address);

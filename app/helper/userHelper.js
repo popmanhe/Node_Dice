@@ -77,8 +77,17 @@ module.exports = {
         });
     },
     GetNewBtcAddress: function (userid, callback) {
-        btcHelper.GetNewAddress(function (err, addr) { 
-            callback(err, { address: addr });
+        btcHelper.GetNewAddress(function (err, addr) {
+            userModel.findOne({ guid: userid }, "funds", function (err, u) {
+                if (err)
+                    callback(err, null);
+                else {
+                    u.funds[0].depositAddress = addr;
+                    u.save();
+                    callback(err, { address: addr });
+                }
+            });
+            
         });
         
     }
