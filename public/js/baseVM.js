@@ -141,7 +141,7 @@ function registerSocketEvents() {
         if (result.code)
             showNotification('', 'Getting balance failed.', 'danger');
         else {
-            baseVM.balance(result.balance);
+            baseVM.balance(result.balance.toFixed(8));
             showNotification('', 'Balance updated.', 'success');
         }
         baseVM.toggleButton(true);

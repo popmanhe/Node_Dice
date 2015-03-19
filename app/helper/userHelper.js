@@ -20,6 +20,7 @@ var userSchema = new mongoose.Schema({
     clientSalt: String,
     serverSalt: String,
     nonce: Number,
+    createTime: { type: Date, expires: 60 * 60 * 24 * 30 },//in production, remove expire attr
     funds: [{
             coinName: String,
             balance: Number,
@@ -48,6 +49,7 @@ module.exports = {
                 serverSalt : uuid.v4(),
                 clientSalt : uuid.v4(),
                 nonce : 0,
+                createTime: new Date(),
                 funds: [{
                             coinName: 'BTC', 
                             depositAddress: '', balance: 1000, 

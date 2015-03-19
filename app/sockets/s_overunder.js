@@ -48,7 +48,7 @@ module.exports = function (io) {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
-                    u.funds[0].profit += 0;
+                    u.funds[0].profit += GetProfit(bet.rollNum, bet.selNum, bet.amount);
                     u.save(function (err) {
                         if (err) return console.error('Saving user\'s profit error:' + err);
                     });                                      
@@ -79,5 +79,18 @@ module.exports = function (io) {
                 socket.emit('getAllBets', bets);
             });
         });
+
+
+        //functions
+        function GetProfit(rollNum, selNum, amount) { 
+            var payout = selNum <= 49.5? 99 / selNum:99 / (100 - selNum);
+            if ((selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1) 
+             || (selNum * 1 >= 50.5 && rollNum * 1 >= selNum * 1)) {
+                return amount * (payout - 1);
+            }
+            else {
+               return -1 * amount;
+            }
+        }
     });
 }
