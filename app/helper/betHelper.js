@@ -8,6 +8,7 @@
 
 var dbhelp = require("./dbHelper"),
     db = dbhelp.db,
+    config = require("../../config"),
     mongoose = dbhelp.mongoose;
 
 /*bet schema*/
@@ -19,16 +20,12 @@ var betSchema = new mongoose.Schema({
     amount: Number,
     selNum: Number,
     unit: String,
-    betTime: { type: Date, expires: 60 * 60 * 24 * 30 },
+    betTime: { type: Date, expires: 60 * 60 * 24 * 30, index: true },
     rollNum: Number,
     betId: String
-}, { autoIndex: false });
-betSchema.index({betTime: -1, userid: 1});
-var betModel = mongoose.model('Bet', betSchema);
-
-module.exports = {
-    Bet : betModel,
-    GetBetsByUser: function (userid, callback) {
+}, { autoIndex: config.mongodb.autoIndex });
+//Static methods
+betSchema.statics = { GetBetsByUser: function (userid, callback) {
         var query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },
@@ -37,3 +34,7 @@ module.exports = {
         query.sort({ betTime: -1 }).exec(callback);
     }
 };
+
+var betModel = mongoose.model('Bet', betSchema);
+
+module.exports = betModel;

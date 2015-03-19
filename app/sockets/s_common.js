@@ -14,18 +14,21 @@ module.exports = function (io) {
     
     io.on('connection', function (socket) {
         var session = socket.handshake.session;
+        
         //return a new user
         socket.on('newUser', function (username) {
-            session.userid = uuid.v4();
-            session.username = username;
-            session.save();
-            var user = userHelper.CreateNewUser(session.userid, username);
-            socket.emit('newUser', {
-                userid: user.guid,
-                userName: username,
-                clientSalt: user.clientSalt, 
-                funds: user.funds,
-                hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
+           
+            userHelper.CreateNewUser(username, function (err, user) {
+                session.userid = user.guid;
+                session.username = user.userName;
+                session.save();
+                socket.emit('newUser', {
+                    userid: user.guid,
+                    userName: user.userName,
+                    clientSalt: user.clientSalt, 
+                    funds: user.funds,
+                    hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
+                });
             });
         });
         
@@ -84,5 +87,6 @@ module.exports = function (io) {
                     socket.emit('getBalance', addr);
             });
         });
+        
     });
 }

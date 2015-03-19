@@ -10,7 +10,8 @@ module.exports = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,
-        dbname: 'node_dice'
+        dbname: 'node_dice',
+        autoIndex: false
     },
     mongoStore: {
         url: 'mongodb://localhost/node_dice',
