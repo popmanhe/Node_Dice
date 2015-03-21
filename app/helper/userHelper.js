@@ -63,7 +63,9 @@ userSchema.statics = {
                 callback(err, null);
                 console.error('Saving user error: ' + err);
             }
-            else { callback(null, user); }
+            else {
+                callback(null, user);
+            }
         });
     },
     GetUserById: function (userid, fields, callback) {
@@ -118,7 +120,6 @@ userSchema.statics = {
 };
 
 var userModel = mongoose.model('User', userSchema);
-//userModel.startTTLReaper();
-//betModel.startTTLReaper();
+ 
 /*exports models*/
 module.exports = userModel;

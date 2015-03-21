@@ -175,7 +175,7 @@ function setCoin() {
         $(baseVM.funds).each(function (i) {
             var f = baseVM.funds[i];
             if (baseVM.coinName() == f.coinName) {
-                baseVM.balance(f.balance.toFixed(8));
+                baseVM.balance(f.depositAmount.toFixed(8));
                 baseVM.depositAddress(f.depositAddress);
                 baseVM.withdrawalAddress(f.withdrawAddress);
             }

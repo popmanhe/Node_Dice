@@ -32,7 +32,7 @@ module.exports = function (io) {
                    
                     //get lucky number
                     var num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
-                    var bet = new betHelper.Bet({
+                    var bet = new betHelper({
                         userid: session.userid,
                         clientSalt: u.clientSalt,
                         serverSalt: u.serverSalt,

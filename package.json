@@ -30,7 +30,7 @@
     "errorhandler": "^1.2.2",
     "express": "^4.12.2",
     "express-handlebars": "^1.1.0",
-    "express-session": "latest",
+    "express-session": "^1.10.4",
     "express-validator": "latest",
     "handlebars": "^2.0.0",
     "lodash": "^2.4.1",

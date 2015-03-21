@@ -17,7 +17,6 @@ module.exports = function (io) {
         
         //return a new user
         socket.on('newUser', function (username) {
-           
             userHelper.CreateNewUser(username, function (err, user) {
                 session.userid = user.guid;
                 session.username = user.userName;
@@ -40,8 +39,6 @@ module.exports = function (io) {
                     socket.emit('existingUser', { clientSalt: '', error: err });
                 else {
                     if (u) {
-                        //session.username = u.username;
-                        //session.save();
                         socket.emit('existingUser', {
                             userid: u.guid,
                             userName: u.userName,
@@ -80,11 +77,11 @@ module.exports = function (io) {
 
         //get user balance
         socket.on('getBalance', function (unit) {
-            userHelper.GetBalance(session.userid, unit, function (err, addr) {
+            userHelper.GetBalance(session.userid, unit, function (err, balance) {
                 if (err)
                     socket.emit('getBalance', err);
                 else
-                    socket.emit('getBalance', addr);
+                    socket.emit('getBalance', balance);
             });
         });
         
