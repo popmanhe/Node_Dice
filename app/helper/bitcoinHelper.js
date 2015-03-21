@@ -10,6 +10,9 @@ module.exports = {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
         client.getReceivedByAccount(userid, 2, callback);
+    },
+    WithdrawFunds: function (userid, unit, callback) { 
+    
     }
 
 }

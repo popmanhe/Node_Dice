@@ -73,7 +73,7 @@
     <Content Include="app\views\partials\common\_ChatPartial.hbs" />
     <Content Include="app\views\partials\common\_NameUserPartial.hbs" />
     <Content Include="app\views\partials\common\_OnlineUserPartial.hbs" />
-    <Content Include="app\views\partials\games\Faq.hbs" />
+    <Content Include="app\views\http\Faq.hbs" />
     <Content Include="app\views\partials\games\_AutoBetPartial.hbs" />
     <Content Include="app\views\partials\games\_BetHistoryPartial.hbs" />
     <Content Include="app\views\partials\games\_BetPartial.hbs" />

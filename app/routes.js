@@ -39,7 +39,10 @@ module.exports = function(app, exphbs) {
     app.get('/Support', function (req, res) {
         res.render('./http/Support', { page_title: 'Support' + seo_title });
     });
-   
+    
+    app.get('/faq', function (req, res) {
+        res.render('./http/faq', { page_title: 'Faq ' + seo_title });
+    });
     //error handler
     app.use(require('./views/http/index').http500);
     app.use(require('./views/http/index').http404);

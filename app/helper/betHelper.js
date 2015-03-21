@@ -25,7 +25,8 @@ var betSchema = new mongoose.Schema({
     betId: String
 }, { autoIndex: config.mongodb.autoIndex });
 //Static methods
-betSchema.statics = { GetBetsByUser: function (userid, callback) {
+betSchema.statics = {
+    GetBetsByUser: function (userid, callback) {
         var query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },

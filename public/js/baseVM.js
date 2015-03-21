@@ -46,7 +46,7 @@
     refreshBalance: function () {
         if (this.toggleButton()) {
             this.toggleButton(false);
-            socket.emit('getBalance', this.coinName());
+            refreshBalance();
         }
     },
     copyBalance: function () {
@@ -95,6 +95,16 @@ $(function () {
 });
 
 function registerSocketEvents() {
+    socket.on('newUser', function (data) {
+        if (data.error && data.error.code == 11000) { 
+            showNotification('Username exists.', 'Please user a different name.', 'danger');
+        }
+        else {
+            setUser(data);
+            $('#nameUserModal').modal('hide');
+        }
+    });
+    
     socket.on('existingUser', function (data) {
         if (data.clientSalt == '' && data.error == 'session expired') { 
             createNewUser(); //session expired and create a new user
@@ -104,11 +114,7 @@ function registerSocketEvents() {
             $("#spinner").hide();
         }
     });
-    
-    socket.on('newUser', function (data) {
-        setUser(data);
-    });
-    
+   
     socket.on('savingClientSalt', function (data) {
         if (data.error) {
             showNotification('', data.error, 'danger');
@@ -132,6 +138,7 @@ function registerSocketEvents() {
             showNotification('', 'Getting new BTC address failed.', 'danger');
         else {
             baseVM.depositAddress(result.address);
+            setInterval(refreshBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
             showNotification('', 'A new BTC address updated.', 'success');
         }
         baseVM.toggleButton(true);
@@ -153,7 +160,6 @@ function createNewUser() {
     $('#nameUserModal').modal({ backdrop: 'static' });
     $('#saveUserName').click(function () {
         socket.emit('newUser', $('#txtNameUser').val());
-        $('#nameUserModal').modal('hide');
     });
 }
 function setUser(user) {
@@ -177,8 +183,14 @@ function setCoin() {
             if (baseVM.coinName() == f.coinName) {
                 baseVM.balance(f.depositAmount.toFixed(8));
                 baseVM.depositAddress(f.depositAddress);
+                if (f.depositAddress != '')
+                    setInterval(refreshBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
                 baseVM.withdrawalAddress(f.withdrawAddress);
             }
         });
     }
+}
+
+function refreshBalance() {
+    socket.emit('getBalance', baseVM.coinName());
 }

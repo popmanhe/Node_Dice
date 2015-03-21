@@ -22,8 +22,19 @@
 };
 var chatArray = ko.observableArray(),
     onlineUsersArray = ko.observableArray();
-
+var socket;
 $(function () {
+    
+    if (socket === undefined) {
+        if (typeof (WebSocket) != "function") {
+            socket = io();
+        }
+        else {
+            /* Use websocket only */
+            socket = io.connect({ transports: ['websocket'] });
+        }
+    }
+
     ko.applyBindings(chatVM, document.getElementById("chatBox"));
     socket.emit('getChats', '');
     socket.on('getChats', function (result) {

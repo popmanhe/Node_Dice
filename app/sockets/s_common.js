@@ -18,16 +18,22 @@ module.exports = function (io) {
         //return a new user
         socket.on('newUser', function (username) {
             userHelper.CreateNewUser(username, function (err, user) {
-                session.userid = user.guid;
-                session.username = user.userName;
-                session.save();
-                socket.emit('newUser', {
-                    userid: user.guid,
-                    userName: user.userName,
-                    clientSalt: user.clientSalt, 
-                    funds: user.funds,
-                    hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
-                });
+                if (err) { 
+                    if (err.code == 11000)
+                        socket.emit('newUser', { error: { code: 11000 } });
+                }
+                else {
+                    session.userid = user.guid;
+                    session.username = user.userName;
+                    session.save();
+                    socket.emit('newUser', {
+                        userid: user.guid,
+                        userName: user.userName,
+                        clientSalt: user.clientSalt, 
+                        funds: user.funds,
+                        hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
+                    });
+                }
             });
         });
         

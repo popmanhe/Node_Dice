@@ -52,7 +52,7 @@ userSchema.statics = {
                     },
                         {
                         coinName: 'NXT', 
-                        depositAddress: '', balance: 10000000, 
+                        depositAddress: '', depositAmount: 10000000, 
                         withdrawAddress: '', withdrawAmount: 0,
                         profit: 0
                     }]
