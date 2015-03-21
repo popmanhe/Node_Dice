@@ -46,7 +46,7 @@
     refreshBalance: function () {
         if (this.toggleButton()) {
             this.toggleButton(false);
-            refreshBalance();
+            getBalance();
         }
     },
     copyBalance: function () {
@@ -138,7 +138,7 @@ function registerSocketEvents() {
             showNotification('', 'Getting new BTC address failed.', 'danger');
         else {
             baseVM.depositAddress(result.address);
-            setInterval(refreshBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
+            setInterval(getBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
             showNotification('', 'A new BTC address updated.', 'success');
         }
         baseVM.toggleButton(true);
@@ -146,10 +146,11 @@ function registerSocketEvents() {
 
     socket.on('getBalance', function (result) { 
         if (result.code)
-            showNotification('', 'Getting balance failed.', 'danger');
+            showNotification('', 'Getting deposit failed.', 'danger');
         else {
             baseVM.balance(result.balance.toFixed(8));
-            showNotification('', 'Balance updated.', 'success');
+            if (baseVM.balance() != result.balance)
+            showNotification('', 'Deposit updated.', 'success');
         }
         baseVM.toggleButton(true);
     });
@@ -184,13 +185,13 @@ function setCoin() {
                 baseVM.balance(f.depositAmount.toFixed(8));
                 baseVM.depositAddress(f.depositAddress);
                 if (f.depositAddress != '')
-                    setInterval(refreshBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
+                    setInterval(getBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
                 baseVM.withdrawalAddress(f.withdrawAddress);
             }
         });
     }
 }
 
-function refreshBalance() {
+function getBalance() {
     socket.emit('getBalance', baseVM.coinName());
 }
