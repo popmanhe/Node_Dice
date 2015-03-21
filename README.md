@@ -10,9 +10,11 @@ The site is built on
 <p>Before you run this site, please set up connection to mongodb in config/developement.js or production.js.</p>
 
 <ul>
-<li>2015-02-24: First commit; Basic features added.</li>
+<li>2015-02-24:  First commit; Basic features added.</li>
 <li>2015-03-11:  Add chat functionality. Chat messages can be saved to database and kept for a week(using mongodb TTL index).</li>
-<li>2015-03-18  Get bitcoin address from Blockchain.info and can be saved to user account.</li>
+<li>2015-03-18:  Get bitcoin address from Blockchain.info and can be saved to user account.</li>
+<li>2015-03-21:  Will update balance for deposit every 30 seconds once BTC address is generated; 
+				 User name has to be unique(unique index in place);
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
