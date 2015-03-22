@@ -32,6 +32,7 @@
     <Compile Include="app\sockets\s_chat.js" />
     <Compile Include="app\sockets\s_common.js" />
     <Compile Include="app\sockets\s_overunder.js" />
+    <Compile Include="app\views\partials\common\_Adsense.hbs" />
     <Compile Include="public\js\apps.js" />
     <Compile Include="public\js\baseVM.js" />
     <Compile Include="public\js\bootstrap-progressbar.js" />
