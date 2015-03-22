@@ -1,24 +1,24 @@
 {
   "name": "NodeDice",
-  "description": "An open source dice game built on nodejs for BTC/NXT",
+  "description": "An open source dice game faucet built on nodejs for BTC/NXT",
   "version": "0.1.0",
   "keywords": [
     "open source",
     "node.js",
-    "nodejs dice btc nxt"
+    "nodejs dice btc faucet"
   ],
-  "homepage": "",
+  "homepage": "https://github.com/popmanhe/node_dice",
   "author": "Neo",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/popmanhe/node_dice"
   },
   "config": {
     "unsafe-perm": true
   },
   "bugs": {
-    "url": "https://github.com/eRealm/HomeSite/issues",
-    "email": "neo_temp@hotmail.com"
+    "url": "https://github.com/popmanhe/node_dice/issues",
+    "email": "popman.he@gmail.com"
   },
   "license": "MIT BSD",
   "dependencies": {
@@ -37,11 +37,11 @@
     "lru-cache": "^2.5.0",
     "method-override": "^2.3.0",
     "mongoose": "3.8.24",
-    "mongoose-ttl": "0.0.3",
     "morgan": "^1.5.0",
     "newrelic": "^1.17.1",
     "node-uuid": "^1.4.3",
     "nodemailer": "^1.3.0",
+    "request": "^2.53.0",
     "serve-favicon": "^2.1.6",
     "socket.io": "^1.3.5",
     "socket.io-handshake": "0.0.10",

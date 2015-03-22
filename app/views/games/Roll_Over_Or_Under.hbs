@@ -3,6 +3,7 @@
 </div>
 
 <div class="col-sm-5 col-md-4 col-lg-3">
+    {{> common/_Faucet}}
     {{> games/_SaltPartial}}
     {{> games/_CoinBalancePartial}}
     {{> games/_WithdrawPartial}}
@@ -10,13 +11,8 @@
     {{> common/_Adsense}}
     {{> common/_Adsense}}
     {{> common/_Adsense}}
-    {{> common/_Adsense}}
-    {{> common/_Adsense}}
-    {{> common/_Adsense}}
-    {{> common/_Adsense}}
-    {{> common/_Adsense}}
 </div>
-<div class="col-sm-7 col-md-8 col-lg-8">
+<div class="col-sm-7 col-md-7 col-lg-7">
     <div class="panel panel-primary">
         <div class="panel-heading">
             Bet
@@ -36,9 +32,12 @@
     </div>
     {{> games/_BetHistoryPartial}}
 </div>
-
-{{#contentFor  "pageScripts"}}
-<script src="/js/baseVM.js"></script>
-<script src="/js/overunder.js"></script>
-{{/contentFor }}
+<div class="col-md-2 col-lg-2">
+    {{> common/_Adsense}}
+    {{> common/_Adsense}}
+</div>
+    {{#contentFor  "pageScripts"}}
+    <script src="/js/baseVM.js"></script>
+    <script src="/js/overunder.js"></script>
+    {{/contentFor }}
 

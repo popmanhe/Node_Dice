@@ -6,7 +6,9 @@
 
 'use strict';
 
-var config = require("../config");
+var config = require("../config")
+    , faucet = require('./faucet.js')
+    , session = require('express-session');
 
 module.exports = function(app, exphbs) {
     
@@ -42,6 +44,24 @@ module.exports = function(app, exphbs) {
     
     app.get('/faq', function (req, res) {
         res.render('./http/faq', { page_title: 'Faq ' + seo_title });
+    });
+    
+    //verify the response and return new balance if succeeded.
+    app.post('/recAPTCHA', function (req, res) {
+         
+        faucet.VerifyResponse(
+            req.session.userid
+            , '6LeD4QMTAAAAAEWzJqieM9nJIhlIDygbrx0IOyUk'
+            , req.body.g_recaptcha_response 
+            , function (err, result) {
+                if (err) { 
+                    res.json(err);
+                }
+                else {
+                    res.json(result);
+                }
+                res.end();
+        });
     });
     //error handler
     app.use(require('./views/http/index').http500);

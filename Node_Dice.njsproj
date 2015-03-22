@@ -23,11 +23,13 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="app\faucet.js" />
     <Compile Include="app\helper\betHelper.js" />
     <Compile Include="app\helper\bitcoinHelper.js" />
     <Compile Include="app\helper\chatHelper.js" />
     <Compile Include="app\helper\cryptoroll.js" />
     <Compile Include="app\helper\dbHelper.js" />
+    <Compile Include="app\helper\faucetHelper.js" />
     <Compile Include="app\sockets.js" />
     <Compile Include="app\sockets\s_chat.js" />
     <Compile Include="app\sockets\s_common.js" />
@@ -57,6 +59,7 @@
     <Compile Include="public\js\morris.js" />
     <Compile Include="public\js\overunder.js" />
     <Compile Include="public\js\raphael.js" />
+    <Compile Include="public\js\reCaptcha.js" />
     <Compile Include="public\js\respond.js" />
     <Compile Include="public\js\respond.matchmedia.addListener.js" />
     <Compile Include="public\js\respond.matchmedia.addListener.min.js" />
@@ -72,6 +75,7 @@
     <Content Include="app\views\http\Verification.hbs" />
     <Content Include="app\views\layouts\_Layout.hbs" />
     <Content Include="app\views\partials\common\_ChatPartial.hbs" />
+    <Content Include="app\views\partials\common\_Faucet.hbs" />
     <Content Include="app\views\partials\common\_NameUserPartial.hbs" />
     <Content Include="app\views\partials\common\_OnlineUserPartial.hbs" />
     <Content Include="app\views\http\Faq.hbs" />
