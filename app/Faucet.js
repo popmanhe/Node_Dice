@@ -1,5 +1,6 @@
 ﻿var request = require('request')
-    , faucetHelper = require('./helper/faucetHelper.js');
+    , faucetHelper = require('./helper/faucetHelper.js')
+    , config = require('../config');
 
 module.exports = {
     VerifyResponse: function (userid, secret, response, callback) {
@@ -11,7 +12,7 @@ module.exports = {
                 'response': response
             },
             method: 'POST'
-           ,proxy:'http://localhost:8580' //try to use proxy to connect to google if blocked
+           ,proxy: config.faucet.proxy
         }, function (err, httpResponse, body) {
             var re = JSON.parse(body);
             if (re.success) {

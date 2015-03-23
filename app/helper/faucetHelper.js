@@ -23,21 +23,23 @@ faucetSchema.statics = {
                                 userid: userid,
                                 lastTime: now
                             });
-                            fa.save();
-                        }
-                    else if ((now - fa.lastTime) >= 15 * 60 * 1000) { //send out bitcoin every 15 minutes
-                        
-                            fa.lastTime = now;
-                        
-                            fa.save();
+                    }
 
-                            var amount = randomIntInc(100, 500);
-                            u.funds[0].profit += amount * 0.00000001;//100-500 sato
-                            u.save();
+                    if ((now == fa.lastTime) || (now - fa.lastTime) >= config.faucet.interval) { //send out bitcoin every 15 minutes
                         
-                            var f = u.funds[0];
-                            callback(null, { balance: f.depositAmount + f.profit - f.withdrawAmount });
-                        }
+                        fa.lastTime = now;
+                        fa.save();
+                        
+                        var amount = randomIntInc(config.faucet.min, config.faucet.max);
+                        u.funds[0].profit += amount * 0.00000001;
+                        u.save();
+                        
+                        var f = u.funds[0];
+                        callback(null, {faucet:amount,  balance: (f.depositAmount - 0) + (f.profit - f.withdrawAmount) });
+                    }
+                    else { 
+                        callback(null, -2); //too soon
+                    }
                     });
             }
         });

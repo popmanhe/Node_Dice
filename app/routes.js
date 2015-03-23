@@ -28,10 +28,9 @@ module.exports = function(app, exphbs) {
     });
 
     app.get('/Roll_Over_Or_Under', function (req, res) {
-        res.render('./games/Roll_Over_Or_Under', 
-            {
-            page_title: 'Over or Under? ' + seo_title
-        });
+         
+        res.render('./games/Roll_Over_Or_Under',
+            { page_title: 'Over or Under? ' + seo_title });
     });
 
     app.get('/Verification', function(req, res) {
