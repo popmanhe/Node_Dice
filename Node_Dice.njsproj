@@ -74,6 +74,7 @@
     <Content Include="app\views\http\Support.hbs" />
     <Content Include="app\views\http\Verification.hbs" />
     <Content Include="app\views\layouts\_Layout.hbs" />
+    <Content Include="app\views\partials\common\_Adsense_Text.hbs" />
     <Content Include="app\views\partials\common\_ChatPartial.hbs" />
     <Content Include="app\views\partials\common\_Faucet.hbs" />
     <Content Include="app\views\partials\common\_NameUserPartial.hbs" />
