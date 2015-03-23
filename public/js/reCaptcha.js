@@ -14,7 +14,7 @@
 
     });
 },
-    timeLeft = 2 * 60,
+    timeLeft = 15 * 60,
     restartVerification = function () {
         if (timeLeft > 0) {
             timeLeft -= 1;
@@ -26,6 +26,6 @@
             grecaptcha.reset();
             $('#reCaptchaDiv').show();
             $('#faucetRestartTime').hide();
-            timeLeft = 2 * 60;
+            timeLeft = 15 * 60;
         }
     }
