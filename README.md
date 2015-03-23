@@ -16,7 +16,7 @@ The site is built on
 <li>2015-03-21:  Will update balance for deposit every 30 seconds once BTC address is generated; 
 				 User name has to be unique(using unique index of mongodb);
 <li>2015-03-22:  Bitcoin faucet implemented. Use google reCaptcha to verify user is not rebot. <br />
-	             Amount of faucet and interval can be adjusted in app/helper/faucetHelper.js file.</li>
+	             Amount of faucet and interval can be adjusted in config file.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
