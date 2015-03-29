@@ -21,7 +21,7 @@ module.exports = {
                 });
             }
             else { 
-                callback(null, -1); //verify failed. no bitcoin;
+                callback(null, { code: -1 }); //verify failed. no bitcoin;
             }
         });
   

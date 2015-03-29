@@ -46,7 +46,7 @@ module.exports = function(app, exphbs) {
     });
     
     //verify the response and return new balance if succeeded.
-    app.post('/recAPTCHA', function (req, res) {
+    app.post('/reCaptCha', function (req, res) {
          
         faucet.VerifyResponse(
             req.session.userid

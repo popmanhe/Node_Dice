@@ -1,10 +1,13 @@
 ﻿var verifyreCaptcha = function (response) {
     $.post('/reCaptCha', { 'g_recaptcha_response': response })
     .done(function (data) {
-        switch (data) {
+        switch (data.code) {
             case -1: showNotification('', 'Verification failed. Try again.', 'danger');
                 break;
             case -2: showNotification('', 'Please wait a bit longer to verify again.', 'danger');
+                timeLeft = Math.floor(((new Date()) - Date.parse(data.lastTime)) / 1000);
+                timeLeft = timeInterval - timeLeft;
+                restartVerification();
                 break;
             default:
                 baseVM.balance(data.balance.toFixed(8));
@@ -14,7 +17,7 @@
 
     });
 },
-    timeLeft = 15 * 60,
+    timeInterval = timeLeft = 15 * 60,
     restartVerification = function () {
         if (timeLeft > 0) {
             timeLeft -= 1;

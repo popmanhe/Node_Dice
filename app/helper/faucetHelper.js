@@ -35,10 +35,10 @@ faucetSchema.statics = {
                         u.save();
                         
                         var f = u.funds[0];
-                        callback(null, {faucet:amount,  balance: (f.depositAmount - 0) + (f.profit - f.withdrawAmount) });
-                    }
+                        callback(null, {code: 0, faucet:amount,  balance: (f.depositAmount - 0) + (f.profit - f.withdrawAmount) });
+                    } 
                     else { 
-                        callback(null, -2); //too soon
+                        callback(null, {code: -2, lastTime: fa.lastTime }); //too soon
                     }
                     });
             }
