@@ -52,7 +52,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     secret: config.cookieSecret,
-    store: sessionStore
+    store: sessionStore,
+    cookie: {
+      maxAge: config.session.timeout //session will expire in 30 days
+    }
 }));
 
 /*require socket.io*/
@@ -65,12 +68,7 @@ io.use(socketHandshake({
     secret: config.cookieSecret, 
     parser: cookieParser()
 }));
-//io.of('/overunder').use(socketHandshake({
-//    store: sessionStore, 
-//    key: 'connect.sid', 
-//    secret: config.cookieSecret, 
-//    parser: cookieParser()
-//}));
+
 //config express in all environments
 app.disable('x-powered-by');
 
@@ -80,8 +78,11 @@ app.set('views', config.serverRoot + '/views');
 
 //Add express's middlewares
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
-app.use(compression({ threshold: 512 }));
-app.use(express.static(config.clientRoot));
+//Only used in development. In production, use nginx to serve static files
+if (process.env.NODE_ENV == 'development') {
+    app.use(express.static(config.clientRoot));
+    app.use(compression({ threshold: 512 }));
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator([]));

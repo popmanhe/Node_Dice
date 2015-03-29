@@ -17,6 +17,7 @@ The site is built on
 				 User name has to be unique(using unique index of mongodb);
 <li>2015-03-22:  Bitcoin faucet implemented. Use google reCaptcha to verify user is not rebot. <br />
 	             Amount of faucet and interval can be adjusted in config file.</li>
+<li>2015-03-29:  Move to ubuntu and use nginx as web server.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>

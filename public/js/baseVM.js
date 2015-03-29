@@ -85,7 +85,7 @@ $(function () {
         socket = io.connect({ transports: ['websocket'] });
     }
     
-    if ($.cookie('newUser') && $.cookie('newUser') == 0) {
+    if ($.cookie('newUser') && $.cookie('newUser') == '0') {
         socket.emit('existingUser', '');
     }
     else {
@@ -164,12 +164,12 @@ function createNewUser() {
     });
 }
 function setUser(user) {
-    $.cookie('newUser', 0);
     baseVM.userGuid(user.userid);
     baseVM.userName(user.userName);
     baseVM.clientsalt(user.clientSalt);
     baseVM.serversalt(user.hashedServerSalt);
     baseVM.funds = user.funds;
+    $.cookie('newUser', '0', { expires: new Date((new Date()).getTime() + 30 * 24 * 60 * 60 * 1000) });
     setCoin();
     if (onlineUsersArray) {
         if (onlineUsersArray.indexOf(user) == -1)

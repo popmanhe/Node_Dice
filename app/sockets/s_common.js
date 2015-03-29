@@ -12,6 +12,7 @@ var config = require("../../config"),
 
 module.exports = function (io) {
     
+    //socket.io events
     io.on('connection', function (socket) {
         var session = socket.handshake.session;
         
@@ -26,11 +27,17 @@ module.exports = function (io) {
                     session.userid = user.guid;
                     session.username = user.userName;
                     session.save();
+                    var date = new Date();
+                    date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
+                    var expires = "expires=" + date.toGMTString();
+                    
+                    socket.handshake.headers.cookie = "newUser=0;" + expires + "; path=/";
                     socket.emit('newUser', {
                         userid: user.guid,
                         userName: user.userName,
                         clientSalt: user.clientSalt, 
                         funds: user.funds,
+                        nonce: 0,
                         hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
                     });
                 }
@@ -41,8 +48,9 @@ module.exports = function (io) {
         socket.on('existingUser', function () {
             userHelper.GetUserById(session.userid, "clientSalt serverSalt guid userName funds nonce",
                 function (err, u) {
-                if (err)
+                if (err) {
                     socket.emit('existingUser', { clientSalt: '', error: err });
+                }
                 else {
                     if (u) {
                         socket.emit('existingUser', {
@@ -92,4 +100,7 @@ module.exports = function (io) {
         });
         
     });
+
+    //functions
+    function CreateNewUser() { }
 }
