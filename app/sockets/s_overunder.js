@@ -53,7 +53,7 @@ module.exports = function (io) {
                         if (err) return console.error('Saving user\'s profit error:' + err);
                     });                                      
                     //Here, every bet is sent to everyone who is in over/under game. 
-                    io.to(gameName).emit('allbets', {
+                    io.to(gameName).emit('allBets', {
                         userid: session.userid,
                         rollNum: num, 
                         nonce: u.nonce, 

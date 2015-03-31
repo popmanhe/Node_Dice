@@ -60,12 +60,12 @@
     <div class="row">
         <div class="col-sm-4">
             <button class="btn btn-success btn-perspective btn-lg"
-                    data-bind="click: clickBet.bind($data,0), enable: buttonEnable() && isPayoutValid(), text: 'Under '+koVM.rollUnder()"></button>
+                    data-bind="click: clickBet.bind($data,0), enable: buttonEnable() && isPayoutValid(), text: 'Under '+ouVM.rollUnder()"></button>
         </div>
 
         <div class="col-sm-4">
             <button class="btn btn-danger btn-perspective btn-lg"
-                    data-bind="click: clickBet.bind($data,1), enable: buttonEnable() && isPayoutValid(), text: 'Over '+koVM.rollOver()"></button>
+                    data-bind="click: clickBet.bind($data,1), enable: buttonEnable() && isPayoutValid(), text: 'Over '+ouVM.rollOver()"></button>
         </div>
         <div class="col-sm-4">
             <button class="btn btn-warning btn-perspective btn-lg"

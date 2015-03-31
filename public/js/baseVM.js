@@ -182,7 +182,7 @@ function setCoin() {
         $(baseVM.funds).each(function (i) {
             var f = baseVM.funds[i];
             if (baseVM.coinName() == f.coinName) {
-                baseVM.balance(f.depositAmount.toFixed(8));
+                baseVM.balance((f.depositAmount - f.withdrawAmount + f.profit).toFixed(8));
                 baseVM.depositAddress(f.depositAddress);
                 if (f.depositAddress != '')
                     setInterval(getBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
