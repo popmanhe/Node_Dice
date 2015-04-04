@@ -86,12 +86,21 @@ var overunder = function (socket) {
     }
 }
 
-overunder.prototype.registerOverUnderEvents = function() {
-   
-    
+overunder.prototype.registerOverUnderEvents = function () {
+    this.rollResult();
     this.allBets();
     this.getMyBets();
     this.getAllBets();
+}
+//receive single bet result if anything goes wrong
+overunder.prototype.rollResult = function () {
+    this.socket.on('rollResult', function (result) {
+        switch (result.code) {
+            case -1: showNotification('', 'Fund not enough.', 'danger');
+                break;
+        }
+        ouVM.betted(false);
+    });
 }
 //receive bets after loading
 overunder.prototype.allBets = function () {
@@ -104,7 +113,8 @@ overunder.prototype.allBets = function () {
         self.addToBetHistory(allBetsArray, roll);
             if (roll.amount >= ouVM.highRollers())
                 self.addToBetHistory(highRollArray, roll);
-        });
+    });
+
 }
 //retrieve my bet history from server when loading
 overunder.prototype.getMyBets = function () {

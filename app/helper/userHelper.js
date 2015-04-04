@@ -32,7 +32,10 @@ var userSchema = new mongoose.Schema({
         }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
- 
+userSchema.methods.getBalance = function (index) { 
+    var fund = this.funds[index];
+    return fund.depositAmount - fund.withdrawAmount + fund.profit;
+}
 //Static methods
 userSchema.statics = {
     CreateNewUser: function (username, callback) {

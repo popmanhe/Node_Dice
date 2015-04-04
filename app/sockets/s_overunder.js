@@ -27,6 +27,13 @@ module.exports = function (io) {
                 if (err)
                     socket.emit('roll', { clientSalt: '', error: err });
                 else {
+                    
+                    //validate input
+                    if (u.getBalance(0) < clientBet.w) {
+                        socket.emit('rollResult', { code: -1 });
+                        return;
+                    }
+
                     //increase nonce
                     u.nonce++;
                    
@@ -48,6 +55,7 @@ module.exports = function (io) {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
+                   
                     u.funds[0].profit += GetProfit(bet.rollNum, bet.selNum, bet.amount);
                     u.save(function (err) {
                         if (err) return console.error('Saving user\'s profit error:' + err);
