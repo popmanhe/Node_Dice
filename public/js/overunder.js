@@ -96,9 +96,11 @@ overunder.prototype.registerOverUnderEvents = function () {
 overunder.prototype.rollResult = function () {
     this.socket.on('rollResult', function (result) {
         switch (result.code) {
-            case -1: showNotification('', 'Fund not enough', 'danger');
+            case -1: showNotification('Fund', 'Fund not enough', 'danger');
                 break;
-            case -2 : showNotification('', 'Wager invalide', 'danger');
+            case -2 : showNotification('Wager', 'Wager invalid', 'danger');
+                break;
+            case -3: showNotification('Wager', 'Wager has to be a valid number', 'danger');
                 break;
         }
         ouVM.betted(false);

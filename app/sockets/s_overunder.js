@@ -10,6 +10,7 @@ var config = require("../../config"),
     userHelper = require('../helper/userHelper'),
     betHelper = require('../helper/betHelper'),
     rollDice = require('../helper/cryptoroll'),
+    _ = require('lodash'),
     gameName = 'overunder';
 
 module.exports = function (io) {
@@ -29,6 +30,11 @@ module.exports = function (io) {
                 else {
                     
                     //validate input
+                    if (!_.isNumber(clientBet.w)) { 
+                        socket.emit('rollResult', { code: -3 });
+                        return;
+                    }
+
                     if (clientBet.w <= 0) {
                         socket.emit('rollResult', { code: -2 });
                         return;
