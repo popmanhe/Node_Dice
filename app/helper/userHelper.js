@@ -32,9 +32,14 @@ var userSchema = new mongoose.Schema({
         }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
-userSchema.methods.getBalance = function (index) { 
-    var fund = this.funds[index];
-    return fund.depositAmount - fund.withdrawAmount + fund.profit;
+userSchema.methods.getBalance = function (coinName) {
+    for (var i in this.funds) {
+        var fund = this.funds[i];
+        if (fund.coinName == coinName)
+             return fund.depositAmount - fund.withdrawAmount + fund.profit;
+    }
+
+    return 0;
 }
 //Static methods
 userSchema.statics = {

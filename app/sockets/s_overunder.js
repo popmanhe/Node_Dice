@@ -29,7 +29,11 @@ module.exports = function (io) {
                 else {
                     
                     //validate input
-                    if (u.getBalance(0) < clientBet.w) {
+                    if (clientBet.w <= 0) {
+                        socket.emit('rollResult', { code: -2 });
+                        return;
+                    }
+                    if (u.getBalance(clientBet.coinName) < clientBet.w) {
                         socket.emit('rollResult', { code: -1 });
                         return;
                     }
