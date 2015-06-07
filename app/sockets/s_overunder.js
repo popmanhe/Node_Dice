@@ -30,7 +30,7 @@ module.exports = function (io) {
                 else {
                     
                     //validate input
-                    if (!_.isNumber(clientBet.w)) { 
+                    if (!_.isNumber(clientBet.w-0)) { 
                         socket.emit('rollResult', { code: -3 });
                         return;
                     }
@@ -39,7 +39,7 @@ module.exports = function (io) {
                         socket.emit('rollResult', { code: -2 });
                         return;
                     }
-                    if (u.getBalance(clientBet.coinName) < clientBet.w) {
+                    if (u.getBalance(clientBet.coinName) < clientBet.w) {// not enough fund
                         socket.emit('rollResult', { code: -1 });
                         return;
                     }

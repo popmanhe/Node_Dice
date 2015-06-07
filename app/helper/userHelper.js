@@ -150,7 +150,7 @@ userSchema.statics = {
     },
     GetBalance: function (userid, coinName, callback) {
         
-        var helper = helperFac[coinname];
+        var helper = coinsConfig[coinName];
         helper.GetBalance(userid, function (err, amount) {
             userModel.findOne({ guid: userid }, "funds", function (err, u) {
                 if (err) { callback(err, null); }
