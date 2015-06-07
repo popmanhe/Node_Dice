@@ -11,7 +11,7 @@ var uuid = require('node-uuid'),
     db = dbhelp.db,
     mongoose = dbhelp.mongoose,
     config = require("../../config"),
-    btcHelper = require('./bitcoinHelper.js');
+    coinsConfig = require('../../config/coinsConfig.js');
 
 /*view models*/
 /*user schema*/
@@ -32,14 +32,46 @@ var userSchema = new mongoose.Schema({
         }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
-userSchema.methods.getBalance = function (coinName) {
+userSchema.methods.getFund = function (coinName){
     for (var i in this.funds) {
-        var fund = this.funds[i];
+            var fund = this.funds[i];
         if (fund.coinName == coinName)
-             return fund.depositAmount - fund.withdrawAmount + fund.profit;
+            return fund;
     }
+    return null;
+}
+userSchema.methods.getBalance = function (coinName) {
+    
+    var fund = this.getFund(coinName)
+    if (fund)
+        return fund.depositAmount - fund.withdrawAmount + fund.profit;
 
     return 0;
+}
+userSchema.methods.addProfit = function (coinName, profit){
+
+    var fund = this.getFund(coinName)
+    if (fund) {
+        fund.profit += profit;
+        return fund;
+    }
+}
+userSchema.methods.setDeposit = function (coinName, amount) {
+    
+    var fund = this.getFund(coinName)
+    if (fund && amount) {
+        fund.depositAmount = amount;
+    }
+
+     return fund;
+}
+userSchema.methods.setDepositAddr = function (coinName, addr) {
+    
+    var fund = this.getFund(coinName)
+    if (fund) {
+        fund.depositAddress = addr;
+        return fund;
+    }
 }
 //Static methods
 userSchema.statics = {
@@ -97,30 +129,36 @@ userSchema.statics = {
             }
         });
     },
-    GetNewBtcAddress: function (userid, callback) {
-        btcHelper.GetNewAddress(userid, function (err, addr) {
-            userModel.findOne({ guid: userid }, "funds", function (err, u) {
-                if (err) { callback(err, null); }
-                else {
-                    u.funds[0].depositAddress = addr;
-                    u.save();
-                    callback(err, { address: addr });
-                }
-            });
-            
+    GetNewAddress: function (userid, coinName, callback) {
+        var helper = coinsConfig[coinName];
+        helper.GetNewAddress(userid, function (err, addr) {
+            if (err) { 
+                callback(err, null);
+            }
+            else {
+                userModel.findOne({ guid: userid }, "funds", function (err, u) {
+                    if (err) { callback(err, null); }
+                    else {
+                        u.setDepositAddr('BTC', addr);
+                        u.save();
+                        callback(err, { address: addr });
+                    }
+                });
+            }    
         });
         
     },
-    GetBalance: function (userid, unit, callback) {
-        //set unit=BTC for now
-        btcHelper.GetBalance(userid, function (err, amount) {
+    GetBalance: function (userid, coinName, callback) {
+        
+        var helper = helperFac[coinname];
+        helper.GetBalance(userid, function (err, amount) {
             userModel.findOne({ guid: userid }, "funds", function (err, u) {
                 if (err) { callback(err, null); }
                 else {
-                    u.funds[0].depositAmount = amount;
+                    var f = u.setDeposit(coinName, amount);
                     u.save();
-                    var f = u.funds[0];
-                    callback(err, { balance: f.depositAmount + f.profit - f.withdrawAmount });
+                     
+                    callback(err, { balance: u.getBalance(coinName) });
                 }
             });
         });

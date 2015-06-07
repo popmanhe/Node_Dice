@@ -31,11 +31,11 @@ faucetSchema.statics = {
                         fa.save();
                         
                         var amount = randomIntInc(config.faucet.min, config.faucet.max);
-                        u.funds[0].profit += amount * 0.00000001;
-                        u.save();
+                        var f = u.addProfit('BTC', amount * 0.00000001)
+                         u.save();
                         
-                        var f = u.funds[0];
-                        callback(null, {code: 0, faucet:amount,  balance: (f.depositAmount - 0) + (f.profit - f.withdrawAmount) });
+                        
+                        callback(null, {code: 0, faucet:amount,  balance: u.getBalance('BTC') });
                     } 
                     else { 
                         callback(null, {code: -2, lastTime: fa.lastTime }); //too soon

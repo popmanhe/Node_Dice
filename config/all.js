@@ -37,9 +37,9 @@ module.exports = {
             }
         }
     },
-session:{
-    timeout: 30*24*60*60*1000
-},
+    session:{
+        timeout: 30*24*60*60*1000
+    },
     support: '',
     projectName: '',
     copyrightName: ''

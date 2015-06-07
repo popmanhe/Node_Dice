@@ -56,7 +56,7 @@
     generateAddress: function () {
         if (this.toggleButton()) {
             this.toggleButton(false);
-            socket.emit('newBtcAddr', '');
+            socket.emit('newCoinAddr', this.coinName());
         }
     }
 };
@@ -133,24 +133,26 @@ function registerSocketEvents() {
             showNotification('', 'Update withdrawal address failed.', 'danger');
     });
 
-    socket.on('newBtcAddress', function (result) { 
-        if (result.code)
-            showNotification('', 'Getting new BTC address failed.', 'danger');
-        else {
+    socket.on('newCoinAddr', function (result) { 
+        
+        if (result.address) {
             baseVM.depositAddress(result.address);
             setInterval(getBalance, 30 * 1000);//refresh balance every 30 seconds for deposits
-            showNotification('', 'A new BTC address updated.', 'success');
+            showNotification('', 'A new address updated.', 'success');
+        } else {
+            showNotification('', 'Getting new address failed.', 'danger');
         }
         baseVM.toggleButton(true);
     });
 
     socket.on('getBalance', function (result) { 
-        if (result.code)
-            showNotification('', 'Getting deposit failed.', 'danger');
-        else {
+        if (result.balance >= 0)
+        {
             baseVM.balance(result.balance.toFixed(8));
             if (baseVM.balance() != result.balance)
-            showNotification('', 'Deposit updated.', 'success');
+            showNotification('', 'Balance updated.', 'success');
+        } else {
+            showNotification('', 'Getting balance failed.', 'danger');
         }
         baseVM.toggleButton(true);
     });

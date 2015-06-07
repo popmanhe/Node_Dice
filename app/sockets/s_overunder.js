@@ -65,12 +65,11 @@ module.exports = function (io) {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
-                   
-                    u.funds[0].profit += GetProfit(bet.rollNum, bet.selNum, bet.amount);
+                    u.addProfit(clientBet.coinName, GetProfit(bet.rollNum, bet.selNum, bet.amount))
                     u.save(function (err) {
                         if (err) return console.error('Saving user\'s profit error:' + err);
                     });                                      
-                    //Here, every bet is sent to everyone who is in over/under game. 
+                    //Every bet is sent to everyone who is in over/under game. 
                     io.to(gameName).emit('allBets', {
                         userid: session.userid,
                         rollNum: num, 

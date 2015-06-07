@@ -80,18 +80,18 @@ module.exports = function (io) {
         });
 
         //get new bitcion address
-        socket.on('newBtcAddr', function () {
-            userHelper.GetNewBtcAddress(session.userid, function (err, addr) {
+        socket.on('newCoinAddr', function (coinName) {
+            userHelper.GetNewAddress(session.userid, coinName, function (err, addr) {
                 if (err)
-                    socket.emit('newBtcAddress', err);
+                    socket.emit('newCoinAddr', err);
                 else
-                    socket.emit('newBtcAddress', addr);
+                    socket.emit('newCoinAddr', addr);
             });
         });
 
         //get user balance
-        socket.on('getBalance', function (unit) {
-            userHelper.GetBalance(session.userid, unit, function (err, balance) {
+        socket.on('getBalance', function (coinName) {
+            userHelper.GetBalance(session.userid, coinName, function (err, balance) {
                 if (err)
                     socket.emit('getBalance', err);
                 else

@@ -32,6 +32,10 @@ module.exports = function(app, exphbs) {
         res.render('./games/Roll_Over_Or_Under',
             { page_title: 'Over or Under? ' + seo_title });
     });
+    
+    app.get('/Investment', function (req, res) {
+        res.render('./games/Investment', { page_title: 'Investment ' + seo_title });
+    });
 
     app.get('/Verification', function(req, res) {
         res.render('./http/Verification', {page_title: 'Verification ' + seo_title});
@@ -47,7 +51,6 @@ module.exports = function(app, exphbs) {
     
     //verify the response and return new balance if succeeded.
     app.post('/reCaptCha', function (req, res) {
-         
         faucet.VerifyResponse(
             req.session.userid
             , '6LeD4QMTAAAAAEWzJqieM9nJIhlIDygbrx0IOyUk'
