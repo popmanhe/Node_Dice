@@ -64,8 +64,7 @@ chat.prototype.receiveChats = function () {
         if (chatArray().length > 100)
             chatArray.shift();
         chatArray.push({ chatUser: result.chatUser, chatTime: moment(result.chatTime).format('YYYY-MM-DD HH:mm'), chatMsg: result.chatMsg });
-        var container = $('#chatList')
-        container.animate({ scrollTop: container.height() + 20000 }, 1000);
+        chat.scrollToBottom();
     });
 }
 

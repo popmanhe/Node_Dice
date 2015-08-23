@@ -3,12 +3,12 @@
     , config = require('../config');
 
 module.exports = {
-    VerifyResponse: function (userid, secret, response, callback) {
+    VerifyResponse: function (userid, response, callback) {
         
         request.post({
             url: 'https://www.google.com/recaptcha/api/siteverify', 
             form: {
-                'secret': secret ,
+                'secret': '6LeD4QMTAAAAAEWzJqieM9nJIhlIDygbrx0IOyUk' ,
                 'response': response
             },
             method: 'POST'

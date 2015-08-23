@@ -23,7 +23,7 @@ module.exports = function (io) {
         var session = socket.handshake.session;
         //return a 
         socket.on('roll', function (clientBet) {
-           
+            
             userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce funds", function (err, u) {
                 if (err)
                     socket.emit('roll', { clientSalt: '', error: err });
