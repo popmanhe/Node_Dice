@@ -69,8 +69,8 @@
     <Compile Include="public\js\shrink-main-navigation.js" />
     <Compile Include="public\js\shrink-navbar.js" />
     <Compile Include="public\js\toastr.js" />
-    <None Include="public\js\jquery-1.10.2.intellisense.js" />
-    <None Include="public\js\jquery.validate-vsdoc.js" />
+    <Compile Include="public\js\jquery-1.10.2.intellisense.js" />
+    <Compile Include="public\js\jquery.validate-vsdoc.js" />
     <Content Include="app\views\games\Investment.hbs" />
     <Content Include="app\views\games\Roll_Over_Or_Under.hbs" />
     <Content Include="app\views\http\Support.hbs" />
