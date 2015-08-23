@@ -1,6 +1,6 @@
 {
-  "name": "NodeDice",
-  "description": "An open source dice game faucet built on nodejs for BTC/NXT",
+  "name": "Node Dice",
+  "description": "An open source dice game faucet built on node.js for BTC/NXT",
   "version": "0.1.0",
   "keywords": [
     "open source",
@@ -43,7 +43,9 @@
     "nodemailer": "^1.3.4",
     "request": "^2.55.0",
     "serve-favicon": "^2.1.6",
+    "should": "^7.0.1",
     "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5",
     "socket.io-handshake": "0.0.10",
     "winston": "^0.8.3"
   },

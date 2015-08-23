@@ -69,8 +69,12 @@
     <Compile Include="public\js\shrink-main-navigation.js" />
     <Compile Include="public\js\shrink-navbar.js" />
     <Compile Include="public\js\toastr.js" />
-    <None Include="public\js\jquery-1.10.2.intellisense.js" />
-    <None Include="public\js\jquery.validate-vsdoc.js" />
+    <Compile Include="tests\unittests\test-chat.js" />
+    <Compile Include="tests\unittests\test-dice.js" />
+    <Compile Include="tests\unittests\test-faucet.js" />
+    <Compile Include="tests\unittests\test-transaction.js" />
+    <Compile Include="public\js\jquery-1.10.2.intellisense.js" />
+    <Compile Include="public\js\jquery.validate-vsdoc.js" />
     <Content Include="app\views\games\Investment.hbs" />
     <Content Include="app\views\games\Roll_Over_Or_Under.hbs" />
     <Content Include="app\views\http\Support.hbs" />
@@ -196,6 +200,8 @@
     <Folder Include="public\img\shop\" />
     <Folder Include="public\js\" />
     <Folder Include="public\css\" />
+    <Folder Include="tests\" />
+    <Folder Include="tests\unittests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />

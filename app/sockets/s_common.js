@@ -8,14 +8,16 @@
 var config = require("../../config"),
     uuid = require('node-uuid'),
     userHelper = require('../helper/userHelper'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    coinsConfig = require('../../config/coinsConfig.js');
 
 module.exports = function (io) {
     
     //socket.io events
     io.on('connection', function (socket) {
         var session = socket.handshake.session;
-        
+        socket.emit('coinNames', coinsConfig.getCoinNames());
+
         //return a new user
         socket.on('newUser', function (username) {
             userHelper.CreateNewUser(username, function (err, user) {

@@ -53,7 +53,6 @@ module.exports = function(app, exphbs) {
     app.post('/reCaptCha', function (req, res) {
         faucet.VerifyResponse(
             req.session.userid
-            , '6LeD4QMTAAAAAEWzJqieM9nJIhlIDygbrx0IOyUk'
             , req.body.g_recaptcha_response 
             , function (err, result) {
                 if (err) { 

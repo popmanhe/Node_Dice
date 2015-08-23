@@ -73,7 +73,7 @@ var autoBetVM = {
 var myBetsArray = ko.observableArray();
 var allBetsArray = ko.observableArray();
 var highRollArray = ko.observableArray();
-
+var coinsArray = ko.observableArray();
 var socket;
 $(function () {
     
@@ -95,6 +95,10 @@ $(function () {
 });
 
 function registerSocketEvents() {
+    socket.on('coinNames', function (coinNames) { 
+        coinsArray.push(coinNames);
+    });
+
     socket.on('newUser', function (data) {
         if (data.error && data.error.code == 11000) { 
             showNotification('Username exists.', 'Please user a different name.', 'danger');
