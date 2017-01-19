@@ -1,0 +1,10 @@
+dist/
+
+node_modules/*
+logs/*
+.idea/
+.DS_Store
+.tmp/
+tests/coverage.html
+*.log
+/newrelic_agent.log
