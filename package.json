@@ -1,7 +1,7 @@
 {
-  "name": "Node Dice",
+  "name": "Node_Dice",
   "description": "An open source dice game faucet built on node.js for BTC/NXT",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "keywords": [
     "open source",
     "node.js",
@@ -13,6 +13,12 @@
     "type": "git",
     "url": "https://github.com/popmanhe/node_dice"
   },
+  "scripts": {
+    "dev": "nodemon dist/app.js",
+    "build": "node_modules/.bin/babel -w src/ -d dist/ -s",
+    "start": "PORT=8080 pm2 start dist/app.js",
+    "lint": "eslint src"
+},
   "config": {
     "unsafe-perm": true
   },
@@ -39,7 +45,7 @@
     "mongoose": "^4.0.5",
     "morgan": "^1.5.2",
     "newrelic": "^1.18.5",
-    "node-uuid": "^1.4.3",
+    "uuid": "^3.0.1",
     "nodemailer": "^1.3.4",
     "request": "^2.55.0",
     "serve-favicon": "^2.1.6",
@@ -50,6 +56,9 @@
     "winston": "^0.8.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
     "debug": "~0.7.4"
   }
 }
