@@ -1,7 +1,7 @@
 /**
- * Copyright 2014 Node Dice
+ * Copyright 2017 Node Dice
  *
- * Created by Neo on 2014/11/27.
+ * Created by Neo on 2017/01/19.
  */
 
 'use strict';
@@ -50,22 +50,22 @@ var userSchema = new mongoose.Schema({
 }, { autoIndex: _config2.default.mongodb.autoIndex });
 //Instance methods
 userSchema.methods.getFund = function (coinName) {
-    for (var i in this.funds) {
-        var fund = this.funds[i];
+    for (var i in undefined.funds) {
+        var fund = undefined.funds[i];
         if (fund.coinName == coinName) return fund;
     }
     return null;
 };
 userSchema.methods.getBalance = function (coinName) {
 
-    var fund = this.getFund(coinName);
+    var fund = undefined.getFund(coinName);
     if (fund) return fund.depositAmount - fund.withdrawAmount + fund.profit;
 
     return 0;
 };
 userSchema.methods.addProfit = function (coinName, profit) {
 
-    var fund = this.getFund(coinName);
+    var fund = undefined.getFund(coinName);
     if (fund) {
         fund.profit += profit;
         return fund;
@@ -73,7 +73,7 @@ userSchema.methods.addProfit = function (coinName, profit) {
 };
 userSchema.methods.setDeposit = function (coinName, amount) {
 
-    var fund = this.getFund(coinName);
+    var fund = undefined.getFund(coinName);
     if (fund && amount) {
         fund.depositAmount = amount;
     }
@@ -82,7 +82,7 @@ userSchema.methods.setDeposit = function (coinName, amount) {
 };
 userSchema.methods.setDepositAddr = function (coinName, addr) {
 
-    var fund = this.getFund(coinName);
+    var fund = undefined.getFund(coinName);
     if (fund) {
         fund.depositAddress = addr;
         return fund;

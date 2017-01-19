@@ -1,7 +1,7 @@
 /**
- * Copyright 2014 Node Dice
+ * Copyright 2017 Node Dice
  *
- * Created by Neo on 2014/11/27.
+ * Created by Neo on 2017/01/19.
  */
 
 'use strict';
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
         }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
-userSchema.methods.getFund = function (coinName){
+userSchema.methods.getFund = (coinName) => {
     for (let i in this.funds) {
             let fund = this.funds[i];
         if (fund.coinName == coinName)
@@ -39,7 +39,7 @@ userSchema.methods.getFund = function (coinName){
     }
     return null;
 }
-userSchema.methods.getBalance = function (coinName) {
+userSchema.methods.getBalance = (coinName) => {
     
     let fund = this.getFund(coinName)
     if (fund)
@@ -47,7 +47,7 @@ userSchema.methods.getBalance = function (coinName) {
 
     return 0;
 }
-userSchema.methods.addProfit = function (coinName, profit){
+userSchema.methods.addProfit = (coinName, profit) => {
 
     let fund = this.getFund(coinName)
     if (fund) {
@@ -55,7 +55,7 @@ userSchema.methods.addProfit = function (coinName, profit){
         return fund;
     }
 }
-userSchema.methods.setDeposit = function (coinName, amount) {
+userSchema.methods.setDeposit = (coinName, amount) => {
     
     let fund = this.getFund(coinName)
     if (fund && amount) {
@@ -64,7 +64,7 @@ userSchema.methods.setDeposit = function (coinName, amount) {
 
      return fund;
 }
-userSchema.methods.setDepositAddr = function (coinName, addr) {
+userSchema.methods.setDepositAddr = (coinName, addr) => {
     
     let fund = this.getFund(coinName)
     if (fund) {
@@ -74,7 +74,7 @@ userSchema.methods.setDepositAddr = function (coinName, addr) {
 }
 //Static methods
 userSchema.statics = {
-    CreateNewUser: function (username, callback) {
+    CreateNewUser: (username, callback) => {
         let user = new userModel(
             {
                 guid : uuid.v4(),
@@ -97,7 +97,7 @@ userSchema.statics = {
                     }]
             });
         
-        user.save(function (err) {
+        user.save(err => {
             if (err) {
                 callback(err, null);
                 console.error('Saving user error: ' + err);
@@ -135,7 +135,7 @@ userSchema.statics = {
                 callback(err, null);
             }
             else {
-                userModel.findOne({ guid: userid }, "funds", function (err, u) {
+                userModel.findOne({ guid: userid }, "funds", (err, u) =>{
                     if (err) { callback(err, null); }
                     else {
                         u.setDepositAddr('BTC', addr);
@@ -147,11 +147,11 @@ userSchema.statics = {
         });
         
     },
-    GetBalance: function (userid, coinName, callback) {
+    GetBalance: (userid, coinName, callback) => {
         
         let helper = coinsConfig[coinName];
-        helper.GetBalance(userid, function (err, amount) {
-            userModel.findOne({ guid: userid }, "funds", function (err, u) {
+        helper.GetBalance(userid, (err, amount) =>{
+            userModel.findOne({ guid: userid }, "funds", (err, u) => {
                 if (err) { callback(err, null); }
                 else {
                     let f = u.setDeposit(coinName, amount);
