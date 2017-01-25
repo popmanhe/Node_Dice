@@ -1,4 +1,4 @@
 {
   "presets": ["es2015","stage-0"],
-  "ignore": ["public"]
+  "ignore": ["wwwroot","node_modules"]
 }

@@ -1,7 +1,8 @@
 "use strict";
 
 var f = require('util').format
-  , crypto = require('crypto')
+  , require_optional = require('require_optional')
+  , Query = require('../connection/commands').Query
   , MongoError = require('../error');
 
 var AuthSession = function(db, username, password, options) {
@@ -12,7 +13,7 @@ var AuthSession = function(db, username, password, options) {
 }
 
 AuthSession.prototype.equal = function(session) {
-  return session.db == this.db 
+  return session.db == this.db
     && session.username == this.username
     && session.password == this.password;
 }
@@ -23,9 +24,9 @@ var MongoAuthProcess = null;
 
 // Try to grab the Kerberos class
 try {
-  Kerberos = require('kerberos').Kerberos
+  Kerberos = require_optional('kerberos').Kerberos
   // Authentication process for Mongo
-  MongoAuthProcess = require('kerberos').processes.MongoAuthProcess
+  MongoAuthProcess = require_optional('kerberos').processes.MongoAuthProcess
 } catch(err) {}
 
 /**
@@ -33,7 +34,8 @@ try {
  * @class
  * @return {SSPI} A cursor instance
  */
-var SSPI = function() {
+var SSPI = function(bson) {
+  this.bson = bson;
   this.authStore = [];
 }
 
@@ -41,35 +43,32 @@ var SSPI = function() {
  * Authenticate
  * @method
  * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
- * @param {Pool} pool Connection pool for this topology
+ * @param {[]Connections} connections Connections to authenticate using this authenticator
  * @param {string} db Name of the database
  * @param {string} username Username
  * @param {string} password Password
  * @param {authResultCallback} callback The callback to return the result from the authentication
  * @return {object}
  */
-SSPI.prototype.auth = function(server, pool, db, username, password, options, callback) {
+SSPI.prototype.auth = function(server, connections, db, username, password, options, callback) {
   var self = this;
   // We don't have the Kerberos library
-  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));  
+  if(Kerberos == null) return callback(new Error("Kerberos library is not installed"));
   var gssapiServiceName = options['gssapiServiceName'] || 'mongodb';
-  // Get all the connections
-  var connections = pool.getAll();
   // Total connections
   var count = connections.length;
   if(count == 0) return callback(null, null);
 
   // Valid connections
   var numberOfValidConnections = 0;
-  var credentialsValid = false;
   var errorObject = null;
 
   // For each connection we need to authenticate
-  while(connections.length > 0) {    
+  while(connections.length > 0) {
     // Execute MongoCR
     var execute = function(connection) {
       // Start Auth process for a connection
-      SSIPAuthenticate(username, password, gssapiServiceName, server, connection, function(err, r) {
+      SSIPAuthenticate(self, username, password, gssapiServiceName, server, connection, options, function(err, r) {
         // Adjust count
         count = count - 1;
 
@@ -81,7 +80,6 @@ SSPI.prototype.auth = function(server, pool, db, username, password, options, ca
         } else if(r && typeof r == 'object' && r.result['errmsg']) {
           errorObject = r.result;
         } else {
-          credentialsValid = true;
           numberOfValidConnections = numberOfValidConnections + 1;
         }
 
@@ -98,12 +96,17 @@ SSPI.prototype.auth = function(server, pool, db, username, password, options, ca
       });
     }
 
-    // Get the connection
-    execute(connections.shift());
+    var _execute = function(_connection) {
+      process.nextTick(function() {
+        execute(_connection);
+      });
+    }
+
+    _execute(connections.shift());
   }
 }
 
-var SSIPAuthenticate = function(username, password, gssapiServiceName, server, connection, callback) {
+var SSIPAuthenticate = function(self, username, password, gssapiServiceName, server, connection, options, callback) {
   // Build Authentication command to send to MongoDB
   var command = {
       saslStart: 1
@@ -113,13 +116,13 @@ var SSIPAuthenticate = function(username, password, gssapiServiceName, server, c
   };
 
   // Create authenticator
-  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName);
+  var mongo_auth_process = new MongoAuthProcess(connection.host, connection.port, gssapiServiceName, options);
 
   // Execute first sasl step
-  server.command("$external.$cmd"
-    , command
-    , { connection: connection }, function(err, r) {
-    if(err) return callback(err, false);    
+  server(connection, new Query(self.bson, "$external.$cmd", command, {
+    numberToSkip: 0, numberToReturn: 1
+  }), function(err, r) {
+    if(err) return callback(err, false);
     var doc = r.result;
 
     mongo_auth_process.init(username, password, function(err) {
@@ -136,9 +139,9 @@ var SSIPAuthenticate = function(username, password, gssapiServiceName, server, c
         };
 
         // Execute the command
-        server.command("$external.$cmd"
-          , command
-          , { connection: connection }, function(err, r) {
+        server(connection, new Query(self.bson, "$external.$cmd", command, {
+          numberToSkip: 0, numberToReturn: 1
+        }), function(err, r) {
           if(err) return callback(err, false);
           var doc = r.result;
 
@@ -153,12 +156,12 @@ var SSIPAuthenticate = function(username, password, gssapiServiceName, server, c
             };
 
             // Execute the command
-            server.command("$external.$cmd"
-              , command
-              , { connection: connection }, function(err, r) {
+            server(connection, new Query(self.bson, "$external.$cmd", command, {
+              numberToSkip: 0, numberToReturn: 1
+            }), function(err, r) {
               if(err) return callback(err, false);
               var doc = r.result;
-              
+
               mongo_auth_process.transition(doc.payload, function(err, payload) {
                 // Perform the next step against mongod
                 var command = {
@@ -168,22 +171,22 @@ var SSIPAuthenticate = function(username, password, gssapiServiceName, server, c
                 };
 
                 // Execute the command
-                server.command("$external.$cmd"
-                  , command
-                  , { connection: connection }, function(err, r) {
+                server(connection, new Query(self.bson, "$external.$cmd", command, {
+                  numberToSkip: 0, numberToReturn: 1
+                }), function(err, r) {
                   if(err) return callback(err, false);
                   var doc = r.result;
 
                   if(doc.done) return callback(null, true);
                   callback(new Error("Authentication failed"), false);
-                });        
+                });
               });
             });
           });
         });
       });
     });
-  });  
+  });
 }
 
 // Add to store only if it does not exist
@@ -201,23 +204,36 @@ var addAuthSession = function(authStore, session) {
 }
 
 /**
+ * Remove authStore credentials
+ * @method
+ * @param {string} db Name of database we are removing authStore details about
+ * @return {object}
+ */
+SSPI.prototype.logout = function(dbName) {
+  this.authStore = this.authStore.filter(function(x) {
+    return x.db != dbName;
+  });
+}
+
+/**
  * Re authenticate pool
  * @method
  * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
- * @param {Pool} pool Connection pool for this topology
+ * @param {[]Connections} connections Connections to authenticate using this authenticator
  * @param {authResultCallback} callback The callback to return the result from the authentication
  * @return {object}
  */
-SSPI.prototype.reauthenticate = function(server, pool, callback) {
-  var count = this.authStore.length;
+SSPI.prototype.reauthenticate = function(server, connections, callback) {
+  var authStore = this.authStore.slice(0);
+  var count = authStore.length;
   if(count == 0) return callback(null, null);
   // Iterate over all the auth details stored
-  for(var i = 0; i < this.authStore.length; i++) {
-    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, this.authStore[i].options, function(err, r) {
+  for(var i = 0; i < authStore.length; i++) {
+    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, authStore[i].options, function(err) {
       count = count - 1;
       // Done re-authenticating
       if(count == 0) {
-        callback(null, null);
+        callback(err, null);
       }
     });
   }

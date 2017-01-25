@@ -1,17 +1,17 @@
-﻿var bitcoin = require('bitcoin'),
-    config = config = require("../../config");
+﻿import bitcoin from 'bitcoin';
+import config from '../../config';
 
-var client = new bitcoin.Client(config.bitcoin);
-module.exports = {
-    GetNewAddress: function (userid, callback){
+const client = new bitcoin.Client(config.bitcoin);
+export default {
+    GetNewAddress: (userid, callback) =>{
         client.getNewAddress(userid, callback);
     },
-    GetBalance: function (userid, callback) {
+    GetBalance: (userid, callback) => {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
         client.getReceivedByAccount(userid, 2, callback);
     },
-    WithdrawFunds: function (userid, unit, callback) { 
+    WithdrawFunds:  (userid, unit, callback) => { 
     
     }
 

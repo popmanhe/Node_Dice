@@ -20,7 +20,7 @@ import    socketHandshake from 'socket.io-handshake';
 import    express_handlebars from 'express-handlebars';
 import    http from 'http';
 import    socketio from 'socket.io';
-app = express();
+const app = express();
  const MongoStore = MongoConnect(session);
 /*set up view engine*/
 const exphbs = express_handlebars({

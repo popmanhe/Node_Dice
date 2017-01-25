@@ -1,7 +1,7 @@
 "use strict";
 
 var f = require('util').format
-  , crypto = require('crypto')
+  , Query = require('../connection/commands').Query
   , MongoError = require('../error');
 
 var AuthSession = function(db, username, password) {
@@ -11,7 +11,7 @@ var AuthSession = function(db, username, password) {
 }
 
 AuthSession.prototype.equal = function(session) {
-  return session.db == this.db 
+  return session.db == this.db
     && session.username == this.username
     && session.password == this.password;
 }
@@ -21,7 +21,8 @@ AuthSession.prototype.equal = function(session) {
  * @class
  * @return {X509} A cursor instance
  */
-var X509 = function() {
+var X509 = function(bson) {
+  this.bson = bson;
   this.authStore = [];
 }
 
@@ -29,41 +30,42 @@ var X509 = function() {
  * Authenticate
  * @method
  * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
- * @param {Pool} pool Connection pool for this topology
+ * @param {[]Connections} connections Connections to authenticate using this authenticator
  * @param {string} db Name of the database
  * @param {string} username Username
  * @param {string} password Password
  * @param {authResultCallback} callback The callback to return the result from the authentication
  * @return {object}
  */
-X509.prototype.auth = function(server, pool, db, username, password, callback) {
+X509.prototype.auth = function(server, connections, db, username, password, callback) {
   var self = this;
-  // Get all the connections
-  var connections = pool.getAll();
   // Total connections
   var count = connections.length;
   if(count == 0) return callback(null, null);
 
   // Valid connections
   var numberOfValidConnections = 0;
-  var credentialsValid = false;
   var errorObject = null;
 
   // For each connection we need to authenticate
-  while(connections.length > 0) {    
+  while(connections.length > 0) {
     // Execute MongoCR
     var execute = function(connection) {
       // Let's start the sasl process
       var command = {
           authenticate: 1
         , mechanism: 'MONGODB-X509'
-        , user: username
       };
 
+      // Add username if specified
+      if(username) {
+        command.user = username;
+      }
+
       // Let's start the process
-      server.command("$external.$cmd"
-        , command
-        , { connection: connection }, function(err, r) {
+      server(connection, new Query(self.bson, "$external.$cmd", command, {
+        numberToSkip: 0, numberToReturn: 1
+      }), function(err, r) {
         // Adjust count
         count = count - 1;
 
@@ -75,7 +77,6 @@ X509.prototype.auth = function(server, pool, db, username, password, callback) {
         } else if(r.result['errmsg']) {
           errorObject = r.result;
         } else {
-          credentialsValid = true;
           numberOfValidConnections = numberOfValidConnections + 1;
         }
 
@@ -92,8 +93,13 @@ X509.prototype.auth = function(server, pool, db, username, password, callback) {
       });
     }
 
-    // Get the connection
-    execute(connections.shift());
+    var _execute = function(_connection) {
+      process.nextTick(function() {
+        execute(_connection);
+      });
+    }
+
+    _execute(connections.shift());
   }
 }
 
@@ -112,23 +118,36 @@ var addAuthSession = function(authStore, session) {
 }
 
 /**
+ * Remove authStore credentials
+ * @method
+ * @param {string} db Name of database we are removing authStore details about
+ * @return {object}
+ */
+X509.prototype.logout = function(dbName) {
+  this.authStore = this.authStore.filter(function(x) {
+    return x.db != dbName;
+  });
+}
+
+/**
  * Re authenticate pool
  * @method
  * @param {{Server}|{ReplSet}|{Mongos}} server Topology the authentication method is being called on
- * @param {Pool} pool Connection pool for this topology
+ * @param {[]Connections} connections Connections to authenticate using this authenticator
  * @param {authResultCallback} callback The callback to return the result from the authentication
  * @return {object}
  */
-X509.prototype.reauthenticate = function(server, pool, callback) {
-  var count = this.authStore.length;
+X509.prototype.reauthenticate = function(server, connections, callback) {
+  var authStore = this.authStore.slice(0);
+  var count = authStore.length;
   if(count == 0) return callback(null, null);
   // Iterate over all the auth details stored
-  for(var i = 0; i < this.authStore.length; i++) {
-    this.auth(server, pool, this.authStore[i].db, this.authStore[i].username, this.authStore[i].password, function(err, r) {
+  for(var i = 0; i < authStore.length; i++) {
+    this.auth(server, connections, authStore[i].db, authStore[i].username, authStore[i].password, function(err) {
       count = count - 1;
       // Done re-authenticating
       if(count == 0) {
-        callback(null, null);
+        callback(err, null);
       }
     });
   }

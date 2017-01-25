@@ -1,10 +1,21 @@
-"use strict";
+'use strict';
 
-var bitcoin = require('bitcoin'),
-    config = config = require("../../config");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var client = new bitcoin.Client(config.bitcoin);
-module.exports = {
+var _bitcoin = require('bitcoin');
+
+var _bitcoin2 = _interopRequireDefault(_bitcoin);
+
+var _config = require('../../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var client = new _bitcoin2.default.Client(_config2.default.bitcoin);
+exports.default = {
     GetNewAddress: function GetNewAddress(userid, callback) {
         client.getNewAddress(userid, callback);
     },

@@ -1,0 +1,1 @@
+"C:\Program Files\MongoDB\Server\3.4\bin\mongod" --config C:\node_dice\mongod.conf --install

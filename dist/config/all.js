@@ -1,13 +1,16 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var path = require('path');
-var rootPath = path.normalize(__dirname + '/..');
+var rootPath = path.normalize(__dirname + '/../../');
 var pkg = require(rootPath + '/package.json');
 
-module.exports = {
+exports.default = {
     root: rootPath,
-    serverRoot: rootPath + '/app',
-    clientRoot: rootPath + '/public',
+    serverRoot: rootPath + '/dist/app',
+    clientRoot: rootPath + '/wwwroot',
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {

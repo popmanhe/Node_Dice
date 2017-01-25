@@ -1,6 +1,9 @@
 'use strict';
 
-module.exports = {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,

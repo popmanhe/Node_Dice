@@ -61,7 +61,7 @@ var _socket4 = _interopRequireDefault(_socket3);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import cluster from 'cluster');
-app = (0, _express2.default)();
+var app = (0, _express2.default)();
 //favicon from 'serve-favicon'),
 
 var MongoStore = (0, _connectMongo2.default)(_expressSession2.default);

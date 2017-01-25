@@ -1,5 +1,5 @@
 {
-  "name": "Node_Dice",
+  "name": "node_dice",
   "description": "An open source dice game faucet built on node.js for BTC/NXT",
   "version": "0.5.0",
   "keywords": [
@@ -18,7 +18,7 @@
     "build": "node_modules/.bin/babel -w src/ -d dist/ -s",
     "start": "PORT=8080 pm2 start dist/app.js",
     "lint": "eslint src"
-},
+  },
   "config": {
     "unsafe-perm": true
   },
@@ -42,10 +42,9 @@
     "lodash": "^2.4.2",
     "lru-cache": "^2.6.2",
     "method-override": "^2.3.2",
-    "mongoose": "^4.0.5",
+    "mongoose": "^4.7.8",
     "morgan": "^1.5.2",
     "newrelic": "^1.18.5",
-    "uuid": "^3.0.1",
     "nodemailer": "^1.3.4",
     "request": "^2.55.0",
     "serve-favicon": "^2.1.6",
@@ -53,6 +52,7 @@
     "socket.io": "^1.3.5",
     "socket.io-client": "^1.3.5",
     "socket.io-handshake": "0.0.10",
+    "uuid": "^3.0.1",
     "winston": "^0.8.3"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
 'use strict';
 
 
-var path = require('path');
-var rootPath = path.normalize(__dirname + '/../../');
-var pkg = require(rootPath + '/package.json');
+import path from 'path';
+const rootPath = path.normalize(__dirname + '/../../');
+import pkg from rootPath + '/package.json';
 
-module.exports = {
+export default {
     root: rootPath,
     serverRoot: rootPath + '/dist/app',
     clientRoot: rootPath + '/wwwroot',

@@ -1,7 +1,6 @@
-'use strict';
 
 
-var _ = require('lodash');
+import _  from'lodash';
 
 
 // default is development environment
