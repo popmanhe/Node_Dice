@@ -1,13 +1,15 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var path = require('path');
-var rootPath = path.normalize(__dirname + '/../../');
-var pkg = require(rootPath + '/package.json');
+var _path = require('path');
 
-exports.default = {
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var rootPath = _path2.default.normalize(__dirname + '/../../');
+var pkg = rootPath + '/package.json';
+
+module.exports = {
     root: rootPath,
     serverRoot: rootPath + '/dist/app',
     clientRoot: rootPath + '/wwwroot',

@@ -32,8 +32,8 @@ exports.default = function () {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(remap)) {
-        var object = remap.object;
-        var property = remap.property;
+        var object = remap.object,
+            property = remap.property;
 
         path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name), t.JSXIdentifier(property.name)));
       } else {
@@ -373,9 +373,9 @@ exports.default = function () {
           }
 
           for (var source in imports) {
-            var _imports$source = imports[source];
-            var specifiers = _imports$source.specifiers;
-            var maxBlockHoist = _imports$source.maxBlockHoist;
+            var _imports$source = imports[source],
+                specifiers = _imports$source.specifiers,
+                maxBlockHoist = _imports$source.maxBlockHoist;
 
             if (specifiers.length) {
               var uid = addRequire(source, maxBlockHoist);

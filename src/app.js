@@ -4,24 +4,26 @@
  * Created by Neo on 2015/02/08
  */
 
-'use strict';
-import    newrelic from 'newrelic';
+import newrelic from 'newrelic';
 //import cluster from 'cluster');
-import    config from './config';
-import    express from 'express';
-import    expressValidator from 'express-validator';
+import config from './config';
+import express from 'express';
+import expressValidator from 'express-validator';
 //favicon from 'serve-favicon'),
-import    compression from 'compression';
-import    bodyParser from 'body-parser';
-import    cookieParser from 'cookie-parser';
-import    session from 'express-session';
-import    MongoConnect from 'connect-mongo';
-import    socketHandshake from 'socket.io-handshake';
-import    express_handlebars from 'express-handlebars';
-import    http from 'http';
-import    socketio from 'socket.io';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import MongoConnect from 'connect-mongo';
+import socketHandshake from 'socket.io-handshake';
+import express_handlebars from 'express-handlebars';
+import http from 'http';
+import socketio from 'socket.io';
+import routes from './app/routes';
+import sockets from './app/sockets';
+
 const app = express();
- const MongoStore = MongoConnect(session);
+const MongoStore = MongoConnect(session);
 /*set up view engine*/
 const exphbs = express_handlebars({
     helpers: {
@@ -91,9 +93,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator([]));
 
 //map routes for pages
-require('./app/routes')(app, exphbs);
+routes(app, exphbs);
 //socket communication for games
-require('./app/sockets')(io);
+sockets(io);
 
 server.listen(config.port, function () {
     console.log('Server running on port ' + config.port);

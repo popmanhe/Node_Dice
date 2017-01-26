@@ -4,11 +4,12 @@
  * Created by Ken on 2/08/2014
  */
 
+
 'use strict';
 
 var logger = require('../../helper/logger');
 
-exports.http403 = function (req, res) {
+exports.http403 = function(req, res) {
     res.status(403);
     logger.warn('Access denial : ', req.originalUrl);
 
@@ -21,7 +22,8 @@ exports.http403 = function (req, res) {
     }
 };
 
-exports.http404 = function (req, res) {
+
+exports.http404 = function(req, res) {
     res.status(404);
     logger.warn('Resource not found : ', req.originalUrl);
     if (req.xhr) {
@@ -33,7 +35,8 @@ exports.http404 = function (req, res) {
     }
 };
 
-exports.http500 = function (err, req, res, next) {
+
+exports.http500 = function(err, req, res, next) {
     res.status(500);
     //    // capture an exception
     //    if (config.errors) {
@@ -49,4 +52,3 @@ exports.http500 = function (err, req, res, next) {
         res.render('http/500');
     }
 };
-//# sourceMappingURL=index.js.map

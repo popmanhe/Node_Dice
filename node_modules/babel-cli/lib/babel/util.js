@@ -10,13 +10,13 @@ exports.transform = transform;
 exports.compile = compile;
 exports.requireChokidar = requireChokidar;
 var commander = require("commander");
+var defaults = require("lodash/defaults");
 var readdir = require("fs-readdir-recursive");
 var index = require("./index");
 var babel = require("babel-core");
 var util = require("babel-core").util;
 var path = require("path");
 var fs = require("fs");
-var _ = require("lodash");
 
 function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -44,7 +44,7 @@ function log(msg) {
 }
 
 function transform(filename, code, opts) {
-  opts = _.defaults(opts || {}, index.opts);
+  opts = defaults(opts || {}, index.opts);
   opts.filename = filename;
 
   var result = babel.transform(code, opts);

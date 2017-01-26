@@ -10,7 +10,7 @@ import config from '../config';
 import faucet from './faucet.js';
 import session from 'express-session';
 import logger from './helper/logger';
-module.exports = (app, exphbs)=> {
+export default (app, exphbs)=> {
     
     const seo_title = 'bit coin btc nxt altcoin dice game';
     app.use((req, res, next) => {

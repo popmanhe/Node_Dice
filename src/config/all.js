@@ -3,9 +3,9 @@
 
 import path from 'path';
 const rootPath = path.normalize(__dirname + '/../../');
-import pkg from rootPath + '/package.json';
+const pkg = rootPath + '/package.json';
 
-export default {
+module.exports =  {
     root: rootPath,
     serverRoot: rootPath + '/dist/app',
     clientRoot: rootPath + '/wwwroot',
@@ -37,4 +37,4 @@ export default {
     support: '',
     projectName: '',
     copyrightName: ''
-};
+}

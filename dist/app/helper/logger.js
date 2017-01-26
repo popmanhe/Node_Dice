@@ -6,16 +6,25 @@
 
 'use strict';
 
-var path = require('path'),
-    winston = require('winston');
+var _path = require('path');
 
-module.exports = new winston.Logger({
-    transports: [new winston.transports.Console({
+var _path2 = _interopRequireDefault(_path);
+
+var _winston = require('winston');
+
+var _winston2 = _interopRequireDefault(_winston);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_winston2.default.transports.DailyRotateFile = require('winston-daily-rotate-file');
+
+module.exports = new _winston2.default.Logger({
+    transports: [new _winston2.default.transports.Console({
         level: 'debug',
         colorize: true
-    }), new winston.transports.DailyRotateFile({
+    }), new _winston2.default.transports.DailyRotateFile({
         level: 'silly',
-        filename: path.join(__dirname, '../../logs/access-'),
+        filename: _path2.default.join(__dirname, '../../logs/access-'),
         datePattern: 'yyyy-MM-dd.log',
         maxsize: 5242880 /* 5MB */
     })]

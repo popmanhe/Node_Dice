@@ -5,15 +5,15 @@
  */
 'use strict';
 
-var config = require("../../config"),
-    uuid = require('node-uuid'),
-    userHelper = require('../helper/userHelper'),
-    betHelper = require('../helper/betHelper'),
-    rollDice = require('../helper/cryptoroll'),
-    _ = require('lodash'),
-    gameName = 'overunder';
+import config from '../../config';
+import uuid from 'uuid';
+import userHelper from '../helper/userHelper';
+import betHelper from '../helper/betHelper';
+import rollDice from '../helper/cryptoroll';
+import _ from 'lodash';
+const gameName = 'overunder';
 
-module.exports = function (io) {
+export default (io) => {
     
     
     io.on('connection', function (socket) {
@@ -99,7 +99,7 @@ module.exports = function (io) {
 
 
         //functions
-        function GetProfit(rollNum, selNum, amount) { 
+        const  GetProfit = (rollNum, selNum, amount) => { 
             var payout = selNum <= 49.5? 99 / selNum:99 / (100 - selNum);
             if ((selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1) 
              || (selNum * 1 >= 50.5 && rollNum * 1 >= selNum * 1)) {

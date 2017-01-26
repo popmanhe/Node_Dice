@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['eRealm'],
+  app_name : ['node_dice'],
   /**
    * Your New Relic license key.
    */

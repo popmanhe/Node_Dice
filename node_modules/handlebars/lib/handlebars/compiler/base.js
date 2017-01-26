@@ -1,18 +1,24 @@
-import parser from "./parser";
-import AST from "./ast";
-module Helpers from "./helpers";
-import { extend } from "../utils";
+import parser from './parser';
+import WhitespaceControl from './whitespace-control';
+import * as Helpers from './helpers';
+import { extend } from '../utils';
 
 export { parser };
 
-var yy = {};
-extend(yy, Helpers, AST);
+let yy = {};
+extend(yy, Helpers);
 
-export function parse(input) {
-  // Just return if an already-compile AST was passed in.
-  if (input.constructor === AST.ProgramNode) { return input; }
+export function parse(input, options) {
+  // Just return if an already-compiled AST was passed in.
+  if (input.type === 'Program') { return input; }
 
   parser.yy = yy;
 
-  return parser.parse(input);
+  // Altering the shared object here, but this is ok as parser is a sync operation
+  yy.locInfo = function(locInfo) {
+    return new yy.SourceLocation(options && options.srcName, locInfo);
+  };
+
+  let strip = new WhitespaceControl(options);
+  return strip.accept(parser.parse(input));
 }

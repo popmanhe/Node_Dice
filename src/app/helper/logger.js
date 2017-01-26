@@ -6,10 +6,11 @@
 
 'use strict';
 
-var path = require('path'),
-    winston = require('winston');
-
-module.exports = new(winston.Logger)({
+import path from 'path';
+import winston from 'winston';
+winston.transports.DailyRotateFile = require('winston-daily-rotate-file');
+ 
+module.exports = new (winston.Logger)({
     transports: [
         new(winston.transports.Console)({
             level: 'debug',

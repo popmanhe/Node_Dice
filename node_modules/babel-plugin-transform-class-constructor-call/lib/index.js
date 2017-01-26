@@ -41,8 +41,8 @@ exports.default = function (_ref) {
   }
 
   function handleClassWithCall(constructorCall, classPath) {
-    var _classPath = classPath;
-    var node = _classPath.node;
+    var _classPath = classPath,
+        node = _classPath.node;
 
     var ref = node.id || classPath.scope.generateUidIdentifier("class");
 

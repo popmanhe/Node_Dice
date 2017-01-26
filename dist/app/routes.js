@@ -6,6 +6,10 @@
 
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
@@ -24,7 +28,7 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = function (app, exphbs) {
+exports.default = function (app, exphbs) {
 
     var seo_title = 'bit coin btc nxt altcoin dice game';
     app.use(function (req, res, next) {

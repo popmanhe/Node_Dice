@@ -1,9 +1,3 @@
-/**
- * Copyright 2014 Node Dice
- *
- * Created by Neo on 2015/02/08
- */
-
 'use strict';
 
 var _newrelic = require('newrelic');
@@ -58,11 +52,24 @@ var _socket3 = require('socket.io');
 
 var _socket4 = _interopRequireDefault(_socket3);
 
+var _routes = require('./app/routes');
+
+var _routes2 = _interopRequireDefault(_routes);
+
+var _sockets = require('./app/sockets');
+
+var _sockets2 = _interopRequireDefault(_sockets);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import cluster from 'cluster');
 var app = (0, _express2.default)();
 //favicon from 'serve-favicon'),
+/**
+ * Copyright 2014 Node Dice
+ *
+ * Created by Neo on 2015/02/08
+ */
 
 var MongoStore = (0, _connectMongo2.default)(_expressSession2.default);
 /*set up view engine*/
@@ -134,9 +141,9 @@ app.use(_bodyParser2.default.urlencoded({ extended: true }));
 app.use((0, _expressValidator2.default)([]));
 
 //map routes for pages
-require('./app/routes')(app, exphbs);
+(0, _routes2.default)(app, exphbs);
 //socket communication for games
-require('./app/sockets')(io);
+(0, _sockets2.default)(io);
 
 server.listen(_config2.default.port, function () {
     console.log('Server running on port ' + _config2.default.port);

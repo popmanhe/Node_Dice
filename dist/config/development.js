@@ -1,9 +1,6 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
+module.exports = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,
@@ -25,7 +22,7 @@ exports.default = {
         interval: 15 * 60 * 1000,
         min: 100,
         max: 500,
-        proxy: 'http://localhost:8580' //try to use proxy to connect to google if blocked
+        proxy: null //try to use proxy to connect to google if blocked
     }
 };
 //# sourceMappingURL=development.js.map

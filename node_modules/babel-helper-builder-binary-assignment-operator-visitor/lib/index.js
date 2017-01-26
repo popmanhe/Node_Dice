@@ -28,8 +28,8 @@ exports.default = function (opts) {
   };
 
   visitor.AssignmentExpression = function (path, file) {
-    var node = path.node;
-    var scope = path.scope;
+    var node = path.node,
+        scope = path.scope;
 
     if (!isAssignment(node)) return;
 
