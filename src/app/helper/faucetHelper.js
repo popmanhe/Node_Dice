@@ -1,23 +1,23 @@
-﻿var dbhelp = require("./dbHelper"),
-    db = dbhelp.db,
-    config = require("../../config"),
-    userHelper = require('./userHelper.js'),
+﻿import dbhelp from './dbHelper';
+import config from '../../config';
+import userHelper from './userHelper.js';
+const db = dbhelp.db;
     mongoose = dbhelp.mongoose;
 
-var faucetSchema = new mongoose.Schema({
+const faucetSchema = new mongoose.Schema({
     lastTime: Date,
     userid: String
 });
 /*Static methods*/
 faucetSchema.statics = {
-    GetPay: function (userid, callback) {
-        userHelper.GetUserById(userid, 'funds', function (err, u) {
+    GetPay:  (userid, callback) => {
+        userHelper.GetUserById(userid, 'funds', (err, u) =>{
             if (err) {
                 callback(err, null);
             }
             else {
-                faucetModel.findOne({ userid: userid }, 'lastTime', function (err, fa) {
-                    var now = new Date();
+                faucetModel.findOne({ userid: userid }, 'lastTime', (err, fa) => {
+                    let now = new Date();
                     if (!fa) {
                             fa = new faucetModel({
                                 userid: userid,
@@ -30,8 +30,8 @@ faucetSchema.statics = {
                         fa.lastTime = now;
                         fa.save();
                         
-                        var amount = randomIntInc(config.faucet.min, config.faucet.max);
-                        var f = u.addProfit('BTC', amount * 0.00000001)
+                        let amount = randomIntInc(config.faucet.min, config.faucet.max);
+                        let f = u.addProfit('BTC', amount * 0.00000001)
                          u.save();
                         
                         
@@ -46,10 +46,10 @@ faucetSchema.statics = {
     }
 };
 /*functions*/
-function randomIntInc(low, high) {
+const randomIntInc =(low, high) => {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
-var faucetModel = mongoose.model('Faucet', faucetSchema);
+const faucetModel = mongoose.model('Faucet', faucetSchema);
 
 module.exports = faucetModel;

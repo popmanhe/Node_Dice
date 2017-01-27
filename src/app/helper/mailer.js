@@ -37,14 +37,14 @@ const Mailer = () => {
     this.transport = nodemailer.createTransport(config.mail.transport, _.clone(config.mail.options) || {});
 }
 
-Mailer.prototype.sendTemplate = function(to, templateName, data) {
-    var template = this.templates[templateName];
+Mailer.prototype.sendTemplate = (to, templateName, data)=> {
+    let template = this.templates[templateName];
     if (!template){
         return;
     }
-    var compiledTemplate = template.compiledTemplate;
+    let compiledTemplate = template.compiledTemplate;
     if (!compiledTemplate) {
-        var source = fs.readFileSync(path.join(this.path, template.file), 'utf8');
+        let source = fs.readFileSync(path.join(this.path, template.file), 'utf8');
         compiledTemplate = this.templates[templateName].compiledTemplate = handlebars.compile(source);
     }
     return this.send({
