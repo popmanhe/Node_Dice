@@ -6,12 +6,12 @@
 
 'use strict';
 
-var config = require("../../config"), //request the config files.
-    mongoose = require('mongoose');
+import config from '../../config'; //request the config files.
+import mongoose from 'mongoose';
 //   ttl = require('mongoose-ttl');
 mongoose.connect(config.mongodb.hostaddress + '/' + config.mongodb.dbname); //connect to the mongodb driver.
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 module.exports = {

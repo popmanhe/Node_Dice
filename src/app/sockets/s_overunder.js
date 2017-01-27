@@ -16,15 +16,15 @@ const gameName = 'overunder';
 export default (io) => {
     
     
-    io.on('connection', function (socket) {
+    io.on('connection', (socket) => {
         
         socket.join(gameName);
         
-        var session = socket.handshake.session;
+        let session = socket.handshake.session;
         //return a 
-        socket.on('roll', function (clientBet) {
+        socket.on('roll', (clientBet) => {
             
-            userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce funds", function (err, u) {
+            userHelper.GetUserById(session.userid, "clientSalt serverSalt nonce funds",  (err, u) => {
                 if (err)
                     socket.emit('roll', { clientSalt: '', error: err });
                 else {
@@ -48,8 +48,8 @@ export default (io) => {
                     u.nonce++;
                    
                     //get lucky number
-                    var num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
-                    var bet = new betHelper({
+                    let num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    let bet = new betHelper({
                         userid: session.userid,
                         clientSalt: u.clientSalt,
                         serverSalt: u.serverSalt,
@@ -61,12 +61,12 @@ export default (io) => {
                         rollNum: num,
                         betId: uuid.v4()
                     });
-                    bet.save(function (err) {
+                    bet.save((err) => {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
                     u.addProfit(clientBet.coinName, GetProfit(bet.rollNum, bet.selNum, bet.amount))
-                    u.save(function (err) {
+                    u.save((err) => {
                         if (err) return console.error('Saving user\'s profit error:' + err);
                     });                                      
                     //Every bet is sent to everyone who is in over/under game. 

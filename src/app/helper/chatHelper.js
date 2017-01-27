@@ -1,24 +1,24 @@
 ﻿'use strict';
 
-var dbhelp = require("./dbHelper"),
-    db = dbhelp.db,
+import dbhelp from './dbHelper';
+const db = dbhelp.db,
     mongoose = dbhelp.mongoose;
 
 /*chat schema*/
-var chatSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
     chatUser: String,
     chatTime: { type: Date, expires: 60 * 60 * 24 * 7 },//msg expired in a week
     chatMsg: String
 });
 
-var chatModel = mongoose.model('Chat', chatSchema);
+const chatModel = mongoose.model('Chat', chatSchema);
 
 module.exports = {
     Chat: chatModel,
-    GetChats: function (callback) { 
+    GetChats: (callback) => { 
         chatModel.find({},'chatUser chatTime chatMsg', {limit: 100}).sort({chatTime: -1}).exec(callback);
     },
-    AddChat: function (chat, callback) {
+    AddChat: (chat, callback) =>{
         var c = new chatModel({
             chatUser: chat.chatUser,
             chatTime: chat.chatTime,
