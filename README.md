@@ -18,7 +18,7 @@ The site is built on
 <li>2015-03-22:  Bitcoin faucet implemented. Use google reCaptcha to verify user is not rebot. <br />
 	             Amount of faucet and interval can be adjusted in config file.</li>
 <li>2015-03-29:  Move to ubuntu and use nginx as web server.</li>
-<li>2017-01-25:  Start rewriting in ES2015 and react.</li>
+<li>2017-01-25:  Start rewriting in ES6 and react. Use babel to transform ES6 to ES5.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
