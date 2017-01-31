@@ -2,7 +2,7 @@
 import config from '../../config';
 import userHelper from './userHelper.js';
 const db = dbhelp.db;
-    mongoose = dbhelp.mongoose;
+const mongoose = dbhelp.mongoose;
 
 const faucetSchema = new mongoose.Schema({
     lastTime: Date,
