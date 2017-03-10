@@ -1,12 +1,9 @@
 import React from 'react';
 
-const Investment =  ()=>{
-
-    return (
-<span > Welcome, Investor! </span>
-
-    );
-
+const Investment = () => {
+  return (
+    <div > Welcome, investor!  </div>
+   );
 };
-
+ 
 export default Investment;

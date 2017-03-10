@@ -1,11 +1,13 @@
-import React from 'react';
+import React,{PropTypes} from 'react';
 
-const CoinPicker =  ()=>{
+const CoinPicker =  ({coin})=>{
 
     return (
-        <span />
+       <a >{coin}</a>
     );
 
 };
-
+CoinPicker.propTypes = {
+  coin :PropTypes.string.isRequired
+};
 export default CoinPicker;
