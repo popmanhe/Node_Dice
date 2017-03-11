@@ -39,8 +39,9 @@
     "react-router-redux": "4.0.8",
     "redux": "3.6.0",
     "redux-saga": "0.14.3",
-    "ramda":"0.23.0" 
-  },
+    "ramda":"0.23.0" ,
+    "socket.io-client": "1.7.3"
+ },
   "devDependencies": {
     "autoprefixer": "6.7.6",
     "babel-cli": "6.23.0",

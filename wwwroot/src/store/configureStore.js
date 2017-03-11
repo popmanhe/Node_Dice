@@ -2,14 +2,16 @@ import {createStore, compose, applyMiddleware} from 'redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from '../reducers';
-import { ouBet } from '../sagas/OuBetSaga';
+import  ouBetSaga  from '../sagas/ouBetSaga';
+import  chatSaga  from '../sagas/chatSaga';
 function configureStoreProd(initialState) {
   const sagaMiddleware = createSagaMiddleware();
   const middlewares = [
     // Add other middleware on this line...
-    ouBet
+    ouBetSaga, chatSaga
   ];
-  sagaMiddleware.run(ouBet);
+  sagaMiddleware.run(ouBetSaga);
+  sagaMiddleware.run(chatSaga);
   const store = createStore(rootReducer, initialState, compose(
     applyMiddleware(...middlewares),
     window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -25,7 +27,7 @@ function configureStoreDev(initialState) {
 
     // Redux middleware that spits an error on you when you try to mutate your state either inside a dispatch or between dispatches.
     reduxImmutableStateInvariant(),
-    ouBet
+    ouBetSaga, chatSaga
    ];
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
@@ -42,7 +44,8 @@ function configureStoreDev(initialState) {
       store.replaceReducer(nextReducer);
     });
   }
-  sagaMiddleware.run(ouBet);
+  sagaMiddleware.run(ouBetSaga);
+  sagaMiddleware.run(chatSaga);
   return store;
 }
 
