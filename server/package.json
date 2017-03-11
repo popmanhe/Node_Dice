@@ -15,8 +15,8 @@
   },
   "scripts": {
     "dev": "nodemon dist/app.js",
-    "build": "node_modules/.bin/babel -w src/ -d dist/ -s",
-    "start": "PORT=8080 pm2 start dist/app.js",
+    "start": "node_modules/.bin/babel -w src/ -d dist/ -s && nodemon dist/app.js",
+    "build": "PORT=8080 pm2 start dist/app.js",
     "lint": "eslint src"
   },
   "config": {
@@ -47,7 +47,7 @@
     "mongodb": "^2.2.22",
     "mongoose": "^4.7.8",
     "morgan": "^1.7.0",
-    "newrelic": "^1.36.1",
+    "newrelic": "^1.37.2",
     "node-uuid": "^1.4.7",
     "nodemailer": "^2.7.2",
     "request": "^2.79.0",

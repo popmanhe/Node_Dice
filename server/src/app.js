@@ -1,7 +1,7 @@
 /**
- * Copyright 2014 Node Dice
+ * Copyright 2017 Node Dice
  *
- * Created by Neo on 2015/02/08
+ * Created by Neo on 2017/02/08
  */
 
 import newrelic from 'newrelic';

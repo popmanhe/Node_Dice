@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import io from "socket.io-client";
 //import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { takeEvery } from "redux-saga/effects";
