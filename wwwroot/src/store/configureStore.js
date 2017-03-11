@@ -1,38 +1,37 @@
 import {createStore, compose, applyMiddleware} from 'redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import rootReducer from '../reducers';
-
+import { ouBet } from '../sagas/OuBetSaga';
 function configureStoreProd(initialState) {
+  const sagaMiddleware = createSagaMiddleware();
   const middlewares = [
     // Add other middleware on this line...
-
-    // thunk middleware can also accept an extra argument to be passed to each thunk action
-    // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
-    thunk,
+    ouBet
   ];
-
-  return createStore(rootReducer, initialState, compose(
-    applyMiddleware(...middlewares)
+  sagaMiddleware.run(ouBet);
+  const store = createStore(rootReducer, initialState, compose(
+    applyMiddleware(...middlewares),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );
+  return store;
 }
 
 function configureStoreDev(initialState) {
+  const sagaMiddleware = createSagaMiddleware();
   const middlewares = [
     // Add other middleware on this line...
 
     // Redux middleware that spits an error on you when you try to mutate your state either inside a dispatch or between dispatches.
     reduxImmutableStateInvariant(),
-
-    // thunk middleware can also accept an extra argument to be passed to each thunk action
-    // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
-    thunk,
-  ];
+    ouBet
+   ];
 
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
   const store = createStore(rootReducer, initialState, composeEnhancers(
-    applyMiddleware(...middlewares)
+    applyMiddleware(...middlewares),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );
 
@@ -43,7 +42,7 @@ function configureStoreDev(initialState) {
       store.replaceReducer(nextReducer);
     });
   }
-
+  sagaMiddleware.run(ouBet);
   return store;
 }
 
