@@ -2,8 +2,8 @@ Demo site: http://ccroll.com/
 
 The site is built on 
 <ul>
-<li>Backend: node.js + socket.io + mongodb + handlebars.js(template)</li>
-<li>Frontend: bootstrap + jquery + knockout.js</li>
+<li>Backend: node.js + socket.io + mongodb</li>
+<li>Frontend: bootstrap + jquery + react.js</li>
 </ul>
 <p>Session uses mongodb as session store, so the site can be expanded to multiple servers.</p>
 
@@ -18,7 +18,7 @@ The site is built on
 <li>2015-03-22:  Bitcoin faucet implemented. Use google reCaptcha to verify user is not rebot. <br />
 	             Amount of faucet and interval can be adjusted in config file.</li>
 <li>2015-03-29:  Move to ubuntu and use nginx as web server.</li>
-<li>2017-01-25:  Start rewriting in ES6 and react. Use babel to transform ES6 to ES5.</li>
+<li>2017-01-25:  Start rewriting in ES6 and react. Use babel to transform ES6 to ES5. Node.js acts as restful api/socket.io server and does not render front-end html any more. Will use docker to host application in the future.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
