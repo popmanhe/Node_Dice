@@ -9,13 +9,14 @@ const socket = io.connect(config.socketUrl,
         transports: ['websocket']
     }
 );
-function* sendMessage() {
-   yield socket.emit('sendChat', { chatMsg: this.enterMsg() });
+function* sendMessage(action) {
+   console.log("message: " + action.text);
+//   yield socket.emit('sendChat', { chatMsg: this.enterMsg() });
 }
 
 function* ouBetSaga() {
     return yield [
-        takeEvery("sendChat", sendMessage)
+        takeEvery("SEND_MESSAGE", sendMessage)
     ];
 
 }
