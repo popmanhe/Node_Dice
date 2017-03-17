@@ -1,5 +1,7 @@
 export default {
-  fuelSavings: {
+  chat: {
+    newMessage: '',
+    messages:[]
      
     
   }
