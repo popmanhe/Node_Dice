@@ -5,7 +5,7 @@
  */
 'use strict';
 
-import config from '../../config';
+//import config from '../../config';
 import uuid from 'uuid';
 import userHelper from '../helper/userHelper';
 import betHelper from '../helper/betHelper';
@@ -13,7 +13,7 @@ import rollDice from '../helper/cryptoroll';
 import _ from 'lodash';
 const gameName = 'overunder';
 
-export default (io) => {
+const overunder = (io) => {
     
     
     io.on('connection', (socket) => {
@@ -65,7 +65,7 @@ export default (io) => {
                         if (err) return console.error('Saving bet error:' + err);
                     });
                     //Todo: process bet's result here
-                    u.addProfit(clientBet.coinName, GetProfit(bet.rollNum, bet.selNum, bet.amount))
+                    u.addProfit(clientBet.coinName, GetProfit(bet.rollNum, bet.selNum, bet.amount));
                     u.save((err) => {
                         if (err) return console.error('Saving user\'s profit error:' + err);
                     });                                      
@@ -100,7 +100,7 @@ export default (io) => {
 
         //functions
         const  GetProfit = (rollNum, selNum, amount) => { 
-            var payout = selNum <= 49.5? 99 / selNum:99 / (100 - selNum);
+            let payout = selNum <= 49.5? 99 / selNum:99 / (100 - selNum);
             if ((selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1) 
              || (selNum * 1 >= 50.5 && rollNum * 1 >= selNum * 1)) {
                 return amount * (payout - 1);
@@ -108,6 +108,8 @@ export default (io) => {
             else {
                return -1 * amount;
             }
-        }
+        };
     });
-}
+};
+
+export default overunder;

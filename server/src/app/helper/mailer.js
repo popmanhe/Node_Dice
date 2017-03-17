@@ -35,7 +35,7 @@ const Mailer = () => {
 
     this.path = path.normalize(path.join(__dirname, '../templates/'));
     this.transport = nodemailer.createTransport(config.mail.transport, _.clone(config.mail.options) || {});
-}
+};
 
 Mailer.prototype.sendTemplate = (to, templateName, data)=> {
     let template = this.templates[templateName];
@@ -60,10 +60,10 @@ Mailer.prototype.send = function(mailOptions) {
         return;
     }
 
-    var from = (config.mail && config.mail.fromaddress),
-        to = mailOptions.to;
+    let from = (config.mail && config.mail.fromaddress);
+    let to = mailOptions.to;
 
-    var logger = require('./logger');
+    const logger = require('./logger');
     logger.info('Mail: ', JSON.stringify(mailOptions));
 
     mailOptions = _.extend(mailOptions, {
@@ -73,10 +73,10 @@ Mailer.prototype.send = function(mailOptions) {
     });
 
     try {
-        this.transport.sendMail(mailOptions, function(error, response) {
-
-        });
-    } catch (err) {}
+        this.transport.sendMail(mailOptions);
+    } catch (err) {
+        logger.info('Error when sending email.' + err);
+    }
 };
 
-module.exports = new Mailer();
+export default new Mailer();

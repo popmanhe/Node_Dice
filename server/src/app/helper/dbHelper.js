@@ -14,7 +14,7 @@ mongoose.connect(config.mongodb.hostaddress + '/' + config.mongodb.dbname); //co
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-module.exports = {
+export default {
     db: db
     , mongoose: mongoose
 };

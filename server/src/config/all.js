@@ -37,4 +37,4 @@ module.exports =  {
     support: '',
     projectName: '',
     copyrightName: ''
-}
+};

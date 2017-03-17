@@ -7,6 +7,6 @@ import _  from'lodash';
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Load app configuration
-module.exports = _.extend(
+export default _.extend(
     require(__dirname + '/all.js'),
     require(__dirname + '/' + process.env.NODE_ENV + '.js') || {});

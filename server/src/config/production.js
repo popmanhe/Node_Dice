@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+export default {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,

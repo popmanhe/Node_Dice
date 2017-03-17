@@ -4,7 +4,7 @@
  * Created by Neo on 2017/02/08
  */
 
-import newrelic from 'newrelic';
+//import newrelic from 'newrelic';
 //import cluster from 'cluster');
 import config from './config';
 import express from 'express';
@@ -16,7 +16,6 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoConnect from 'connect-mongo';
 import socketHandshake from 'socket.io-handshake';
-import express_handlebars from 'express-handlebars';
 import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
@@ -24,28 +23,6 @@ import sockets from './app/sockets';
 
 const app = express();
 const MongoStore = MongoConnect(session);
-/*set up view engine*/
-const exphbs = express_handlebars({
-    helpers: {
-        block: function (name) {
-            var blocks = this._blocks,
-                content = blocks && blocks[name];
-            
-            return content ? content.join('\n') : null;
-        },
-        contentFor: function (name, options) {
-            var blocks = this._blocks || (this._blocks = {}),
-                block = blocks[name] || (blocks[name] = []);
-            
-            block.push(options.fn(this));
-        }
-    },
-    extname: '.hbs', 
-    defaultLayout: '_Layout',
-    layoutsDir  : config.serverRoot + '/views/layouts/',
-    partialsDir : config.serverRoot + '/views/partials/'
-});
-
 //if (process.env.SITE_USER) {
 //    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
 //}
@@ -77,9 +54,6 @@ io.use(socketHandshake({
 //config express in all environments
 app.disable('x-powered-by');
 
-app.engine('.hbs', exphbs);
-app.set('view engine', '.hbs');
-app.set('views', config.serverRoot + '/views');
 
 //Add express's middlewares
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
@@ -93,7 +67,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator([]));
 
 //map routes for pages
-routes(app, exphbs);
+routes(app);
 //socket communication for games
 sockets(io);
 

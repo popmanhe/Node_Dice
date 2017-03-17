@@ -10,7 +10,7 @@ import dbhelp from './dbHelper';
 import config from '../../config';
 
 const mongoose = dbhelp.mongoose;
-const db = dbhelp.db;
+//const db = dbhelp.db;
 /*bet schema*/
 const betSchema = new mongoose.Schema({
     userid: String,
@@ -27,15 +27,15 @@ const betSchema = new mongoose.Schema({
 //Static methods
 betSchema.statics = {
     GetBetsByUser: function (userid, callback) {
-        var query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+        const query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },
     GetAllBets: function (callback) {
-        var query = betModel.find({}, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+        const query = betModel.find({}, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     }
 };
 
 const betModel = mongoose.model('Bet', betSchema);
 
-module.exports = betModel;
+export default betModel;

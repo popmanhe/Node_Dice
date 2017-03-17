@@ -1,5 +1,5 @@
 {
-  "name": "node_dice",
+  "name": "nodedice_server",
   "description": "An open source dice game faucet built on node.js for BTC/NXT",
   "version": "0.5.0",
   "keywords": [
@@ -8,16 +8,20 @@
     "nodejs dice btc faucet"
   ],
   "homepage": "https://github.com/popmanhe/node_dice",
-  "author": "Neo",
+  "author": "Neo He",
   "repository": {
     "type": "git",
     "url": "https://github.com/popmanhe/node_dice"
   },
   "scripts": {
-    "dev": "nodemon dist/app.js",
-    "start": "node_modules/.bin/babel -w src/ -d dist/ -s && nodemon dist/app.js",
-    "build": "PORT=8080 pm2 start dist/app.js",
-    "lint": "eslint src"
+    "start": "npm-run-all --parallel open:src run:dev lint:watch",
+    "build": "npm-run-all open:dist run:prod",
+    "open:src": "babel-node tools/srcServer.js",
+    "open:dist": "babel-node tools/distServer.js",
+    "run:dev": "nodemon dist/nodeDiceServer.js --watch dist",
+    "run:prod": "pm2 start dist/nodeDiceServer.js",
+    "lint": "esw src --color",
+    "lint:watch": "npm run lint -- --watch"
   },
   "config": {
     "unsafe-perm": true
@@ -36,34 +40,44 @@
     "cookie-parser": "^1.3.3",
     "debug": "^2.6.0",
     "errorhandler": "^1.3.5",
-    "express": "^4.14.0",
-    "express-handlebars": "^3.0.0",
+    "express": "^4.15.2",
     "express-session": "^1.15.0",
     "express-validator": "^3.1.2",
-    "handlebars": "^4.0.6",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
     "method-override": "^2.3.7",
-    "mongodb": "^2.2.22",
-    "mongoose": "^4.7.8",
-    "morgan": "^1.7.0",
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.0",
+    "morgan": "^1.8.1",
     "newrelic": "^1.37.2",
-    "node-uuid": "^1.4.7",
-    "nodemailer": "^2.7.2",
-    "request": "^2.79.0",
-    "serve-favicon": "^2.3.2",
-    "should": "^11.2.0",
-    "socket.io": "^1.7.2",
-    "socket.io-client": "^1.7.2",
-    "socket.io-handshake": "0.0.10",
     "uuid": "^3.0.1",
+    "nodemailer": "3.1.7",
+    "request": "^2.81.0",
+    "serve-favicon": "^2.3.2",
+    "should": "^11.2.1",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3",
+    "socket.io-handshake": "0.0.10",
     "winston": "^2.3.1",
-    "winston-daily-rotate-file": "^1.4.3"
+    "winston-daily-rotate-file": "^1.4.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-0": "^6.16.0",
-    "debug": "~0.7.4"
+    "babel-cli": "^6.24.0",
+    "babel-eslint":"7.1.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "debug": "~0.7.4",
+    "eslint": "3.17.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-node":"4.2.1",
+    "eslint-watch": "3.0.1",
+    "npm-run-all": "4.0.2",
+    "webpack": "2.2.1",
+    "webpack-bundle-analyzer": "2.3.1",
+    "webpack-dev-middleware": "1.10.1",
+    "webpack-hot-middleware": "2.17.1",
+    "webpack-md5-hash": "0.0.5"
   }
 }

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'uuid';
-import {getFormattedDateTime} from '../utils/dateHelper';
+import { getFormattedDateTime } from '../utils/dateHelper';
 
 class Chat extends React.Component {
       constructor(props) {
@@ -13,8 +13,9 @@ class Chat extends React.Component {
       }
 
       handleInputMessage(e) {
-          this.props.onTypeMessage(e.target.value);
-       }
+            this.props.onTypeMessage(e.target.value);
+            e.target.value = '';
+      }
       sendMsg(e) {
             e.preventDefault();
             if (this.props.newMessage != '') {
@@ -22,9 +23,9 @@ class Chat extends React.Component {
             }
       }
       render() {
-            
+
             const p = this.props;
-            const messages =(p&& p.messages) || [];
+            const messages = (p && p.messages) || [];
 
             return (
                   <div className="col-sm-12 action-chat" id="chatBox">
@@ -42,7 +43,7 @@ class Chat extends React.Component {
                         <form onSubmit={this.sendMsg}>
                               <div className="form-group">
                                     <label>Message:</label>
-                                    <input type="text" value={p.newMessage} onChange={this.handleInputMessage} className="form-control rounded" placeholder="Enter message" />
+                                    <input type="text" onBlur={this.handleInputMessage} className="form-control rounded" placeholder="Enter message" />
                               </div>
 
                               <button type="submit" onClick={this.sendMsg} className="btn btn-default">Send</button>
@@ -72,7 +73,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
       return {
             onSendMessage: (message) => dispatch({ type: 'SEND_MESSAGE', text: message, messageId: uuid.v4(), messageTimeStamp: getFormattedDateTime() }),
-            onTypeMessage: (message) => dispatch({type: 'TYPE_MESSAGE', text: message})
+            onTypeMessage: (message) => dispatch({ type: 'TYPE_MESSAGE', text: message })
       };
 
 };

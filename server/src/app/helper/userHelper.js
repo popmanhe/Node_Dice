@@ -10,7 +10,6 @@ import config from '../../config';
 import uuid from 'uuid';
 import coinsConfig from '../../config/coinsConfig.js';
 
-const db = dbhelp.db;
 const mongoose = dbhelp.mongoose;
 /*view models*/
 /*user schema*/
@@ -38,40 +37,45 @@ userSchema.methods.getFund = (coinName) => {
             return fund;
     }
     return null;
-}
+};
+
 userSchema.methods.getBalance = (coinName) => {
     
-    let fund = this.getFund(coinName)
+    let fund = this.getFund(coinName);
     if (fund)
         return fund.depositAmount - fund.withdrawAmount + fund.profit;
 
     return 0;
-}
+};
+
 userSchema.methods.addProfit = (coinName, profit) => {
 
-    let fund = this.getFund(coinName)
+    let fund = this.getFund(coinName);
     if (fund) {
         fund.profit += profit;
         return fund;
     }
-}
+};
+
 userSchema.methods.setDeposit = (coinName, amount) => {
     
-    let fund = this.getFund(coinName)
+    let fund = this.getFund(coinName);
     if (fund && amount) {
         fund.depositAmount = amount;
     }
 
      return fund;
-}
+};
+
 userSchema.methods.setDepositAddr = (coinName, addr) => {
     
-    let fund = this.getFund(coinName)
+    let fund = this.getFund(coinName);
     if (fund) {
         fund.depositAddress = addr;
         return fund;
     }
-}
+};
+
 //Static methods
 userSchema.statics = {
     CreateNewUser: (username, callback) => {
@@ -124,7 +128,7 @@ userSchema.statics = {
                 u.serverSalt = uuid.v4();
                 u.nonce = 0;
                 u.save();
-                callback(null, { clientSalt: _clientSalt, serverSalt: _serverSalt })
+                callback(null, { clientSalt: _clientSalt, serverSalt: _serverSalt });
             }
         });
     },
@@ -154,7 +158,7 @@ userSchema.statics = {
             userModel.findOne({ guid: userid }, "funds", (err, u) => {
                 if (err) { callback(err, null); }
                 else {
-                    let f = u.setDeposit(coinName, amount);
+                    u.setDeposit(coinName, amount);
                     u.save();
                      
                     callback(err, { balance: u.getBalance(coinName) });

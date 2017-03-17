@@ -11,8 +11,12 @@ export default {
         //Altcoin may need bigger confirmations.
         client.getReceivedByAccount(userid, 2, callback);
     },
-    WithdrawFunds:  (userid, unit, callback) => { 
-    
+    WithdrawFunds:  (userid, unit) => { 
+       //dummy code for lint rules
+        userid = '';
+        unit = 'BTC';
+
+        return unit;
     }
 
-}
+};

@@ -1,8 +1,7 @@
 ﻿'use strict';
 
 import dbhelp from './dbHelper';
-const db = dbhelp.db,
-    mongoose = dbhelp.mongoose;
+const mongoose = dbhelp.mongoose;
 
 /*chat schema*/
 const chatSchema = new mongoose.Schema({
@@ -13,13 +12,13 @@ const chatSchema = new mongoose.Schema({
 
 const chatModel = mongoose.model('Chat', chatSchema);
 
-module.exports = {
+export default {
     Chat: chatModel,
     GetChats: (callback) => { 
         chatModel.find({},'chatUser chatTime chatMsg', {limit: 100}).sort({chatTime: -1}).exec(callback);
     },
     AddChat: (chat, callback) =>{
-        var c = new chatModel({
+        const c = new chatModel({
             chatUser: chat.chatUser,
             chatTime: chat.chatTime,
             chatMsg: chat.chatMsg
@@ -27,4 +26,4 @@ module.exports = {
 
         c.save(callback);
     }
-}
+};

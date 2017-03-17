@@ -2,7 +2,7 @@
 import faucetHelper from './helper/faucetHelper.js';
 import config from '../config';
 
-export default  {
+export default {
     VerifyResponse: function (userid, response, callback) {
         
         request.post({
@@ -14,7 +14,7 @@ export default  {
             method: 'POST'
            ,proxy: config.faucet.proxy
         },  (err, httpResponse, body) => {
-            var re = JSON.parse(body);
+            let re = JSON.parse(body);
             if (re.success) {
                 faucetHelper.GetPay(userid, function (err, result) {
                     callback(err, result);

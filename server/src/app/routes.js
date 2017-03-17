@@ -4,49 +4,45 @@
  * Created by Neo on 12/12/2014
  */
 
-'use strict';
-
-import config from '../config';
-import faucet from './faucet.js';
-import session from 'express-session';
+import faucet from './Faucet.js';
 import logger from './helper/logger';
-export default (app, exphbs)=> {
+export default (app)=> {
     
-    const seo_title = 'bit coin btc nxt altcoin dice game';
+  //  const seo_title = 'bit coin btc nxt altcoin dice game';
     app.use((req, res, next) => {
         logger.info((new Date()) + ' Request: ', req.originalUrl);
         next();
     });
     
     //default page
-    app.get('/',  (req, res) => {
-        res.render('./games/Roll_Over_Or_Under', 
-            {
-            page_title: 'Over or Under? ' + seo_title
-        });
-    });
+    // app.get('/',  (req, res) => {
+    //     res.render('./games/Roll_Over_Or_Under', 
+    //         {
+    //         page_title: 'Over or Under? ' + seo_title
+    //     });
+    // });
 
-    app.get('/Roll_Over_Or_Under', (req, res) => {
+    // app.get('/Roll_Over_Or_Under', (req, res) => {
          
-        res.render('./games/Roll_Over_Or_Under',
-            { page_title: 'Over or Under? ' + seo_title });
-    });
+    //     res.render('./games/Roll_Over_Or_Under',
+    //         { page_title: 'Over or Under? ' + seo_title });
+    // });
     
-    app.get('/Investment', (req, res) => {
-        res.render('./games/Investment', { page_title: 'Investment ' + seo_title });
-    });
+    // app.get('/Investment', (req, res) => {
+    //     res.render('./games/Investment', { page_title: 'Investment ' + seo_title });
+    // });
 
-    app.get('/Verification', (req, res) => {
-        res.render('./http/Verification', {page_title: 'Verification ' + seo_title});
-    });
+    // app.get('/Verification', (req, res) => {
+    //     res.render('./http/Verification', {page_title: 'Verification ' + seo_title});
+    // });
     
-    app.get('/Support', (req, res) => {
-        res.render('./http/Support', { page_title: 'Support' + seo_title });
-    });
+    // app.get('/Support', (req, res) => {
+    //     res.render('./http/Support', { page_title: 'Support' + seo_title });
+    // });
     
-    app.get('/faq', (req, res) => {
-        res.render('./http/faq', { page_title: 'Faq ' + seo_title });
-    });
+    // app.get('/faq', (req, res) => {
+    //     res.render('./http/faq', { page_title: 'Faq ' + seo_title });
+    // });
     
     //verify the response and return new balance if succeeded.
     app.post('/reCaptCha', (req, res) => {
@@ -64,6 +60,6 @@ export default (app, exphbs)=> {
         });
     });
     //error handler
-    app.use(require('./views/http/index').http500);
-    app.use(require('./views/http/index').http404);
+    // app.use(require('./views/http/index').http500);
+    // app.use(require('./views/http/index').http404);
 };

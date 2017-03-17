@@ -3,15 +3,11 @@
  *
  * Created by Neo on 2017/01/17.
  */
-'use strict';
-
-import config from '../../config';
-import uuid from 'node-uuid';
 import userHelper from '../helper/userHelper';
 import crypto from'crypto';
 import coinsConfig from '../../config/coinsConfig.js';
 
-module.exports =  (io) => {
+export default (io) => {
     
     //socket.io events
     io.on('connection',  (socket) => {
@@ -104,5 +100,5 @@ module.exports =  (io) => {
     });
 
     //functions
-    function CreateNewUser() { }
-}
+  //  function CreateNewUser() { }
+};

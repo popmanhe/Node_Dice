@@ -1,5 +1,5 @@
 {
-  "name": "nodedice",
+  "name": "nodedice_client",
   "version": "0.1.0",
   "description": "",
   "engines": {
@@ -49,7 +49,7 @@
     "babel-core": "6.24.0",
     "babel-eslint": "7.1.1",
     "babel-jest": "19.0.0",
-    "babel-loader": "6.4.0",
+    "babel-loader": "6.4.1",
     "babel-plugin-transform-react-constant-elements": "6.23.0",
     "babel-plugin-transform-react-remove-prop-types": "0.3.2",
     "babel-polyfill": "6.23.0",

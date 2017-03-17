@@ -2,8 +2,8 @@
 import overunder from './sockets/s_overunder';
 import chat from './sockets/s_chat.js';
 
-export default (io, sessionOptions) => {
+export default (io) => {
     common(io);
     overunder(io);
     chat(io);
-}
+};

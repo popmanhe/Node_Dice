@@ -1,5 +1,5 @@
 ﻿import chatHelper from '../helper/chatHelper';
-module.exports =  (io) => {
+const chat = (io) => {
     
     io.on('connection', (socket) => {
         let session = socket.handshake.session;
@@ -12,6 +12,7 @@ module.exports =  (io) => {
         });
 
         socket.on('sendChat',  (chat) =>{
+            console.log("receive chat:" + chat.message);
             chat.chatUser = session.username;
             chat.chatTime = new Date();
             chatHelper.AddChat(chat,  (err) => {
@@ -20,9 +21,11 @@ module.exports =  (io) => {
             socket.broadcast.emit('recvChat', {
                 chatUser: chat.chatUser, 
                 chatTime: chat.chatTime, 
-                chatMsg: chat.chatMsg
-            })
+                chatMsg: chat.message
+            });
         });
     });
 
-}
+};
+
+export default chat;

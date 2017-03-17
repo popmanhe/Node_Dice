@@ -1,7 +1,6 @@
 ﻿import dbhelp from './dbHelper';
 import config from '../../config';
 import userHelper from './userHelper.js';
-const db = dbhelp.db;
 const mongoose = dbhelp.mongoose;
 
 const faucetSchema = new mongoose.Schema({
@@ -31,7 +30,7 @@ faucetSchema.statics = {
                         fa.save();
                         
                         let amount = randomIntInc(config.faucet.min, config.faucet.max);
-                        let f = u.addProfit('BTC', amount * 0.00000001)
+                        u.addProfit('BTC', amount * 0.00000001);
                          u.save();
                         
                         
@@ -49,7 +48,7 @@ faucetSchema.statics = {
 const randomIntInc =(low, high) => {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
-
+;
 const faucetModel = mongoose.model('Faucet', faucetSchema);
 
-module.exports = faucetModel;
+export default faucetModel;

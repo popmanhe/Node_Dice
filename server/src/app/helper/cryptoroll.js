@@ -8,7 +8,7 @@
 //crypto lib for hmac function
 import crypto from 'crypto';
 
-module.exports =  (key, text) => {
+export default (key, text) => {
     
     //create HMAC using server seed as key and client seed as message
     let hash = crypto.createHmac('sha512', key).update(text).digest('hex');
@@ -33,4 +33,4 @@ module.exports =  (key, text) => {
     lucky /= Math.pow(10, 2);
     
     return lucky;
-}
+};
