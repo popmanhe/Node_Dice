@@ -13,7 +13,7 @@ import handlebars from 'handlebars';
 import config from '../../config';
 import nodemailer from 'nodemailer';
 
-const Mailer = () => {
+const Mailer = function () {
     this.templates = {
         "messageReceived": {
             "file": "message-received.html",
@@ -37,7 +37,7 @@ const Mailer = () => {
     this.transport = nodemailer.createTransport(config.mail.transport, _.clone(config.mail.options) || {});
 };
 
-Mailer.prototype.sendTemplate = (to, templateName, data)=> {
+Mailer.prototype.sendTemplate = function (to, templateName, data) {
     let template = this.templates[templateName];
     if (!template){
         return;
