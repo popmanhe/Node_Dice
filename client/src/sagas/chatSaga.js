@@ -10,13 +10,13 @@ const socket = io.connect(config.socketUrl,
     }
 );
 function* sendMessage(action) {
-     console.log("message: " + action.text + ' '+ action.messageId +' ' + action.messageTimeStamp);
-    yield socket.emit('sendChat', { chatMsg: action.text, timeStamp: action.messageTimeStamp, messageId: action.messageId });
+   yield  console.log("message: " + action.text + ' '+ action.messageId +' ' + action.messageTimeStamp);
+   yield socket.emit('sendChat', { chatMsg: action.text, timeStamp: action.messageTimeStamp, messageId: action.messageId });
 }
 
 function* chatSaga() {
     return yield [
-        takeEvery("SEND_MESSAGE1", sendMessage)
+        takeEvery("SEND_MESSAGE", sendMessage)
     ];
 
 }

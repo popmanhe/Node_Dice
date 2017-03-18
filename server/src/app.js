@@ -19,7 +19,7 @@ import socketHandshake from 'socket.io-handshake';
 import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
-import sockets from './app/sockets';
+import sockets from './app/sockets/';
 
 const app = express();
 const MongoStore = MongoConnect(session);
@@ -42,7 +42,7 @@ app.use(session({
 
 /*require socket.io*/
 const server = http.createServer(app);
-const io =socketio(server);
+const io = socketio(server);
 /*Adding session to socket*/
 io.use(socketHandshake({
     store: sessionStore, 

@@ -10,13 +10,13 @@ function configureStoreProd(initialState) {
     // Add other middleware on this line...
      sagaMiddleware
   ];
- // sagaMiddleware.run(ouBetSaga);
-  sagaMiddleware.run(chatSaga);
+   
   const store = createStore(rootReducer, initialState, compose(
     applyMiddleware(...middlewares),
     window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );
+  sagaMiddleware.run(chatSaga);
   return store;
 }
 
