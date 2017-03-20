@@ -1,16 +1,13 @@
 import 'babel-polyfill';
-import io from "socket.io-client";
+import socket from '../utils/socketIoHelper';
+
 //import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { takeEvery } from "redux-saga/effects";
-import config from "../config";
 
-const socket = io.connect(config.socketUrl,
-    {
-        transports: ['websocket']
-    }
-);
+
+
 function* sendMessage(action) {
-   yield socket.emit('sendChat', { message: action.text, timeStamp: action.messageTimeStamp, messageId: action.messageId });
+   yield socket.emit('sendChat', { message: action.message, messageId: action.messageId });
 }
 
 function* chatSaga() {

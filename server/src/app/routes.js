@@ -1,7 +1,7 @@
 /**
  * Copyright 2014 Node Dice.
  *
- * Created by Neo on 12/12/2014
+ * Created by Neo on 03/20/2017
  */
 
 import faucet from './Faucet.js';

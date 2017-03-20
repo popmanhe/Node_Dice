@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import Chat from  './Chat';
+//import Chat from  './Chat';
 import Username from './Username';
 import CoinPicker from './CoinPicker';
 // This is a classNameName-based component because the current
@@ -112,7 +112,7 @@ class App extends React.Component {
         <div className="sidebar-right sidebar-nicescroller">
             <div className="tab-content">
                 <div className="tab-pane fade in active" data-bind="stopBinding: true" id="online-chat">
-                    <Chat />
+                {/*    <Chat /> */}
                 </div>
                  
             </div> {/* /.tab-content */}

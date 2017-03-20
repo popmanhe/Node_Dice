@@ -3,8 +3,8 @@ import logger from '../helper/logger';
 const chat = (io) => {
     
     io.on('connection', (socket) => {
-        let session = socket.handshake.session;
-        
+   //     let session = socket.handshake.session;
+         logger.info('connected!');
         socket.on('getChats',  () => {
             chatHelper.GetChats( (err, chats) => {
                 if (err) return console.error('getChats error:' + err);
@@ -14,17 +14,18 @@ const chat = (io) => {
 
         socket.on('sendChat',  (chat) =>{
 
-            logger.info('chat: ' + chat.message);
-            
-            chat.chatUser = session.username;
-            chat.chatTime = new Date();
+            logger.info('chat: ' + chat.message + ' Id: ' + chat.messageId);
+
+         //   chat.chatUser = session.username;
+            chat.timeStamp = new Date();
             chatHelper.AddChat(chat,  (err) => {
                 if (err) return console.error('sendChat error:' + err);
             });
-            socket.broadcast.emit('recvChat', {
-                chatUser: chat.chatUser, 
-                chatTime: chat.chatTime, 
-                chatMsg: chat.message
+            io.emit('recvChat', {
+           //     user: chat.chatUser, 
+                messageId: chat.messageId,
+                timeStamp: chat.timeStamp, 
+                message: chat.message
             });
         });
     });
