@@ -7,19 +7,14 @@ class Chat extends React.Component {
       constructor(props) {
             super(props);
             this.sendMsg = this.sendMsg.bind(this);
-            this.handleInputMessage = this.handleInputMessage.bind(this);
-
-            //           this.props.userName = 'neo';
       }
-
-      handleInputMessage(e) {
-            this.props.onTypeMessage(e.target.value);
-            e.target.value = '';
-      }
+      
       sendMsg(e) {
             e.preventDefault();
-            if (this.props.newMessage != '') {
-                  this.props.onSendMessage(this.props.newMessage);
+            
+            if (this.newMessage.value != '') {
+                  this.props.onSendMessage(this.newMessage.value);
+                  this.newMessage.value = '';
             }
       }
       render() {
@@ -43,7 +38,7 @@ class Chat extends React.Component {
                         <form onSubmit={this.sendMsg}>
                               <div className="form-group">
                                     <label>Message:</label>
-                                    <input type="text" onBlur={this.handleInputMessage} className="form-control rounded" placeholder="Enter message" />
+                                    <input type="text" ref={(input) => { this.newMessage = input; }} className="form-control rounded" placeholder="Enter message" />
                               </div>
 
                               <button type="submit" onClick={this.sendMsg} className="btn btn-default">Send</button>
@@ -72,8 +67,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
       return {
-            onSendMessage: (message) => dispatch({ type: 'SEND_MESSAGE', text: message, messageId: uuid.v4(), messageTimeStamp: getFormattedDateTime() }),
-            onTypeMessage: (message) => dispatch({ type: 'TYPE_MESSAGE', text: message })
+            onSendMessage: (message) => dispatch({ type: 'SEND_MESSAGE', text: message, messageId: uuid.v4(), messageTimeStamp: getFormattedDateTime() })
+            
       };
 
 };

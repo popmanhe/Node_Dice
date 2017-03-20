@@ -10,8 +10,7 @@ const socket = io.connect(config.socketUrl,
     }
 );
 function* sendMessage(action) {
-   yield  console.log("message: " + action.text + ' '+ action.messageId +' ' + action.messageTimeStamp);
-   yield socket.emit('sendChat', { chatMsg: action.text, timeStamp: action.messageTimeStamp, messageId: action.messageId });
+   yield socket.emit('sendChat', { message: action.text, timeStamp: action.messageTimeStamp, messageId: action.messageId });
 }
 
 function* chatSaga() {

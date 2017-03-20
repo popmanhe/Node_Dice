@@ -2,7 +2,7 @@
 
 import dbhelp from './dbHelper';
 const mongoose = dbhelp.mongoose;
-
+mongoose.Promise = global.Promise;
 /*chat schema*/
 const chatSchema = new mongoose.Schema({
     chatUser: String,

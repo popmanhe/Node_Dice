@@ -2,13 +2,13 @@
 
 
 import path from 'path';
-const rootPath = path.normalize(__dirname + '/../../');
+const rootPath = path.resolve('.');
 const pkg = rootPath + '/package.json';
 
 module.exports =  {
     root: rootPath,
-    serverRoot: rootPath + '/dist/app',
-    clientRoot: rootPath + '/wwwroot',
+    serverRoot: rootPath + '/dist/',
+    clientRoot: rootPath + '/dist/html/',
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {

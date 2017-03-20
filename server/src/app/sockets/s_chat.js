@@ -1,4 +1,5 @@
 ﻿import chatHelper from '../helper/chatHelper';
+import logger from '../helper/logger';
 const chat = (io) => {
     
     io.on('connection', (socket) => {
@@ -12,7 +13,9 @@ const chat = (io) => {
         });
 
         socket.on('sendChat',  (chat) =>{
-            console.log("receive chat:" + chat.message);
+
+            logger.info('chat: ' + chat.message);
+            
             chat.chatUser = session.username;
             chat.chatTime = new Date();
             chatHelper.AddChat(chat,  (err) => {

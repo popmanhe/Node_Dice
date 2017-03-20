@@ -6,6 +6,8 @@
 
 import faucet from './Faucet.js';
 import logger from './helper/logger';
+//import config from '../config';
+//import path from 'path';
 export default (app)=> {
     
   //  const seo_title = 'bit coin btc nxt altcoin dice game';
@@ -13,13 +15,11 @@ export default (app)=> {
         logger.info((new Date()) + ' Request: ', req.originalUrl);
         next();
     });
+      
     
     //default page
     // app.get('/',  (req, res) => {
-    //     res.render('./games/Roll_Over_Or_Under', 
-    //         {
-    //         page_title: 'Over or Under? ' + seo_title
-    //     });
+    //     res.sendFile(config.clientRoot + 'index.html');
     // });
 
     // app.get('/Roll_Over_Or_Under', (req, res) => {
