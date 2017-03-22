@@ -28,6 +28,9 @@ export default {
     // Hash the files using MD5 so that their names change when the content changes.
     new WebpackMd5Hash(),
 
+    // Optimize the order that items are bundled. This assures the hash is deterministic.
+    new webpack.optimize.OccurenceOrderPlugin(),
+    
     // Tells React to build in prod mode. https://facebook.github.io/react/downloads.html
     new webpack.DefinePlugin(GLOBALS),
 
@@ -55,6 +58,9 @@ export default {
       trackJSToken: ''
     }),
 
+    // Eliminate duplicate packages when generating bundle
+    new webpack.optimize.DedupePlugin(),
+    
     // Minify JS
     new webpack.optimize.UglifyJsPlugin({ sourceMap: true }),
 

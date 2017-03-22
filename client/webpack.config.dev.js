@@ -18,8 +18,14 @@ export default {
   output: {
     path: path.resolve(__dirname, 'dist'), // Note: Physical files are only output by the production build task `npm run build`.
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    libraryTarget: 'var'
   },
+  externals:[
+    {
+      '$':'jQuery'
+    }
+  ],
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)

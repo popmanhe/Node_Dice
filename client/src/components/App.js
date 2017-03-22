@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-//import Chat from  './Chat';
 import Username from './Username';
 import CoinPicker from './CoinPicker';
 // This is a classNameName-based component because the current

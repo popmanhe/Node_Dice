@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 //import OUBet from './OUBet';
 //import AutoBet from './AutoBet';
 import Chat from './Chat';
@@ -6,8 +6,7 @@ const HomePage = () => {
   return (
   <div className="row">
       <div className="col-sm-12">
-        <div className="col-sm-4"><h1 className="page-heading">Over or Under</h1></div>
-        <div className="col-sm-8">&nbsp; </div>
+         <h1 className="page-heading">Chat</h1> 
       </div>
      {/*   <div className="col-sm-10 col-md-10 col-lg-10">
        <div className="panel panel-primary">
@@ -31,9 +30,5 @@ const HomePage = () => {
       </div>
 </div>
    );
-};
-
-Chat.PropTypes = {
-    value: PropTypes.string
 };
 export default HomePage;

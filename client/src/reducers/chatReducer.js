@@ -4,7 +4,10 @@ export default (state = initialState.chat, action) => {
          // case 'SEND_MESSAGE':
         //      return {...state, newMessage: '', messages: [...state.messages, {message: action.text, messageId: action.messageId, timeStamp: action.timeStamp} ]};
         case 'RECV_MESSAGE':{
-            return {...state, messages: [...state.messages, {message: action.message.message, messageId: action.message.messageId, timeStamp: action.message.timeStamp} ]};    
+            let receivedMessages = [...state.messages, {message: action.message.message, timeStamp: action.message.timeStamp} ];
+            if (receivedMessages.length > 100)
+                receivedMessages.splice(0, receivedMessages.length - 100);
+            return {...state, messages: receivedMessages};    
         }
         default:
             return state;

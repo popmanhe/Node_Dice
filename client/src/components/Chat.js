@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import uuid from 'uuid';
-// import { getFormattedDateTime } from '../utils/dateHelper';
 import socket from '../utils/socketIoHelper';
 import moment from 'moment';
 
@@ -10,28 +8,41 @@ class Chat extends React.Component {
             super(props);
             this.sendMsg = this.sendMsg.bind(this);
       }
-       
-      componentDidMount(){
-           this.receiveChats();
+
+      componentDidMount() {
+            this.initChat();
+            this.receiveChats();
       }
-      componentWillUnmount (){
+      componentWillUnmount() {
             this.leaveChat();
       }
 
-      leaveChat(){
-            socket.close();
+      leaveChat() {
+            //   socket.close();
       }
-      receiveChats() { 
+      receiveChats() {
             socket.on('recvChat', (result) => {
-            this.props.onReceiveMessage({ timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message,  messageId: result.messageId });
-        
-       // chat.scrollToBottom();
-    });
-}
 
+                  this.props.onReceiveMessage({ timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message });
+
+                  // chat.scrollToBottom();
+            });
+      }
+      initChat() {
+            const self = this;
+            socket.emit('getChats', '');
+            socket.on('getChats', function (result) {
+                  // console.log(result);
+                  if (result.length > 0) {
+                        result.sort((a, b) => a.timeStamp > b.timeStamp ? 1 : -1);
+                        result.map((r) => self.props.onReceiveMessage({ timeStamp: moment(r.timeStamp).format('MM-DD HH:mm'), message: r.message }));
+                  }
+                  //chat.scrollToBottom();
+            });
+      }
       sendMsg(e) {
             e.preventDefault();
-            
+
             if (this.newMessage.value != '') {
                   this.props.onSendMessage(this.newMessage.value);
                   this.newMessage.value = '';
@@ -39,7 +50,7 @@ class Chat extends React.Component {
             }
       }
       render() {
-            
+
             const p = this.props;
             const messages = (p && p.messages) || [];
 
@@ -47,9 +58,9 @@ class Chat extends React.Component {
                   <div className="col-sm-12 action-chat" id="chatBox">
                         <ul className="list-group" id="chatList">
                               {
-                                    messages.map((msg) =>
-                                          <li className="chat-item list-group-item" key={msg.messageId}>
-                                                <span>{msg.timeStamp}</span> <span className="text-danger" >{msg.messageId}</span>: <br />
+                                    messages.map((msg, i) =>
+                                          <li className="chat-item list-group-item" key={i}>
+                                                <span>{msg.timeStamp}</span> <span className="text-danger" />: <br />
                                                 <label className="text-info" >{msg.message}</label>
                                           </li>
                                     )}
@@ -71,11 +82,9 @@ Chat.propTypes = {
       onSendMessage: PropTypes.func,
       onReceiveMessage: PropTypes.func,
       messages: PropTypes.arrayOf(PropTypes.shape({
-            messageId: PropTypes.string.isRequired,
             message: PropTypes.string.isRequired,
             timeStamp: PropTypes.string.isRequired
       }).isRequired),
-      newMessage: PropTypes.string,
       userName: PropTypes.string
 };
 
@@ -87,7 +96,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
       return {
-            onSendMessage: (text) => dispatch({ type: 'SEND_MESSAGE', message: text, messageId: uuid.v4()}),
+            onSendMessage: (text) => dispatch({ type: 'SEND_MESSAGE', message: text }),
             onReceiveMessage: (message) => dispatch({ type: 'RECV_MESSAGE', message: message })
       };
 

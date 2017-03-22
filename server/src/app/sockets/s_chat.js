@@ -1,10 +1,10 @@
 ﻿import chatHelper from '../helper/chatHelper';
 import logger from '../helper/logger';
 const chat = (io) => {
-    
+ 
     io.on('connection', (socket) => {
-   //     let session = socket.handshake.session;
-         logger.info('connected!');
+        //let session = socket.handshake.session;
+        // logger.info('connected!');
         socket.on('getChats',  () => {
             chatHelper.GetChats( (err, chats) => {
                 if (err) return console.error('getChats error:' + err);
@@ -14,7 +14,7 @@ const chat = (io) => {
 
         socket.on('sendChat',  (chat) =>{
 
-            logger.info('chat: ' + chat.message + ' Id: ' + chat.messageId);
+            logger.info('chat: ' + chat.message );
 
          //   chat.chatUser = session.username;
             chat.timeStamp = new Date();
@@ -23,7 +23,6 @@ const chat = (io) => {
             });
             io.emit('recvChat', {
            //     user: chat.chatUser, 
-                messageId: chat.messageId,
                 timeStamp: chat.timeStamp, 
                 message: chat.message
             });

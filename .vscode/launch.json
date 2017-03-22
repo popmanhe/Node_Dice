@@ -6,16 +6,17 @@
     "configurations": [
         {
             "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}\\client\\npm start",
-            "cwd": "${workspaceRoot}"
+            "request": "attach",
+            "name": "Attach to Process",
+            "processId": "${command:PickProcess}",
+            "port": 5858
         },
         {
             "type": "node",
-            "request": "attach",
-            "name": "Attach to Process",
-            "port": 5858
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}\\server\\npm start",
+            "cwd": "${workspaceRoot}"
         }
     ]
 }

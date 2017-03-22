@@ -1,9 +1,8 @@
 ﻿/**
- * Copyright 2014 Node Dice
+ * Copyright 2017 Node Dice
  *
- * Created by Neo on 2014/11/27.
+ * Created by Neo on 2017/03/27.
  */
-'use strict';
 
 //import config from '../../config';
 import uuid from 'uuid';
