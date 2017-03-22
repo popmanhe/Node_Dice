@@ -1,4 +1,3 @@
-Demo site: http://ccroll.com/
 
 The site is built on 
 <ul>
@@ -22,7 +21,3 @@ The site is built on
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
-
-<p>I am also open for part-time coding jobs. I have 15+ years of design/coding experience. </p>
-
-<p>My tech stacks include asp.net, c#, vb.net, node.js,  html, javascript, sql server, oracle, mongodb, redis. </p>
