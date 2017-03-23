@@ -2,17 +2,16 @@
 import overunder from './s_overunder';
 import chat from './s_chat.js';
 import logger from '../helper/logger';
-import cookie from 'cookieparser';
+import uuid from 'uuid';
+
+const assignSessionID = (socket, next) =>{
+       socket.handshake.headers.cookie = 'dSession=sgasdgasdg;path=/;httpOnely'
+        return next(new Error('error...'));
+};
 
 export default (io) => {
-    // io.use((socket, next) => {
-    //     if (socket.request.headers.cookie) {
-    //         const c = cookie.parse(socket.request.headers.cookie);
-    //         logger.info(c['connect.sid']);
-    //         socket.session = { userid: 'neo' };
-    //     }
-    //     return next();
-    // });
+
+    io.use(assignSessionID);
 
     common(io);
     overunder(io);

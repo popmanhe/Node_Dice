@@ -1,5 +1,5 @@
 ﻿import request from 'request';
-import faucetHelper from './helper/faucetHelper.js';
+import faucetHelper from './Models/faucetModel.js';
 import config from '../config';
 
 export default {

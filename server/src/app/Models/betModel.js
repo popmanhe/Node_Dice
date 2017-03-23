@@ -6,11 +6,11 @@
 
 'use strict';
 
-import dbhelp from './dbHelper';
+import dbConnect from './dbConnect';
 import config from '../../config';
 
-const mongoose = dbhelp.mongoose;
-//const db = dbhelp.db;
+const mongoose = dbConnect.mongoose;
+//const db = dbConnect.db;
 /*bet schema*/
 const betSchema = new mongoose.Schema({
     userid: String,

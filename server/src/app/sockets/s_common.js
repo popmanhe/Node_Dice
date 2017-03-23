@@ -3,7 +3,7 @@
  *
  * Created by Neo on 2017/01/17.
  */
-import userHelper from '../helper/userHelper';
+import userModel from '../Models/userModel';
 import crypto from'crypto';
 import coinsConfig from '../../config/coinsConfig.js';
 
@@ -16,7 +16,7 @@ export default (io) => {
 
         //return a new user
         socket.on('newUser',  (username) => {
-            userHelper.CreateNewUser(username,  (err, user)=>  {
+            userModel.CreateNewUser(username,  (err, user)=>  {
                 if (err) { 
                     if (err.code == 11000)
                         socket.emit('newUser', { error: { code: 11000 } });
@@ -44,7 +44,7 @@ export default (io) => {
         
         //return an existing user
         socket.on('existingUser',  () => {
-            userHelper.GetUserById(session.userid, "clientSalt serverSalt guid userName funds nonce",
+            userModel.GetUserById(session.userid, "clientSalt serverSalt guid userName funds nonce",
                 (err, u) => {
                 if (err) {
                     socket.emit('existingUser', { clientSalt: '', error: err });
@@ -69,7 +69,7 @@ export default (io) => {
         
         //update client salt
         socket.on('clientSalt', (clientSalt) => {
-            userHelper.SaveClientSalt(session.userid, clientSalt, (err, oldSalt) => {
+            userModel.SaveClientSalt(session.userid, clientSalt, (err, oldSalt) => {
                 if (err)
                     socket.emit('savingClientSalt', err);
                 else
@@ -79,7 +79,7 @@ export default (io) => {
 
         //get new bitcion address
         socket.on('newCoinAddr', (coinName) => {
-            userHelper.GetNewAddress(session.userid, coinName, (err, addr) => {
+            userModel.GetNewAddress(session.userid, coinName, (err, addr) => {
                 if (err)
                     socket.emit('newCoinAddr', err);
                 else
@@ -89,7 +89,7 @@ export default (io) => {
 
         //get user balance
         socket.on('getBalance', (coinName) => {
-            userHelper.GetBalance(session.userid, coinName, (err, balance) => {
+            userModel.GetBalance(session.userid, coinName, (err, balance) => {
                 if (err)
                     socket.emit('getBalance', err);
                 else

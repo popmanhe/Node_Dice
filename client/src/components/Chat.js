@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import socket from '../utils/socketIoHelper';
+import {socketEmit, socketOn} from '../utils/socketIoHelper';
 import moment from 'moment';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
@@ -9,7 +9,7 @@ class Chat extends React.Component {
             super(props);
             this.sendMsg = this.sendMsg.bind(this);
       }
-
+     
       componentDidMount() {
             this.initChat();
             this.receiveChats();
@@ -22,8 +22,8 @@ class Chat extends React.Component {
             //   socket.close();
       }
       receiveChats() {
-            socket.on('recvChat', (result) => {
-
+            socketOn('recvChat', (result) => {
+              
                   this.props.onReceiveMessage({ timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message });
 
                   // chat.scrollToBottom();
@@ -31,8 +31,8 @@ class Chat extends React.Component {
       }
       initChat() {
             const self = this;
-            socket.emit('getChats', '');
-            socket.on('getChats', function (result) {
+            socketEmit('getChats', '');
+            socketOn('getChats', function (result) {
                   // console.log(result);
                   if (result.length > 0) {
                         result.sort((a, b) => a.timeStamp > b.timeStamp ? 1 : -1);

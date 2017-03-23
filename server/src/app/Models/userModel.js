@@ -5,12 +5,12 @@
  */
 
 'use strict';
-import dbhelp from './dbHelper';
+import dbConnect from './dbConnect';
 import config from '../../config';
 import uuid from 'uuid';
 import coinsConfig from '../../config/coinsConfig.js';
 
-const mongoose = dbhelp.mongoose;
+const mongoose = dbConnect.mongoose;
 /*view models*/
 /*user schema*/
 const userSchema = new mongoose.Schema({

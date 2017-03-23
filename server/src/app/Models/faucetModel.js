@@ -1,7 +1,7 @@
-﻿import dbhelp from './dbHelper';
+﻿import dbConnect from './dbConnect';
 import config from '../../config';
-import userHelper from './userHelper.js';
-const mongoose = dbhelp.mongoose;
+import userModel from './userModel.js';
+const mongoose = dbConnect.mongoose;
 
 const faucetSchema = new mongoose.Schema({
     lastTime: Date,
@@ -10,7 +10,7 @@ const faucetSchema = new mongoose.Schema({
 /*Static methods*/
 faucetSchema.statics = {
     GetPay:  (userid, callback) => {
-        userHelper.GetUserById(userid, 'funds', (err, u) =>{
+        userModel.GetUserById(userid, 'funds', (err, u) =>{
             if (err) {
                 callback(err, null);
             }

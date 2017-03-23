@@ -6,8 +6,8 @@
 
 //import config from '../../config';
 import uuid from 'uuid';
-import userHelper from '../helper/userHelper';
-import betHelper from '../helper/betHelper';
+import userHelper from '../Models/userModel';
+import betHelper from '../Models/betModel';
 import rollDice from '../helper/cryptoroll';
 import _ from 'lodash';
 const gameName = 'overunder';
