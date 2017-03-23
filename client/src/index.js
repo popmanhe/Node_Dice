@@ -7,7 +7,7 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 import configureStore from './store/configureStore';
 import './favicon.ico'; // Tell webpack to load favicon.ico
-import 'bootstrap/dist/css/bootstrap.css';
+//import './styles/bootstrap.css';
 import './styles/font-awesome.min.css';
 import './styles/toastr.css';
 import './styles/morris.css';

@@ -20,7 +20,6 @@ import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';
-import cors from 'cors';
 
 const app = express();
 const MongoStore = MongoConnect(session);
@@ -40,23 +39,11 @@ app.use(session({
       maxAge: config.session.timeout //session will expire in 30 days
     }
 }));
-app.use(cors());
+ 
 /*require socket.io*/
 const server = http.createServer(app);
-const io = socketio(server,{
-    allowRequest: function(handshake, cb) {
-                return cb(null, true); // authorize every connections 
-            }
-});
-// const fn_origins = (err, success) =>{
-//     if (err) 
-//     {
-//         console.log(err);
-//         return;
-//     }
-//     console.log(success);
-// };
-// io.origins((origins, fn_origins) => {console.log('origins:' + origins); fn_origins(null, true);});
+const io = socketio(server);
+
 /*Adding session to socket*/
 io.use(socketHandshake({
     store: sessionStore, 

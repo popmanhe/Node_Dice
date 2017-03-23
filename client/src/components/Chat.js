@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import socket from '../utils/socketIoHelper';
 import moment from 'moment';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 
 class Chat extends React.Component {
       constructor(props) {
@@ -56,16 +57,16 @@ class Chat extends React.Component {
 
             return (
                   <div className="col-sm-12 action-chat" id="chatBox">
-                        <ul className="list-group" id="chatList">
-                              {
+                        <ListGroup>
+                              { 
                                     messages.map((msg, i) =>
-                                          <li className="chat-item list-group-item" key={i}>
-                                                <span>{msg.timeStamp}</span> <span className="text-danger" />: <br />
-                                                <label className="text-info" >{msg.message}</label>
-                                          </li>
+                                          <ListGroupItem key={i}>
+                                                <span>{msg.timeStamp}</span> <span className="text-danger" />:  
+                                                <div className="text-info" >{msg.message}</div>
+                                          </ListGroupItem>
                                     )}
 
-                        </ul>
+                        </ListGroup>
                         <hr />
                         <form onSubmit={this.sendMsg}>
                               <div className="form-group">
