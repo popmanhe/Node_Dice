@@ -47,7 +47,7 @@ const io = socketio(server);
 /*Adding session to socket*/
 io.use(socketHandshake({
     store: sessionStore, 
-    key: 'connect.sid', 
+    key: 'sid', 
     secret: config.cookieSecret, 
     parser: cookieParser()
 }));

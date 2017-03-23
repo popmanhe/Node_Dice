@@ -9,6 +9,7 @@ import path from 'path';
 new webPackDevServer(webpack(config),{
   contentBase: path.resolve(__dirname, '../src'),
   hot: true,
+  compress: true,
   historyApiFallback: true,
 }).listen(3010, 'localhost', function(err){
     if (err) {

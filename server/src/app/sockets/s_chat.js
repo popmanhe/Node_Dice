@@ -2,9 +2,9 @@
 import logger from '../helper/logger';
 const chat = (io) => {
  
+   
     io.on('connection', (socket) => {
-        //let session = socket.handshake.session;
-        // logger.info('connected!');
+        
         socket.on('getChats',  () => {
             chatHelper.GetChats( (err, chats) => {
                 if (err) return console.error('getChats error:' + err);
