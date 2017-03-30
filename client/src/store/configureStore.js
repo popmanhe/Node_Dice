@@ -3,7 +3,7 @@ import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from '../reducers';
 //import  ouBetSaga  from '../sagas/ouBetSaga';
-import  chatSaga  from '../sagas/chatSaga';
+import  rootSaga  from '../sagas';
 function configureStoreProd(initialState) {
   const sagaMiddleware = createSagaMiddleware();
   const middlewares = [
@@ -16,7 +16,7 @@ function configureStoreProd(initialState) {
     window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );
-  sagaMiddleware.run(chatSaga);
+  sagaMiddleware.run(rootSaga);
   return store;
 }
 
@@ -44,8 +44,8 @@ function configureStoreDev(initialState) {
       store.replaceReducer(nextReducer);
     });
   }
- // sagaMiddleware.run(ouBetSaga);
-  sagaMiddleware.run(chatSaga);
+ 
+  sagaMiddleware.run(rootSaga);
   return store;
 }
 

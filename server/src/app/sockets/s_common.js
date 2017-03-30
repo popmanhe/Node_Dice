@@ -97,6 +97,16 @@ export default (io) => {
             });
         });
         
+        //get user balance
+        socket.on('loginUser', (user) => {
+            userModel.LoginUser(user.userName, user.password, (err, user) => {
+                if (err)
+                    socket.emit('loggedUser', {error: err});
+                else
+                    socket.emit('loggedUser', {userName: user.userName, isLoggedIn: true});
+            });
+        });
+
     });
 
     //functions

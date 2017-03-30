@@ -1,18 +1,18 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-class LoginModal extends React.Component {
+class SignupModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { userName: "", password: "", rememberMe: false };
-        this.onLogin = this.onLogin.bind(this);
+        this.state = { userName: "", password: "", confirmPassword: "", error: "" };
+        this.onSignup = this.onSignup.bind(this);
         this.onCancel = this.onCancel.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    onLogin(e) {
+    onSignup(e) {
         e.preventDefault();
-        this.props.onLogin(this.state.userName, this.state.password, this.state.rememberMe);
+        this.props.onSignup(this.state.userName, this.state.password);
 
     }
     onCancel() {
@@ -20,15 +20,18 @@ class LoginModal extends React.Component {
         this.props.onCancel();
     }
 
-    clearData(){
-        this.setState({userName:"", password:"", rememberMe: false});
+    clearData() {
+        this.setState({ userName: "", password: "", confirmPassword: "", error:"" });
     }
 
     handleChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
+        if (name == "confirmPassword")
+        {
+            this.setState({});
+        }
         this.setState({
             [name]: value
         });
@@ -37,10 +40,10 @@ class LoginModal extends React.Component {
         return (
             <Modal show={this.props.show}>
                 <Modal.Header closeButton>
-                    <Modal.Title id="user-login" componentClass="h2">Login</Modal.Title>
+                    <Modal.Title id="user-login" componentClass="h2">Sign up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form role="form" onSubmit={this.onLogin}>
+                    <form role="form" onSubmit={this.onSignup}>
                         <div className="form-group has-feedback lg left-feedback no-label">
                             <input type="text" name="userName" onChange={this.handleChange} value={this.state.userName} className="form-control no-border input-lg rounded" placeholder="Enter username" autoFocus />
                             <span className="fa fa-user form-control-feedback" />
@@ -49,15 +52,12 @@ class LoginModal extends React.Component {
                             <input type="password" name="password" onChange={this.handleChange} value={this.state.password}  className="form-control no-border input-lg rounded" placeholder="Enter password" />
                             <span className="fa fa-unlock-alt form-control-feedback" />
                         </div>
-                        <div className="form-group">
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" className="i-yellow-flat" name="rememberMe" onChange={this.handleChange} checked={this.state.rememberMe} /> Remember me
-					</label>
-                            </div>
+                        <div className="form-group has-feedback lg left-feedback no-label">
+                            <input type="password" name="confirmPassword" onChange={this.handleChange}  value={this.state.confirmPassword} className="form-control no-border input-lg rounded" placeholder="Confirm password" />
+                            <span className="fa fa-unlock-alt form-control-feedback" />
                         </div>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-warning btn-lg btn-perspective btn-block" onClick={this.onLogin}>LOGIN</button>
+                            <button type="submit" className="btn btn-success btn-lg btn-perspective btn-block" onClick={this.onSignup}>Create an account</button>
                         </div>
                     </form>
 
@@ -68,9 +68,9 @@ class LoginModal extends React.Component {
     }
 }
 
-LoginModal.propTypes = {
+SignupModal.propTypes = {
     show: PropTypes.bool,
-    onLogin: PropTypes.func,
+    onSignup: PropTypes.func,
     onCancel: PropTypes.func
 };
-export default LoginModal;
+export default SignupModal;

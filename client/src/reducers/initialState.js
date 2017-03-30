@@ -2,5 +2,5 @@ export default {
   chat: {
     messages:[]
   },
-  user: {userName:null}
+  user: {userName:null, isLoggedIn: false}
 };
