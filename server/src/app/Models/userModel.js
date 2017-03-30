@@ -16,6 +16,7 @@ const mongoose = dbConnect.mongoose;
 const userSchema = new mongoose.Schema({
     guid: { type: String, index: true },
     userName: { type: String, index: { unique: true } },
+    password: {type: String},
     clientSalt: String,
     serverSalt: String,
     nonce: Number,
@@ -165,6 +166,14 @@ userSchema.statics = {
                 }
             });
         });
+    },
+    LoginUser: (userName, password, callback) => {
+         userModel.findOne({ userName: userName }, "passowrd", (err, u) =>{
+                    if (err) { callback(err, null); }
+                    else {
+                        callback(null, u.password === password);
+                    }
+                });
     }
 };
 

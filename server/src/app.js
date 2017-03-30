@@ -42,7 +42,7 @@ const app = express();
  
 /*require socket.io*/
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, {cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true});
 
 /*Adding session to socket*/
 // io.use(socketHandshake({

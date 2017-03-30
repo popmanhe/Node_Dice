@@ -1,10 +1,15 @@
 ﻿import chatModel from '../Models/chatModel';
 import logger from '../helper/logger';
+
 const chat = (io) => {
  
    
     io.on('connection', (socket) => {
         
+        socket.use((packet, next)=>{
+            logger.info(packet);
+            next();
+        });
         socket.on('getChats',  () => {
             chatModel.GetChats( (err, chats) => {
                 if (err) return console.error('getChats error:' + err);
@@ -13,9 +18,7 @@ const chat = (io) => {
         });
 
         socket.on('sendChat',  (chat) =>{
-
-            logger.info('chat: ' + chat.message );
-
+              
          //   chat.chatUser = session.username;
             chat.timeStamp = new Date();
             chatModel.AddChat(chat,  (err) => {

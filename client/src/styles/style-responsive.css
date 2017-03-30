@@ -1,8 +1,8 @@
 /**
 ==============================================================
  * Sentir - Responsive admin & dashboard template
- * Version 	1.1.0
- * Release	June 03, 2014
+ * Version 	1.3.0
+ * Release	February 14, 2015
 ==============================================================
 **/
 
@@ -27,8 +27,29 @@ STANDARD DESKTOP 992px <> 1200px
 =================================
 **/
 @media (min-width: 992px) and (max-width: 1199px) {
-	 
-	 
+	/**
+	-------------------------------------------
+	PRICING TABLE
+	-------------------------------------------
+	**/
+	.pricing-table-wrap{
+		margin: 60px;
+	}
+	.table-item .circle-best{
+		width: 60px;
+		height: 60px;
+		font-size: 16px;
+		top: -30px;
+	}
+	
+	/**
+	-------------------------------------------
+	WEATHER ICON SVG
+	-------------------------------------------
+	**/
+	.weather-widget h1.degrees{
+		font-size: 50px;
+	}
 }
 
 
@@ -65,7 +86,7 @@ TABLET < 1025px
 SMALL DESKTOP 768px <> 991px
 =================================
 **/
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 991px) {
 	/**
 	-------------------------------------------
 	MAIN LAYOUT
@@ -112,7 +133,30 @@ SMALL DESKTOP 768px <> 991px
 		margin-right: 250px;
 	}
 	
- 
+	/**
+	-------------------------------------------
+	PRICING TABLE
+	-------------------------------------------
+	**/
+	.pricing-table-wrap{
+		margin: 60px 0;
+	}
+	.table-item .circle-best{
+		width: 60px;
+		height: 60px;
+		font-size: 16px;
+		top: -30px;
+	}
+	
+	/**
+	-------------------------------------------
+	WEATHER ICON SVG
+	-------------------------------------------
+	**/
+	.weather-widget h1.degrees{
+		font-size: 50px;
+	}
+
 }
 
 
@@ -147,7 +191,44 @@ TABLET < 800px
 		margin-left: 0px;
 		height: 60px;
 	}
-	 
+	
+	/**
+	-------------------------------------------
+	PRICING TABLE
+	-------------------------------------------
+	**/
+	.table-item-2 .table-heading h1 sup,
+	.table-item-2 .table-heading h1 sub{
+		top: -5px;
+		display: block;
+	}
+	.table-item-2 .table-heading h1 sub{
+		top: 10px;
+		bottom: 0px;
+	}
+	.table-item-2 .table-heading h1{
+		font-size: 50px;
+		margin-bottom: 20px;
+		padding: 30px 0;
+	}
+	
+	
+	
+	
+	/**
+	-------------------------------------------
+	BLOG APPS
+	-------------------------------------------
+	**/
+	.carousel.blog-carousel .carousel-caption p{
+		display: none;
+	}
+	.carousel.blog-carousel .carousel-caption h2{
+		font-size: 24px;
+	}
+	
+	
+	
 	/**
 	-------------------------------------------
 	TOP MAIN NAVIGATION
@@ -317,10 +398,87 @@ TABLET < 767px
 	
 	
 	
-	 
-	 
+	/**
+	-------------------------------------------
+	BLOG APPS
+	-------------------------------------------
+	**/
+	.col-full-width-right,
+	.col-full-width-left{
+		padding: 0 15px;
+	}
 	
-	 
+	.blog-detail-image .blog-title,
+	.blog-detail-image:hover .blog-title{
+		position: relative;
+		background: #fff;
+		opacity: 1;
+		color: #434A54;
+	}
+	.blog-detail-image .blog-title a{
+		color: #37BC9B;
+		text-decoration: none;
+	}
+	.blog-detail-image .blog-title h1,
+	.blog-detail-image .blog-title h2,
+	.blog-detail-image .blog-title h3,
+	.blog-detail-image .blog-title h4,
+	.blog-detail-image .blog-title h5{
+		color: #656D78;
+	}
+	.featured-post-wide .featured-text{
+		padding: 5px 5px 5px 40px;
+	}
+
+	
+	
+	
+	/**
+	-------------------------------------------
+	REAL ESTATE APPS
+	-------------------------------------------
+	**/
+	.store-list .store-image,
+	.blog-list .blog-image,
+	.property-list .property-image {
+		width: 100%;
+		margin-bottom: 30px;
+		padding-right: 0;
+	}
+	.store-list .pull-left,
+	.blog-list .pull-left,
+	.property-list .pull-left {
+		margin-right: 0;
+	}
+
+	
+	
+	
+	/**
+	-------------------------------------------
+	PRICING TABLE
+	-------------------------------------------
+	**/
+	.pricing-table-wrap{margin: 50px 0;}
+	.table-item .circle-best{
+		width: 60px;
+		height: 60px;
+		font-size: 16px;
+		top: -30px;
+	}
+	.table-item-2 .table-heading h1{
+		font-size: 80px;
+		margin-bottom: 30px;
+	}
+	.table-item-2 .table-heading h1 sup,
+	.table-item-2 .table-heading h1 sub{
+		top: -50px;
+		display: inline;
+	}
+	.table-item-2 .table-heading h1 sub{
+		top: 0;
+		bottom: -50px;
+	}
 	
 	
 	/**
@@ -379,7 +537,77 @@ PHONE < 600px
 **/
 @media (max-width: 600px){
 
- 
+	/**
+	-------------------------------------------
+	SOCIAL APPS
+	-------------------------------------------
+	**/
+	ul.timeline li.centering-line{
+		left: 15px;
+		margin-left: 0px;
+	}
+	ul.timeline li.item-timeline{
+		width: 100%;
+	}
+	ul.timeline li:nth-child(even).item-timeline{
+		float: left;
+		clear: left;
+	}
+	ul.timeline li:nth-child(odd).item-timeline{
+		float: left;
+		clear: left;
+	}
+	ul.timeline li:nth-child(odd).item-timeline.highlight,
+	ul.timeline li:nth-child(odd).item-timeline.highlight{
+		float: left;
+		clear: left;
+	}
+	ul.timeline li.item-timeline .inner-content{
+		margin: 10px;
+		margin-left: 35px;
+	}
+	ul.timeline li:nth-child(even).item-timeline.highlight .buletan,
+	ul.timeline li:nth-child(odd).item-timeline.highlight .buletan,
+	ul.timeline li:nth-child(even).item-timeline .buletan,
+	ul.timeline li:nth-child(odd).item-timeline .buletan{
+		left: 11px;
+		top: 35px;
+		margin-left: 0;
+	}
+	ul.timeline li.item-timeline:nth-child(even):before{
+		top: 29px;
+		right: auto;
+		left: 25px;
+		border-left: 0px solid #fff;
+		border-right: 12px solid #fff;
+		border-right-color: #fff;
+	}
+	ul.timeline li.item-timeline:nth-child(odd).highlight:before,
+	ul.timeline li.item-timeline:nth-child(even).highlight:before,
+	ul.timeline li.item-timeline:nth-child(odd):before{
+		top: 29px;
+		left: 25px;
+		display: inline-block;
+		border-top: 12px solid transparent;
+		border-right: 12px solid #fff;
+		border-bottom: 12px solid transparent;
+		border-right-color: #fff;
+		content: '';
+	}
+	ul.timeline li.center-timeline-cat .inner{
+		border-radius: 0 5px 5px 0;
+		margin: 20px 0 20px 19px;
+	}
+	ul.timeline li:first-child.center-timeline-cat .inner,
+	ul.timeline li:last-child.center-timeline-cat .inner{
+		margin: 20px 0 20px 19px;
+	}
+	
+	.featured-post-wide .featured-text{
+		position: relative;
+		width: 100%;
+		padding: 5px 15px 15px 15px;
+	}
 }
 
 
@@ -444,6 +672,71 @@ PHONE < 480px
 		-moz-column-count: 1;
 		-webkit-column-count: 1;
 		column-count: 1;
+	}
+	
+	/**
+	-------------------------------------------
+	SOCIAL APPS
+	-------------------------------------------
+	**/
+	.img-wrap-col .img-col-3,
+	.img-wrap-col .img-col-4,
+	.img-wrap-col .img-col-5{
+		width: 50%;
+	}
+	.profile-heading img.avatar{
+		left: 50%;
+		margin-left: -35px;
+		bottom: 190px;
+		z-index: 3;
+		width: 70px;
+		height: 70px;
+	}
+	.profile-heading .user-name{
+		position: relative;
+		left: auto;
+		bottom: auto;
+		color: #434A54;
+	}
+	.profile-heading .right-button{
+		position: relative;
+		bottom: auto;
+		right: auto;
+	}
+	.profile-heading .profile-info{
+		position: relative;
+		padding-left: 10px;
+		padding-top: 40px;
+		text-align: center;
+		height: auto;
+	}
+	
+	
+	/**
+	-------------------------------------------
+	STORE APPS
+	-------------------------------------------
+	**/
+	.item-lg .item-des{
+		position: relative;
+		width: 100%;
+		overflow-y: none;
+	}
+	
+	
+	/**
+	-------------------------------------------
+	MAIL APPS
+	-------------------------------------------
+	**/
+	.list-group-item.mail-list span.attachment,
+	.list-group-item.mail-list span.subject{
+		display: none;
+	}
+	
+	
+	.widget-newsticker li .media-object{
+		width: 50px;
 	}
 }
 
