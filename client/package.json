@@ -32,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "cookieparser": "0.1.0",
+    "icheck": "1.0.2",
     "jquery": "3.1.1",
     "moment": "2.18.1",
     "object-assign": "4.1.1",
@@ -74,6 +75,7 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-react": "6.10.0",
     "eslint-watch": "3.0.1",
+    "expose-loader": "0.7.3",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "0.10.1",
     "html-webpack-plugin": "2.28.0",

@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Username from './Username';
-import LoginModal from './loginModal';
-import SignupModal from './signupModal';
+import Username from '../components/Username';
+import LoginModal from '../components/LoginModal';
+import SignupModal from './SignupModal';
 import { socketOn } from '../utils/socketIoHelper';
 class Login extends React.Component {
     constructor(props) {
@@ -33,12 +33,13 @@ class Login extends React.Component {
                 <div>
                     <span onClick={() => this.setState({ showLoginModal: true })}>Log in</span> / <span onClick={() => this.setState({ showSignupModal: true })}>Sign up</span>
                     <LoginModal show={this.state.showLoginModal} onLogin={this.props.onLogin} onCancel={() => { this.setState({ showLoginModal: false }); }} />
-                    <SignupModal show={this.state.showSignupModal} onLogin={this.props.onLogin} onCancel={() => { this.setState({ showSignupModal: false }); }} />
+                    <SignupModal show={this.state.showSignupModal} onCancel={() => { this.setState({ showSignupModal: false }); }} />
                 </div>);
     }
 }
 Login.propTypes = {
     onLogin: PropTypes.func,
+ 
     setUser: PropTypes.func
 };
 const mapDispatchToProps = (dispatch) => {
