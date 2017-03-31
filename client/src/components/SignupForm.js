@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import $ from 'jquery';
+import { socketOn } from '../utils/socketIoHelper';
 import '../styles/bootstrapValidator.css';
 import '../lib/bootstrapValidator';
 import CheckBox from './Basic/CheckBox';
@@ -13,10 +13,14 @@ class SignupForm extends React.Component {
         this.onSignup = this.onSignup.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-
     componentDidMount() {
         $("#signupForm").bootstrapValidator({
             message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
             fields: {
                 userName: {
                     message: 'The username is not valid',
@@ -35,6 +39,11 @@ class SignupForm extends React.Component {
                     validators: {
                         notEmpty: {
                             message: 'The password is required and can\'t be empty'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: 'The password must be more than 6 and less than 30 characters long'
                         },
                         identical: {
                             field: 'confirmPassword',
@@ -60,7 +69,17 @@ class SignupForm extends React.Component {
         e.preventDefault();
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
-            this.clearData();
+            socketOn('newUser', (result) => {
+                console.log(result);
+                if (result.error) {
+                    this.props.setUser(null, false);
+                }
+                else {
+                    this.props.setUser(result, true);
+                    this.clearData();
+                }
+            });
+            
         }
         else
             alert('Please check "I accept" before registering.');
@@ -71,7 +90,7 @@ class SignupForm extends React.Component {
     }
 
     handleChange(event) {
-        debugger;
+
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
@@ -82,28 +101,37 @@ class SignupForm extends React.Component {
 
     render() {
         return (
-            <form role="form" onSubmit={this.onSignup} id="signupForm">
-                <div className="form-group has-feedback lg left-feedback no-label">
-                    <input type="text" name="userName" onChange={this.handleChange} value={this.state.userName} className="form-control no-border input-lg rounded" placeholder="Choose username" />
-                    <span className="fa fa-user form-control-feedback" />
-                </div>
-                <div className="form-group has-feedback lg left-feedback no-label">
-                    <input type="password" name="password" onChange={this.handleChange} value={this.state.password} className="form-control no-border input-lg rounded" placeholder="Enter password" />
-                    <span className="fa fa-lock form-control-feedback" />
-                </div>
-                <div className="form-group has-feedback lg left-feedback no-label">
-                    <input type="password" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} className="form-control no-border input-lg rounded" placeholder="re-enter password" />
-                    <span className="fa fa-unlock form-control-feedback" />
+            <form role="form" onSubmit={this.onSignup} id="signupForm" className="form-horizontal">
+                <div className="form-group">
+                    <label className="col-lg-3 control-label">Username</label>
+                    <div className="col-lg-5">
+                        <input type="text" className="form-control" name="userName" onChange={this.handleChange} value={this.state.userName} placeholder="Choose username" />
+                    </div>
                 </div>
                 <div className="form-group">
-                    <div className="checkbox">
+                    <label className="col-lg-3 control-label">Password</label>
+                    <div className="col-lg-5">
+                        <input type="password" className="form-control" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Enter password" />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label className="col-lg-3 control-label">Retype password</label>
+                    <div className="col-lg-5">
+                        <input type="password" className="form-control" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} placeholder="re-enter password" />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="checkbox  col-lg-offset-1">
                         <label className="inline-popups">
                             <CheckBox name="acceptTerm" onChange={this.handleChange} className="i-yellow-flat" /> I accept <a href="#text-popup" data-effect="mfp-zoom-in">Terms and conditions</a>
                         </label>
                     </div>
                 </div>
                 <div className="form-group">
-                    <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-lg btn-perspective btn-block">REGISTER</button>
+                    <div className="col-lg-6 col-lg-offset-3">
+                        <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-perspective btn-block">REGISTER</button>
+                    </div>
                 </div>
             </form>
         );
@@ -118,7 +146,7 @@ SignupForm.propTypes = {
 const mapDispatchToProps = (dispatch) => {
     return {
         onSignup: (userName, password) => dispatch({ type: 'SIGNUP_USER', userName, password }),
-        setUser: (userName, isLoggedIn) => dispatch({ type: "SET_USER", userName, isLoggedIn })
+        setUser: (user, isLoggedIn) => dispatch({ type: "SET_USER", user, isLoggedIn })
     };
 };
 const mapStateToProps = (state) => {

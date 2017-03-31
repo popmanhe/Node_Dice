@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import Login from '../containers/login';
+import Login from '../containers/Login';
 import CoinPicker from './CoinPicker';
 // This is a classNameName-based component because the current
 // version of hot reloading won't hot reload a stateless

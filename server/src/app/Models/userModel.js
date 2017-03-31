@@ -80,13 +80,13 @@ userSchema.methods.setDepositAddr = function (coinName, addr) {
 
 //Static methods
 userSchema.statics = {
-    CreateNewUser: (userName, password,callback) => {
-        password = crypto.createHmac('sha512').update(password).digest('hex');
+    CreateNewUser: (userName, password, callback) => {
+        password = crypto.createHash('sha512').update(password).digest('hex');
         let user = new userModel(
             {
                 guid: uuid.v4(),
-                userName,
-                password,
+                userName: userName,
+                password: password,
                 serverSalt: uuid.v4(),
                 clientSalt: uuid.v4(),
                 nonce: 0,
@@ -176,7 +176,7 @@ userSchema.statics = {
             else {
                 if (u)
                   { 
-                       password = crypto.createHmac('sha512').update(password).digest('hex');
+                       password = crypto.createHash('sha512').update(password).digest('hex');
                        callback(null, { userName: u.userName, isLoggedIn: password == u.password });
                   }
                 else

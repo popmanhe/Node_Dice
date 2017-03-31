@@ -4,36 +4,36 @@
  * Created by Neo on 2017/01/17.
  */
 import userModel from '../Models/userModel';
-import crypto from'crypto';
+import crypto from 'crypto';
 import coinsConfig from '../../config/coinsConfig.js';
 
 export default (io) => {
-    
+
     //socket.io events
-    io.on('connection',  (socket) => {
-        const session = socket.handshake.session;
+    io.on('connection', (socket) => {
+        // const session = socket.handshake.session;
         socket.emit('coinNames', coinsConfig.getCoinNames());
 
         //return a new user
-        socket.on('newUser',  (username) => {
-            userModel.CreateNewUser(username,  (err, user)=>  {
-                if (err) { 
+        socket.on('newUser', (u) => {
+            userModel.CreateNewUser(u.userName, u.password, (err, user) => {
+                if (err) {
                     if (err.code == 11000)
                         socket.emit('newUser', { error: { code: 11000 } });
                 }
                 else {
-                    session.userid = user.guid;
-                    session.username = user.userName;
-                    session.save();
-                    let date = new Date();
-                    date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
-                    let expires = "expires=" + date.toGMTString();
-                    
-                    socket.handshake.headers.cookie = "newUser=0;" + expires + "; path=/";
+                    // session.userid = user.guid;
+                    // session.username = user.userName;
+                    // session.save();
+                    // let date = new Date();
+                    // date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
+                    // let expires = "expires=" + date.toGMTString();
+
+                    // socket.handshake.headers.cookie = "newUser=0;" + expires + "; path=/";
                     socket.emit('newUser', {
                         userid: user.guid,
                         userName: user.userName,
-                        clientSalt: user.clientSalt, 
+                        clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: 0,
                         hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
@@ -41,32 +41,32 @@ export default (io) => {
                 }
             });
         });
-        
+
         //return an existing user
-        socket.on('existingUser',  () => {
+        socket.on('existingUser', () => {
             userModel.GetUserById(session.userid, "clientSalt serverSalt guid userName funds nonce",
                 (err, u) => {
-                if (err) {
-                    socket.emit('existingUser', { clientSalt: '', error: err });
-                }
-                else {
-                    if (u) {
-                        socket.emit('existingUser', {
-                            userid: u.guid,
-                            userName: u.userName,
-                            clientSalt: u.clientSalt , 
-                            funds: u.funds,
-                            nonce: u.nonce,
-                            hashedServerSalt: crypto.createHash('sha512').update(u.serverSalt).digest('hex')
-                        });
+                    if (err) {
+                        socket.emit('existingUser', { clientSalt: '', error: err });
                     }
                     else {
-                        socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
+                        if (u) {
+                            socket.emit('existingUser', {
+                                userid: u.guid,
+                                userName: u.userName,
+                                clientSalt: u.clientSalt,
+                                funds: u.funds,
+                                nonce: u.nonce,
+                                hashedServerSalt: crypto.createHash('sha512').update(u.serverSalt).digest('hex')
+                            });
+                        }
+                        else {
+                            socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
+                        }
                     }
-                }
-            });
+                });
         });
-        
+
         //update client salt
         socket.on('clientSalt', (clientSalt) => {
             userModel.SaveClientSalt(session.userid, clientSalt, (err, oldSalt) => {
@@ -96,19 +96,19 @@ export default (io) => {
                     socket.emit('getBalance', balance);
             });
         });
-        
+
         //get user balance
         socket.on('loginUser', (user) => {
             userModel.LoginUser(user.userName, user.password, (err, user) => {
                 if (err)
-                    socket.emit('loggedUser', {error: err});
+                    socket.emit('loggedUser', { error: err });
                 else
-                    socket.emit('loggedUser', {userName: user.userName, isLoggedIn: true});
+                    socket.emit('loggedUser', { userName: user.userName, isLoggedIn: true });
             });
         });
 
     });
 
     //functions
-  //  function CreateNewUser() { }
+    //  function CreateNewUser() { }
 };

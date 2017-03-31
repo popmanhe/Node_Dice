@@ -22,7 +22,12 @@ export default {
   },
 
   plugins: [
-     new webpack.DefinePlugin({
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    }),
+    new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)
       __DEV__: true
     }),
@@ -50,12 +55,6 @@ export default {
     })
   ],
   module: {
-    loaders: [
-      {
-        test: require.resolve('jquery'), //use this loader for jquery plugin
-        loaders: ['expose?$', 'expose?jQuery'] //expose this jquery to the global '$' and 'jQuery' vars.
-      }
-    ],
     rules: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel-loader'] },
       { test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader' },

@@ -32,8 +32,6 @@
   "license": "MIT",
   "dependencies": {
     "cookieparser": "0.1.0",
-    "icheck": "1.0.2",
-    "jquery": "3.1.1",
     "moment": "2.18.1",
     "object-assign": "4.1.1",
     "ramda": "0.23.0",
