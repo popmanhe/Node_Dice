@@ -22,29 +22,29 @@ export default (io) => {
                         socket.emit('newUser', { error: { code: 11000 } });
                 }
                 else {
-                    // session.userid = user.guid;
+                    // socket.user.userid = user.guid;
                     // session.username = user.userName;
                     // session.save();
                     // let date = new Date();
                     // date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
                     // let expires = "expires=" + date.toGMTString();
-
-                    // socket.handshake.headers.cookie = "newUser=0;" + expires + "; path=/";
-                    socket.emit('newUser', {
+                    const newUser = {
                         userid: user.guid,
                         userName: user.userName,
                         clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: 0,
                         hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
-                    });
+                    };
+                    socket.user = { userid: user.guid, userName: user.userName };
+                    socket.emit('newUser', newUser);
                 }
             });
         });
 
         //return an existing user
         socket.on('existingUser', () => {
-            userModel.GetUserById(session.userid, "clientSalt serverSalt guid userName funds nonce",
+            userModel.GetUserById(socket.user.userid, "clientSalt serverSalt guid userName funds nonce",
                 (err, u) => {
                     if (err) {
                         socket.emit('existingUser', { clientSalt: '', error: err });
@@ -69,7 +69,7 @@ export default (io) => {
 
         //update client salt
         socket.on('clientSalt', (clientSalt) => {
-            userModel.SaveClientSalt(session.userid, clientSalt, (err, oldSalt) => {
+            userModel.SaveClientSalt(socket.user.userid, clientSalt, (err, oldSalt) => {
                 if (err)
                     socket.emit('savingClientSalt', err);
                 else
@@ -79,7 +79,7 @@ export default (io) => {
 
         //get new bitcion address
         socket.on('newCoinAddr', (coinName) => {
-            userModel.GetNewAddress(session.userid, coinName, (err, addr) => {
+            userModel.GetNewAddress(socket.user.userid, coinName, (err, addr) => {
                 if (err)
                     socket.emit('newCoinAddr', err);
                 else
@@ -89,7 +89,7 @@ export default (io) => {
 
         //get user balance
         socket.on('getBalance', (coinName) => {
-            userModel.GetBalance(session.userid, coinName, (err, balance) => {
+            userModel.GetBalance(socket.user.userid, coinName, (err, balance) => {
                 if (err)
                     socket.emit('getBalance', err);
                 else
@@ -102,8 +102,18 @@ export default (io) => {
             userModel.LoginUser(user.userName, user.password, (err, user) => {
                 if (err)
                     socket.emit('loggedUser', { error: err });
-                else
-                    socket.emit('loggedUser', { userName: user.userName, isLoggedIn: true });
+                else {
+                    const loggedUser = {
+                        userid: user.guid,
+                        userName: user.userName,
+                        clientSalt: user.clientSalt,
+                        funds: user.funds,
+                        nonce: user.nonce,
+                        hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
+                    };
+                    socket.user = socket.user = { userid: user.guid, userName: user.userName };
+                    socket.emit('loggedUser', loggedUser);
+                }
             });
         });
 

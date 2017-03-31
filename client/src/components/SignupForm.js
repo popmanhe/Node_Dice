@@ -65,21 +65,21 @@ class SignupForm extends React.Component {
             }
         });
     }
+
     onSignup(e) {
         e.preventDefault();
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
             socketOn('newUser', (result) => {
-                console.log(result);
+                 
                 if (result.error) {
                     this.props.setUser(null, false);
                 }
                 else {
                     this.props.setUser(result, true);
-                    this.clearData();
                 }
             });
-            
+
         }
         else
             alert('Please check "I accept" before registering.');
@@ -101,39 +101,42 @@ class SignupForm extends React.Component {
 
     render() {
         return (
-            <form role="form" onSubmit={this.onSignup} id="signupForm" className="form-horizontal">
-                <div className="form-group">
-                    <label className="col-lg-3 control-label">Username</label>
-                    <div className="col-lg-5">
-                        <input type="text" className="form-control" name="userName" onChange={this.handleChange} value={this.state.userName} placeholder="Choose username" />
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-lg-3 control-label">Password</label>
-                    <div className="col-lg-5">
-                        <input type="password" className="form-control" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Enter password" />
-                    </div>
-                </div>
+            <div className="login-wrapper">
+                <form role="form" onSubmit={this.onSignup} id="signupForm">
 
-                <div className="form-group">
-                    <label className="col-lg-3 control-label">Retype password</label>
-                    <div className="col-lg-5">
-                        <input type="password" className="form-control" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} placeholder="re-enter password" />
+                    <div className="form-group">
+                        <label className="control-label">Username</label>
+                        <div>
+                            <input type="text" className="form-control" name="userName" onChange={this.handleChange} value={this.state.userName} placeholder="Choose username" />
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                    <div className="checkbox  col-lg-offset-1">
-                        <label className="inline-popups">
-                            <CheckBox name="acceptTerm" onChange={this.handleChange} className="i-yellow-flat" /> I accept <a href="#text-popup" data-effect="mfp-zoom-in">Terms and conditions</a>
-                        </label>
+                    <div className="form-group">
+                        <label className="control-label">Password</label>
+                        <div>
+                            <input type="password" className="form-control" name="password" onChange={this.handleChange} value={this.state.password} placeholder="Enter password" />
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                    <div className="col-lg-6 col-lg-offset-3">
-                        <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-perspective btn-block">REGISTER</button>
+
+                    <div className="form-group">
+                        <label className="control-label">Retype password</label>
+                        <div>
+                            <input type="password" className="form-control" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} placeholder="re-enter password" />
+                        </div>
                     </div>
-                </div>
-            </form>
+                    <div className="form-group">
+                        <div className="checkbox">
+                            <label className="inline-popups">
+                                <CheckBox name="acceptTerm" onChange={this.handleChange} className="i-yellow-flat" /> I accept <a href="#text-popup" data-effect="mfp-zoom-in">Terms and conditions</a>
+                            </label>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        
+                            <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-perspective btn-block">REGISTER</button>
+                       
+                    </div>
+                </form>
+            </div>
         );
     }
 }
@@ -149,10 +152,5 @@ const mapDispatchToProps = (dispatch) => {
         setUser: (user, isLoggedIn) => dispatch({ type: "SET_USER", user, isLoggedIn })
     };
 };
-const mapStateToProps = (state) => {
-    return {
-        userName: state.user.userName,
-        isLoggedIn: state.user.isLoggedIn
-    };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
+
+export default connect(null, mapDispatchToProps)(SignupForm);

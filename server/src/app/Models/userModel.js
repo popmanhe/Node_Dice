@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     clientSalt: String,
     serverSalt: String,
     nonce: Number,
-    createTime: { type: Date, expires: 60 * 60 * 24 * 30 },//in production, remove expire attr
+    createTime: { type: Date },
     funds: [{
         coinName: String,
         depositAmount: Number,
@@ -171,14 +171,13 @@ userSchema.statics = {
         });
     },
     LoginUser: (userName, password, callback) => {
-        userModel.findOne({ userName: userName }, "userName passowrd", (err, u) => {
+        password = crypto.createHash('sha512').update(password).digest('hex');
+        userModel.findOne({ userName, password }, "guid userName serverSalt clientSalt nonce funds", (err, u) => {
             if (err) { callback(err, null); }
             else {
-                if (u)
-                  { 
-                       password = crypto.createHash('sha512').update(password).digest('hex');
-                       callback(null, { userName: u.userName, isLoggedIn: password == u.password });
-                  }
+                if (u) {
+                    callback(null, u);
+                }
                 else
                     callback('user not found', null);
             }
@@ -186,7 +185,7 @@ userSchema.statics = {
     }
 };
 
-let userModel = mongoose.model('User', userSchema);
+const userModel = mongoose.model('User', userSchema);
 
 /*exports models*/
 export default userModel;

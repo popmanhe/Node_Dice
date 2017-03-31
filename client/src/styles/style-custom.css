@@ -126,4 +126,11 @@ ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
     opacity: 0.1;
 }
 
- 
+ div.login .modal-content{
+	background: #37BC9B;
+	padding: 0;
+}
+
+div.login .modal-header{
+    color: #fff;
+}

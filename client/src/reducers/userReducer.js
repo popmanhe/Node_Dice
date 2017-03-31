@@ -10,7 +10,7 @@ export default (state = initialState.user, action) => {
                     clientSalt: action.user.clientSalt,
                     funds: action.user.funds,
                     nonce: 0,
-                    hashedServerSalt: action.user.serverSalt,
+                    hashedServerSalt: action.user.hashedServerSalt,
                     isLoggedIn: action.isLoggedIn
                 };
             else

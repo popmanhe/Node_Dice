@@ -1,17 +1,26 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import {socketEmit, socketOn} from '../utils/socketIoHelper';
+import { socketEmit, socketOn } from '../utils/socketIoHelper';
 import moment from 'moment';
+import '../lib/jquery.nicescroll.min';
 
 class Chat extends React.Component {
       constructor(props) {
             super(props);
             this.sendMsg = this.sendMsg.bind(this);
       }
-     
+
       componentDidMount() {
             this.initChat();
             this.receiveChats();
+            
+            $('#chatList').niceScroll({
+                  cursorcolor: "#121212",
+                  cursorborder: "0px solid #fff",
+                  cursorborderradius: "0px",
+                  cursorwidth: "5px",
+                  cursoropacitymax: 0.2
+            });
       }
       componentWillUnmount() {
             this.leaveChat();
@@ -21,11 +30,11 @@ class Chat extends React.Component {
             //   socket.close();
       }
       receiveChats() {
+            const self = this;
             socketOn('recvChat', (result) => {
-              
-                  this.props.onReceiveMessage({ timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message });
+                  this.props.onReceiveMessage({ userName: result.userName, timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message });
 
-                  // chat.scrollToBottom();
+                  self.scrollToBottom();
             });
       }
       initChat() {
@@ -35,10 +44,14 @@ class Chat extends React.Component {
                   // console.log(result);
                   if (result.length > 0) {
                         result.sort((a, b) => a.timeStamp > b.timeStamp ? 1 : -1);
-                        result.map((r) => self.props.onReceiveMessage({ timeStamp: moment(r.timeStamp).format('MM-DD HH:mm'), message: r.message }));
+                        result.map((r) => self.props.onReceiveMessage({ userName: r.userName, timeStamp: moment(r.timeStamp).format('MM-DD HH:mm'), message: r.message }));
                   }
-                  //chat.scrollToBottom();
+                  self.scrollToBottom();
             });
+      }
+      scrollToBottom() {
+            const container = $('#chatList');
+            container.animate({ scrollTop: container.height() + 20000 }, 2000);
       }
       sendMsg(e) {
             e.preventDefault();
@@ -56,11 +69,11 @@ class Chat extends React.Component {
 
             return (
                   <div>
-                        <ul className="list-group" style={{"maxHeight": "500px","overflowY": "auto"}}>
-                              { 
+                        <ul id="chatList" className="list-group" style={{ "maxHeight": "500px", "overflowY": "auto" }}>
+                              {
                                     messages.map((msg, i) =>
                                           <li className="list-group-item" key={i}>
-                                                <span>{msg.timeStamp}</span> <span className="text-danger" />:  
+                                                <span>{msg.timeStamp}</span> <span className="text-danger" >{msg.userName}</span>:
                                                 <div className="text-info" >{msg.message}</div>
                                           </li>
                                     )}
@@ -72,7 +85,7 @@ class Chat extends React.Component {
                                     <input type="text" ref={(input) => { this.newMessage = input; }} className="form-control rounded" placeholder="Enter message" />
                               </div>
 
-                              <button type="submit" onClick={this.sendMsg} className="btn btn-default">Send</button>
+                              <button type="submit" disabled={!this.props.chatEnabled} onClick={this.sendMsg} className="btn btn-default">Send</button>
                         </form>
                   </div>);
       }
@@ -84,12 +97,14 @@ Chat.propTypes = {
             message: PropTypes.string.isRequired,
             timeStamp: PropTypes.string.isRequired
       }).isRequired),
-      userName: PropTypes.string
+      userName: PropTypes.string,
+      chatEnabled: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
       return {
-            messages: state.chat.messages
+            messages: state.chat.messages,
+            chatEnabled: state.user.userName != null
       };
 };
 

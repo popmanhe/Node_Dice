@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import CheckBox from './Basic/CheckBox';
+import { connect } from 'react-redux';
+import { socketOn } from '../utils/socketIoHelper';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -13,15 +16,27 @@ class LoginModal extends React.Component {
     onLogin(e) {
         e.preventDefault();
         this.props.onLogin(this.state.userName, this.state.password, this.state.rememberMe);
-
+        this.loggedUser();
     }
+
+    loggedUser() {
+        socketOn('loggedUser', (result) => {
+            if (result.error) {
+                    this.props.setUser(null, false);
+                }
+                else {
+                    this.props.setUser(result, true);
+                }
+        });
+    }
+
     onCancel() {
         this.clearData();
         this.props.onCancel();
     }
 
-    clearData(){
-        this.setState({userName:"", password:"", rememberMe: false});
+    clearData() {
+        this.setState({ userName: "", password: "", rememberMe: false });
     }
 
     handleChange(event) {
@@ -35,32 +50,31 @@ class LoginModal extends React.Component {
     }
     render() {
         return (
-            <Modal show={this.props.show}>
-                <Modal.Header closeButton>
+            <Modal show={this.props.show} dialogClassName="login">
+                <Modal.Header>
                     <Modal.Title id="user-login" componentClass="h2">Login</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form role="form" onSubmit={this.onLogin}>
-                        <div className="form-group has-feedback lg left-feedback no-label">
-                            <input type="text" name="userName" onChange={this.handleChange} value={this.state.userName} className="form-control no-border input-lg rounded" placeholder="Enter username" autoFocus />
-                            <span className="fa fa-user form-control-feedback" />
-                        </div>
-                        <div className="form-group has-feedback lg left-feedback no-label">
-                            <input type="password" name="password" onChange={this.handleChange} value={this.state.password}  className="form-control no-border input-lg rounded" placeholder="Enter password" />
-                            <span className="fa fa-unlock-alt form-control-feedback" />
-                        </div>
-                        <div className="form-group">
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" className="i-yellow-flat" name="rememberMe" onChange={this.handleChange} checked={this.state.rememberMe} /> Remember me
-					</label>
+                    <div className="login-wrapper">
+                        <form role="form" onSubmit={this.onLogin}>
+                            <div className="form-group has-feedback lg left-feedback no-label">
+                                <input type="text" name="userName" onChange={this.handleChange} value={this.state.userName} className="form-control no-border input-lg rounded" placeholder="Enter username" autoFocus />
+                                <span className="fa fa-user form-control-feedback" />
                             </div>
-                        </div>
-                        <div className="form-group">
-                            <button type="submit" className="btn btn-warning btn-lg btn-perspective btn-block" onClick={this.onLogin}>LOGIN</button>
-                        </div>
-                    </form>
-
+                            <div className="form-group has-feedback lg left-feedback no-label">
+                                <input type="password" name="password" onChange={this.handleChange} value={this.state.password} className="form-control no-border input-lg rounded" placeholder="Enter password" />
+                                <span className="fa fa-unlock-alt form-control-feedback" />
+                            </div>
+                            <div className="form-group ">
+                                <div className="checkbox col-lg-offset-1  col-md-offset-1">
+                                    <label>     <CheckBox name="rememberMe" onChange={this.handleChange} checked={this.state.rememberMe} /> Remember me</label>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                    <button type="submit" className="btn btn-warning btn-perspective btn-block" onClick={this.onLogin} >LOGIN</button>
+                            </div>
+                        </form>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer><Button onClick={this.onCancel}>Cancel</Button>
                 </Modal.Footer>
@@ -71,6 +85,15 @@ class LoginModal extends React.Component {
 LoginModal.propTypes = {
     show: PropTypes.bool,
     onLogin: PropTypes.func,
+    setUser: PropTypes.func,
     onCancel: PropTypes.func
 };
-export default LoginModal;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onLogin: (userName, password, rememberMe) => dispatch({ type: 'LOGIN_USER', userName, password, rememberMe }),
+        setUser: (user, isLoggedIn) => dispatch({ type: "SET_USER", user, isLoggedIn })
+    };
+};
+export default connect(null, mapDispatchToProps)(LoginModal);
+

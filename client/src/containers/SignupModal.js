@@ -4,7 +4,7 @@ import SignupForm from '../components/SignupForm';
 
 const SignupModal = (props) => {
     return (
-        <Modal show={props.show}>
+        <Modal show={props.show} dialogClassName="login">
             <Modal.Header closeButton>
                 <Modal.Title componentClass="h2">Sign up</Modal.Title>
             </Modal.Header>
