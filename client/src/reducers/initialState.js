@@ -2,5 +2,6 @@ export default {
   chat: {
     messages:[]
   },
-  user: {userName:null, isLoggedIn: false}
+  user: {userName:null, isLoggedIn: false},
+  ou:{}
 };

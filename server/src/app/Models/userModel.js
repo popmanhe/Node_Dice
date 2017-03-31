@@ -10,8 +10,9 @@ import config from '../../config';
 import uuid from 'uuid';
 import coinsConfig from '../../config/coinsConfig.js';
 import crypto from 'crypto';
-
+// import logger from '../helper/logger';
 const mongoose = dbConnect.mongoose;
+mongoose.Promise = global.Promise;
 /*view models*/
 /*user schema*/
 const userSchema = new mongoose.Schema({
@@ -156,8 +157,8 @@ userSchema.statics = {
 
     },
     GetBalance: (userid, coinName, callback) => {
+        const helper = coinsConfig[coinName];
 
-        let helper = coinsConfig[coinName];
         helper.GetBalance(userid, (err, amount) => {
             userModel.findOne({ guid: userid }, "funds", (err, u) => {
                 if (err) { callback(err, null); }
@@ -165,7 +166,7 @@ userSchema.statics = {
                     u.setDeposit(coinName, amount);
                     u.save();
 
-                    callback(err, { balance: u.getBalance(coinName) });
+                    callback(err,  u.getBalance(coinName));
                 }
             });
         });

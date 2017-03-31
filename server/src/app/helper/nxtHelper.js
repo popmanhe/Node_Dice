@@ -1,10 +1,10 @@
-﻿import bitcoin from 'bitcoin';
-import config from '../../config';
-
-const client = new bitcoin.Client(config.bitcoin);
+﻿ 
+// import config from '../../config';
+import uuid from 'uuid';
+ 
 export default {
     GetNewAddress: (userid, callback) => {
-        client.getNewAddress(userid, callback);
+        callback(null, uuid.v4());
     },
     GetBalance: (userid, callback) => {
         //mini confirmation is 2, BTC only
@@ -12,14 +12,14 @@ export default {
 
         if (process.env.NODE_ENV == "development")
             //In development, return 10 BTC for testing.
-            callback(null, 10);
+            callback(null, 1000000);
         else
-            client.getReceivedByAccount(userid, 2, callback);
+            callback(null, 0);
     },
     WithdrawFunds: (userid, unit) => {
         //dummy code for lint rules
         userid = '';
-        unit = 'BTC';
+        unit = 'NXT';
 
         return unit;
     }

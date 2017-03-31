@@ -1,6 +1,4 @@
-﻿'use strict';
-
-import dbConnect from './dbConnect';
+﻿import dbConnect from './dbConnect';
 
 const mongoose = dbConnect.mongoose;
 mongoose.Promise = global.Promise;

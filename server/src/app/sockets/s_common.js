@@ -12,7 +12,10 @@ export default (io) => {
     //socket.io events
     io.on('connection', (socket) => {
         // const session = socket.handshake.session;
-        socket.emit('coinNames', coinsConfig.getCoinNames());
+        socket.on('coinNames', () =>
+            socket.emit('coinNames', coinsConfig.getCoinNames())
+        );
+
 
         //return a new user
         socket.on('newUser', (u) => {
@@ -118,7 +121,4 @@ export default (io) => {
         });
 
     });
-
-    //functions
-    //  function CreateNewUser() { }
 };

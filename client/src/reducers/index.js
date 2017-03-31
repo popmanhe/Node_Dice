@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux';
-//import ouBetReducer from './ouBetReducer';
+import ou from './ouBetReducer';
 import chat from './chatReducer';
 import user from './userReducer';
 const rootReducer = combineReducers({
- // ouBetReducer,
+  ou,
   chat,
   user,
   routing: routerReducer

@@ -9,11 +9,14 @@ function* loginUser(action) {
 function* signupUser(action) {
     yield socketEmit('newUser', { userName: action.userName, password: action.password });
 }
- 
+function* refreshBalance(action) {
+    yield socketEmit('getBalance',action.coinName);
+}
 function* userSaga() {
     return yield [
         takeEvery("SIGNUP_USER", signupUser),
-        takeEvery("LOGIN_USER", loginUser)
+        takeEvery("LOGIN_USER", loginUser),
+        takeEvery("REFRESH_BALANCE", refreshBalance)
     ];
 
 }

@@ -84,10 +84,7 @@ class App extends React.Component {
                                         </li>
                                         <li>
                                             <a className="dropdown-toggle hand" data-toggle="dropdown">Switch Coins<span className="caret" /></a>
-                                            <ul className="dropdown-menu square primary margin-list-rounded with-triangle">
-                                                <li><CoinPicker coin="BTC" /></li>
-                                                <li><CoinPicker coin="NXT" /></li>
-                                            </ul>
+                                            <CoinPicker />
                                         </li>
 
                                     </ul>

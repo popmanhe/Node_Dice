@@ -1,12 +1,9 @@
-﻿export default {
-    'BTC': require('../app/helper/bitcoinHelper.js'),
-    'NXT':'',
-    'getCoinNames': function() {
-        let names = [];
-        for (let n in this) {
-            if (typeof n === 'string')
-                names.push({ 'name': n });
-        }
-        return names;
+﻿import BTC from '../app/helper/bitcoinHelper';
+import NXT from '../app/helper/nxtHelper';
+export default {
+    'BTC': BTC,
+    'NXT': NXT,
+    getCoinNames: function() {
+        return ['BTC','NXT'];
     }
 };

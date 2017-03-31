@@ -85,7 +85,7 @@ class Chat extends React.Component {
                                     <input type="text" ref={(input) => { this.newMessage = input; }} className="form-control rounded" placeholder="Enter message" />
                               </div>
 
-                              <button type="submit" disabled={!this.props.chatEnabled} onClick={this.sendMsg} className="btn btn-default">Send</button>
+                              <button type="submit" disabled={!this.props.enabled} onClick={this.sendMsg} className="btn btn-default">Send</button>
                         </form>
                   </div>);
       }
@@ -94,17 +94,18 @@ Chat.propTypes = {
       onSendMessage: PropTypes.func,
       onReceiveMessage: PropTypes.func,
       messages: PropTypes.arrayOf(PropTypes.shape({
+            userName: PropTypes.string.isRequired,
             message: PropTypes.string.isRequired,
             timeStamp: PropTypes.string.isRequired
       }).isRequired),
       userName: PropTypes.string,
-      chatEnabled: PropTypes.bool
+      enabled: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
       return {
             messages: state.chat.messages,
-            chatEnabled: state.user.userName != null
+            enabled: state.user.userName != null
       };
 };
 
