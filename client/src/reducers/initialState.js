@@ -3,5 +3,7 @@ export default {
     messages:[]
   },
   user: {userName:null, isLoggedIn: false},
-  ou:{}
+  ou:{ 
+    coins:[]
+  }
 };

@@ -7,6 +7,7 @@ class OUBet extends React.Component {
         super(props);
         this.state = {
             balance: 0,
+            betAmount: 0,
             notLoggedin: "Please login or sign up first."
         };
     }
@@ -14,22 +15,28 @@ class OUBet extends React.Component {
         this.getCoinNames();
     }
 
-
     componentWillReceiveProps(nextProps) {
         // console.log(this.props);
         // console.log(nextProps);
+        //Get coin balance
         if (nextProps.loggedIn && ((nextProps.loggedIn != this.props.loggedIn) ||
-            (nextProps.selectedCoin != this.props.selectedCoin)))
-            this.getBalance(nextProps.selectedCoin);
+            (nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName))) {
+            this.getBalance(nextProps.selectedCoin.coinName);
+        }
+        //Set min betAmount
+        if (!this.props.selectedCoin || nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName) {
+            this.setState({ betAmount: nextProps.selectedCoin.min.toFixed(8) });
+        }
 
     }
 
     getCoinNames() {
         if (!this.props.coins || this.props.coins.length == 0) {
             this.props.getCoinNames();
-            socketOn('coinNames', (result) => this.props.setCoinNames(result));
+            socketOn('coinNames', (result) => { this.props.setCoinNames(result); });
         }
     }
+
     getBalance(coinName) {
         if (coinName) {
             this.props.refreshBalance(coinName);
@@ -38,18 +45,33 @@ class OUBet extends React.Component {
     }
     refreshBalance() {
         if (this.props.loggedIn)
-            this.getBalance(this.props.selectedCoin);
+            this.getBalance(this.props.selectedCoin.coinName);
         else
             alert(this.state.notLoggedin);
     }
+    multiplyAmount(n) {
+
+        let betAmount = this.state.betAmount * n;
+        
+        if (betAmount >= this.props.selectedCoin.min && betAmount<=this.props.selectedCoin.max)
+            this.setState({ betAmount: betAmount.toFixed(8) });
+    }
+    minBetAmount() {
+        this.setState({ betAmount: this.props.selectedCoin.min.toFixed(8) });
+    }
+    maxBetAmount() { 
+         this.setState({ betAmount: this.props.selectedCoin.max.toFixed(8) });
+    }
     render() {
+        const coinName = this.props.selectedCoin ? this.props.selectedCoin.coinName : "";
+
         return (
             <div className="the-box">
                 <div className="form-group">
                     <label htmlFor="balance">Balance</label>
                     <div className="input-group">
                         <span className="input-group-addon">
-                            <a className="dropdown-toggle hand" data-toggle="dropdown">{this.props.selectedCoin}<span className="caret" /></a>
+                            <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
                         <input type="text" value={this.state.balance} className="form-control hand" readOnly="readonly" />
@@ -60,16 +82,16 @@ class OUBet extends React.Component {
                     <label>BET AMOUNT</label>
                     <div className="input-group">
                         <span className="input-group-addon">
-                            <a className="dropdown-toggle hand" data-toggle="dropdown">{this.props.selectedCoin}<span className="caret" /></a>
+                            <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input className="form-control" data-bind="value: betAmount" min="0,00000001" />
-                        <span className="input-group-addon hand" data-bind="click: amountX2">x 2</span>
-                        <span className="input-group-addon hand" data-bind="click: amountDiv2">/ 2</span>
-                        <span className="input-group-addon hand" data-bind="click: minAmount">Min</span>
-                        <span className="input-group-addon hand" data-bind="click: maxAmount">Max</span>
+                        <input className="form-control" value={this.state.betAmount} min="0,00000001" />
+                        <span className="input-group-addon hand" onClick={() => this.multiplyAmount(2)}>x 2</span>
+                        <span className="input-group-addon hand" onClick={() => this.multiplyAmount(0.5)}>/ 2</span>
+                        <span className="input-group-addon hand" onClick={() => this.minBetAmount()}>Min</span>
+                        <span className="input-group-addon hand" onClick={() => this.maxBetAmount()}>Max</span>
                     </div>
-                    <span className="help-block" data-bind="html: amountdesc" />
+                    <span className="help-block" />
                 </div>
                 <div className="form-group">
                     <label>PAYOUT</label>
@@ -86,7 +108,7 @@ class OUBet extends React.Component {
                     <label>PROFIT ON WIN</label>
                     <div className="input-group">
                         <span className="input-group-addon">
-                            <a className="dropdown-toggle hand" data-toggle="dropdown">{this.props.selectedCoin}<span className="caret" /></a>
+                            <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
                         <input className="form-control" readOnly="readonly" />
@@ -95,14 +117,14 @@ class OUBet extends React.Component {
 
                 <div className="row">
                     <div className="col-sm-4">
-                        <button className="btn btn-success btn-perspective btn-lg" />
+                        <button className="btn btn-success btn-perspective btn-lg" >Over</button>
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-danger btn-perspective btn-lg" />
+                        <button className="btn btn-danger btn-perspective btn-lg" >Under</button>
                     </div>
                     <div className="col-sm-4">
-                        <button className="btn btn-warning btn-perspective btn-lg" />
+                        <button className="btn btn-warning btn-perspective btn-lg" >Restart</button>
                     </div>
                 </div>
             </div>
@@ -117,7 +139,7 @@ OUBet.propTypes = {
     setCoinNames: PropTypes.func,
     refreshBalance: PropTypes.func,
     coins: PropTypes.array,
-    selectedCoin: PropTypes.string,
+    selectedCoin: PropTypes.object,
     loggedIn: PropTypes.bool
 };
 

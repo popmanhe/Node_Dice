@@ -71,9 +71,13 @@ class SignupForm extends React.Component {
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
             socketOn('newUser', (result) => {
-                 
+                 console.log(result);
                 if (result.error) {
-                    this.props.setUser(null, false);
+                    switch  (result.error.code)
+                    {
+                        case 11000: alert('User name exists. Choose different one.'); break;
+                        default: this.props.setUser(null, false); 
+                    }
                 }
                 else {
                     this.props.setUser(result, true);

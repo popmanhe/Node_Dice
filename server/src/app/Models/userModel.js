@@ -109,7 +109,7 @@ userSchema.statics = {
         user.save(err => {
             if (err) {
                 callback(err, null);
-                console.error('Saving user error: ' + err);
+                // console.error('Saving user error: ' + err);
             }
             else {
                 callback(null, user);

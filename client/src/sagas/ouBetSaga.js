@@ -7,7 +7,6 @@ function* getCoinNames() {
     yield socketEmit('coinNames', {});
 }
 
-
 function* ouSaga() {
     return yield [
         takeEvery("GET_COINNAMES", getCoinNames)
