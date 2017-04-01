@@ -8,8 +8,10 @@ class OUBet extends React.Component {
         this.state = {
             balance: 0,
             betAmount: 0,
+            payout: 2,
             notLoggedin: "Please login or sign up first."
         };
+        this.handleChange = this.handleChange.bind(this);
     }
     componentDidMount() {
         this.getCoinNames();
@@ -30,6 +32,15 @@ class OUBet extends React.Component {
 
     }
 
+    handleChange(event) {
+
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
+    }
     getCoinNames() {
         if (!this.props.coins || this.props.coins.length == 0) {
             this.props.getCoinNames();
@@ -52,19 +63,34 @@ class OUBet extends React.Component {
     multiplyAmount(n) {
 
         let betAmount = this.state.betAmount * n;
-        
-        if (betAmount >= this.props.selectedCoin.min && betAmount<=this.props.selectedCoin.max)
+        betAmount = Math.min(betAmount, this.props.selectedCoin.max);
+        betAmount = Math.max(betAmount, this.props.selectedCoin.min);
+
+        if (betAmount >= this.props.selectedCoin.min && betAmount <= this.props.selectedCoin.max)
             this.setState({ betAmount: betAmount.toFixed(8) });
     }
     minBetAmount() {
         this.setState({ betAmount: this.props.selectedCoin.min.toFixed(8) });
     }
-    maxBetAmount() { 
-         this.setState({ betAmount: this.props.selectedCoin.max.toFixed(8) });
+    maxBetAmount() {
+        this.setState({ betAmount: this.props.selectedCoin.max.toFixed(8) });
+    }
+    increasePayout() {
+        let payout = this.state.payout + 1;
+
+        this.setState({ payout });
+    }
+    decreasePayout() {
+        let payout = this.state.payout - 1;
+        if (payout >= 2)
+            this.setState({ payout });
     }
     render() {
         const coinName = this.props.selectedCoin ? this.props.selectedCoin.coinName : "";
+        const profitOnWin = (this.state.betAmount * this.state.payout).toFixed(8);
 
+        const rollUnder = (100 / this.state.payout * 0.99).toFixed(2);
+        const rollOver = (100 - rollUnder).toFixed(2);
         return (
             <div className="the-box">
                 <div className="form-group">
@@ -85,7 +111,7 @@ class OUBet extends React.Component {
                             <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input className="form-control" value={this.state.betAmount} min="0,00000001" />
+                        <input className="form-control" name="betAmount" onChange={this.handleChange} value={this.state.betAmount} />
                         <span className="input-group-addon hand" onClick={() => this.multiplyAmount(2)}>x 2</span>
                         <span className="input-group-addon hand" onClick={() => this.multiplyAmount(0.5)}>/ 2</span>
                         <span className="input-group-addon hand" onClick={() => this.minBetAmount()}>Min</span>
@@ -97,9 +123,9 @@ class OUBet extends React.Component {
                     <label>PAYOUT</label>
                     <div className="input-group">
                         <span className="input-group-addon">x</span>
-                        <input className="form-control" />
-                        <span className="input-group-addon hand">+</span>
-                        <span className="input-group-addon hand">-</span>
+                        <input className="form-control" value={this.state.payout} readOnly="true" />
+                        <span className="input-group-addon hand" onClick={() => this.increasePayout()}>+</span>
+                        <span className="input-group-addon hand" onClick={() => this.decreasePayout()}>-</span>
                     </div>
                     <p className="text-danger" data-bind="validationMessage: payout" />
 
@@ -111,20 +137,17 @@ class OUBet extends React.Component {
                             <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input className="form-control" readOnly="readonly" />
+                        <input className="form-control" readOnly="true" value={profitOnWin} />
                     </div>
                 </div>
 
                 <div className="row">
-                    <div className="col-sm-4">
-                        <button className="btn btn-success btn-perspective btn-lg" >Over</button>
+                    <div className="col-sm-4 col-sm-offset-2">
+                        <button className="btn btn-success btn-perspective btn-lg" >Over {rollOver}</button>
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-danger btn-perspective btn-lg" >Under</button>
-                    </div>
-                    <div className="col-sm-4">
-                        <button className="btn btn-warning btn-perspective btn-lg" >Restart</button>
+                        <button className="btn btn-danger btn-perspective btn-lg" >Under {rollUnder}</button>
                     </div>
                 </div>
             </div>
