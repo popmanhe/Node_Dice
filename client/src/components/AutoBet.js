@@ -87,14 +87,12 @@ class AutoBet extends React.Component {
 }
 AutoBet.propTypes = {
     coins: PropTypes.array,
-    selectedCoin: PropTypes.object,
-    loggedIn: PropTypes.bool
+    selectedCoin: PropTypes.object
 };
 const mapStateToProps = (state) => {
     return {
         coins: state.ou.coins,
-        selectedCoin: state.ou.selectedCoin,
-        loggedIn: state.user.userName != null
+        selectedCoin: state.ou.selectedCoin
     };
 };
 const mapDispatchToProps = (dispatch) => {

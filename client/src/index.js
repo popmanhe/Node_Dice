@@ -14,6 +14,7 @@ import './styles/morris.css';
 import './styles/style.css';
 import './styles/style-responsive.css';
 import './styles/style-custom.css';
+import './styles/prettify.css';
 
 import { syncHistoryWithStore } from 'react-router-redux';
 
