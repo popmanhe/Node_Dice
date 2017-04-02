@@ -95,7 +95,7 @@ const mapStateToProps = (state) => {
         selectedCoin: state.ou.selectedCoin
     };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = () => {
     return {
 
     };

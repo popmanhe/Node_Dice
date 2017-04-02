@@ -74,9 +74,9 @@ export default (io) => {
         socket.on('clientSalt', (clientSalt) => {
             userModel.SaveClientSalt(socket.user.userid, clientSalt, (err, oldSalt) => {
                 if (err)
-                    socket.emit('savingClientSalt', err);
+                    socket.emit('clientSalt', err);
                 else
-                    socket.emit('savingClientSalt', oldSalt);
+                    socket.emit('clientSalt', oldSalt);
             });
         });
 

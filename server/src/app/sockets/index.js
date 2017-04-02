@@ -1,6 +1,8 @@
 ﻿import common from './s_common';
 import overunder from './s_overunder';
 import chat from './s_chat.js';
+import config from '../../config';
+
 // import logger from '../helper/logger';
 // import uuid from 'uuid';
 // import socketSession from './handshake.js';
@@ -11,7 +13,8 @@ import chat from './s_chat.js';
 // };
 
 export default (io) => {
-
+    
+    io.origins(config.origins);
     // io.use(socketSession());
 
     common(io);

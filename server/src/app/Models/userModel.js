@@ -4,7 +4,6 @@
  * Created by Neo on 2017/01/19.
  */
 
-'use strict';
 import dbConnect from './dbConnect';
 import config from '../../config';
 import uuid from 'uuid';

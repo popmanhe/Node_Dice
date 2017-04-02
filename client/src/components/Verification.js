@@ -3,7 +3,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/styles';
 
 const Verification = () => {
-    const codeString = `
+    const codeString = `  
 //the seed pair itself
 //dont forget to exclude the dash and the nonce!
 var clientSeed = "your client seed"; 

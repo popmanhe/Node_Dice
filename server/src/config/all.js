@@ -2,10 +2,10 @@
 
 
 import path from 'path';
-const rootPath = path.resolve('.');
-const pkg = rootPath + '/package.json';
+import pkg  from  '../../package.json';
 
-module.exports =  {
+const rootPath = path.resolve('.');
+const config = {
     root: rootPath,
     serverRoot: rootPath + '/dist/',
     clientRoot: rootPath + '/dist/html/',
@@ -22,7 +22,7 @@ module.exports =  {
         fromaddress: '',
         options: {
             host: "smtp.gmail.com",
-            port:465,
+            port: 465,
             secureConnection: true,
             requiresAuth: true,
             auth: {
@@ -31,10 +31,12 @@ module.exports =  {
             }
         }
     },
-    session:{
-        timeout: 30*24*60*60*1000
+    session: {
+        timeout: 30 * 24 * 60 * 60 * 1000
     },
     support: '',
     projectName: '',
     copyrightName: ''
 };
+
+export default config;

@@ -1,7 +1,7 @@
 {
   "name": "nodedice_server",
   "description": "An open source dice game faucet built on node.js for BTC/NXT",
-  "version": "0.5.0",
+  "version": "2.0.0",
   "keywords": [
     "open source",
     "node.js",
@@ -47,18 +47,15 @@
     "express-validator": "^3.1.2",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
-    "method-override": "^2.3.7",
+    "method-override": "^2.3.8",
     "mongodb": "^2.2.25",
-    "mongoose": "^4.9.0",
+    "mongoose": "^4.9.2",
     "morgan": "^1.8.1",
-    "newrelic": "^1.37.2",
     "nodemailer": "3.1.7",
     "request": "^2.81.0",
-    "serve-favicon": "^2.3.2",
+    "serve-favicon": "^2.4.2",
     "should": "^11.2.1",
     "socket.io": "^1.7.3",
-    "socket.io-client": "^1.7.3",
-    "socket.io-handshake": "0.0.10",
     "uuid": "^3.0.1",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
@@ -76,10 +73,10 @@
     "eslint-plugin-node": "4.2.1",
     "eslint-watch": "3.0.1",
     "npm-run-all": "4.0.2",
-    "webpack": "2.2.1",
+    "webpack": "2.3.2",
     "webpack-bundle-analyzer": "2.3.1",
     "webpack-dev-middleware": "1.10.1",
-    "webpack-hot-middleware": "2.17.1",
+    "webpack-hot-middleware": "2.18.0",
     "webpack-md5-hash": "0.0.5"
   }
 }

@@ -76,21 +76,21 @@ class OUBet extends React.Component {
         this.setState({ betAmount: this.props.selectedCoin.max.toFixed(8) });
     }
     increasePayout() {
-        let payout = this.state.payout + 1;
+        let payout = this.state.payout + 0.1;
 
         this.setState({ payout });
     }
     decreasePayout() {
-        let payout = this.state.payout - 1;
+        let payout = this.state.payout - 0.1;
         if (payout >= 2)
             this.setState({ payout });
     }
     render() {
         const coinName = this.props.selectedCoin ? this.props.selectedCoin.coinName : "";
-        const profitOnWin = (this.state.betAmount * this.state.payout).toFixed(8);
+        const profitOnWin = (this.state.betAmount * (this.state.payout-1)).toFixed(8);
 
         const rollUnder = (100 / this.state.payout * 0.99).toFixed(2);
-        const rollOver = (100 - rollUnder).toFixed(2);
+        const rollOver = (99.99 - rollUnder).toFixed(2);
         return (
             <div className="the-box">
                 <div className="form-group">
@@ -123,11 +123,11 @@ class OUBet extends React.Component {
                     <label>PAYOUT</label>
                     <div className="input-group">
                         <span className="input-group-addon">x</span>
-                        <input className="form-control" value={this.state.payout} readOnly="true" />
+                        <input type="text" className="form-control" onChange={this.handleChange} value={this.state.payout.toFixed(4)} name="payout" />
                         <span className="input-group-addon hand" onClick={() => this.increasePayout()}>+</span>
                         <span className="input-group-addon hand" onClick={() => this.decreasePayout()}>-</span>
                     </div>
-                    <p className="text-danger" data-bind="validationMessage: payout" />
+                    <p className="text-danger" />
 
                 </div>
                 <div className="form-group">

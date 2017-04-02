@@ -1,10 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import Login from '../containers/UserLogin';
-import CoinPicker from './CoinPicker';
-// This is a classNameName-based component because the current
-// version of hot reloading won't hot reload a stateless
-// component at the top-level.
+
 class App extends React.Component {
     render() {
         const p = this.props;
@@ -46,18 +43,7 @@ class App extends React.Component {
                                 {/* Begin user session nav */}
                                 <ul className="nav-user navbar-right">
                                     <li className="dropdown">
-                                        <a className="dropdown-toggle hand" data-toggle="dropdown">
-                                            {/*<img src="/img/avatar/avatar.jpg" className="avatar img-circle" alt="Avatar" />*/}
-                                           <Login />
-                                        </a>
-                                        <ul className="dropdown-menu square primary margin-list-rounded with-triangle">
-                                            <li><Link to="/profile">Profile</Link></li>
-                                            <li><Link to="/withdraw">Withdraw</Link></li>
-                                            <li><Link to="/deposit">Deposit</Link></li>
-                                            <li className="divider" />
-                                            <li><Link to="lock-screen.html">Lock screen</Link></li>
-                                            <li><Link to="login.html">Log out</Link></li>
-                                        </ul>
+                                        <Login />
                                     </li>
                                 </ul>
                                 {/* End user session nav */}
@@ -82,11 +68,6 @@ class App extends React.Component {
                                         <li>
                                             <Link to="/support">Support</Link>
                                         </li>
-                                        <li>
-                                            <a className="dropdown-toggle hand" data-toggle="dropdown">Switch Coins<span className="caret" /></a>
-                                            <CoinPicker />
-                                        </li>
-
                                     </ul>
 
                                 </div> {/* /.navbar-collapse */}
@@ -98,13 +79,7 @@ class App extends React.Component {
                     {/* BEGIN SIDEBAR LEFT */}
                     {/* /.sidebar-left */}
                     {/* END SIDEBAR LEFT */}
-                    {/* BEGIN SIDEBAR RIGHT HEADING */}
-                    <div className="sidebar-right-heading">
-                        <ul className="nav nav-tabs square nav-justified">
-                            <li className="active"><Link to="#online-chat" data-toggle="tab"><i className="fa fa-comments" /></Link></li>
-                        </ul>
-                    </div> {/* /.sidebar-right-heading */}
-                    {/* END SIDEBAR RIGHT HEADING */}
+
                     {/* BEGIN SIDEBAR RIGHT */}
                     <div className="sidebar-right sidebar-nicescroller">
                         <div className="tab-content">
@@ -122,9 +97,9 @@ class App extends React.Component {
                     <img src="/img/bg-11-full.jpg" className="stretch" alt="" />
                 </div>*/}
                             {/* BEGIN SiTE INFORMATIONS */}
-                            <p>{' ' }</p>
-                                {this.props.children}
-                            
+                            <p>{' '}</p>
+                            {this.props.children}
+
                             {/* /.row */}
                             {/* END SITE INFORMATIONS */}
 
@@ -159,6 +134,5 @@ class App extends React.Component {
 App.propTypes = {
     children: PropTypes.element
 };
- 
+
 export default App;
- 

@@ -14,14 +14,14 @@ class UserLogin extends React.Component {
     render() {
         const p = this.props;
         if (p.isLoggedIn && p.userName != null)
-            return (<Username userName={p.userName} />);
+            return ( <Username userName={p.userName} />);
         else
             return (
-                <div>
-                    <span onClick={() => this.setState({ showLoginModal: true })}>Log in</span> / <span onClick={() => this.setState({ showSignupModal: true })}>Sign up</span>
+                 <a className="dropdown-toggle hand" data-toggle="dropdown">
+                    <span onClick={() => this.setState({ showLoginModal: true })}><i className="fa fa-sign-in icon-circle icon-xs icon-default" /> Log in</span> / <span onClick={() => this.setState({ showSignupModal: true })}><i className="fa fa-plus  icon-circle icon-xs icon-default" /> Sign up</span>
                     <LoginModal  show={this.state.showLoginModal}  onCancel={() => { this.setState({ showLoginModal: false }); }} />
                     <SignupModal show={this.state.showSignupModal} onCancel={() => { this.setState({ showSignupModal: false }); }} />
-                </div>);
+                </a>);
     }
 }
 

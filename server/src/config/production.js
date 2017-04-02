@@ -1,6 +1,6 @@
 'use strict';
 
-export default {
+const config = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,
@@ -13,6 +13,7 @@ export default {
         autoRemoveInterval: 10 // In minutes. Default 
     },
     port: 8080,
+    origins: "*:*", //For security, it's better to set origins in prod
     bitcoin:
     {
         host: 'rpc.blockchain.info',
@@ -30,3 +31,5 @@ export default {
     }
 
 };
+
+export default config;

@@ -12,11 +12,16 @@ function* signupUser(action) {
 function* refreshBalance(action) {
     yield socketEmit('getBalance',action.coinName);
 }
+function* saveClientSalt(action) {
+    yield socketEmit('clientSalt',action.clientSalt);
+}
+
 function* userSaga() {
     return yield [
         takeEvery("SIGNUP_USER", signupUser),
         takeEvery("LOGIN_USER", loginUser),
-        takeEvery("REFRESH_BALANCE", refreshBalance)
+        takeEvery("REFRESH_BALANCE", refreshBalance),
+        takeEvery("SAVE_CLIENTSALT", saveClientSalt)
     ];
 
 }
