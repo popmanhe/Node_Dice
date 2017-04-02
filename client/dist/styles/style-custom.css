@@ -1,0 +1,136 @@
+﻿input[readonly] {
+    background-color: #eee !important;
+}
+
+.font-large {
+    font-size: 16px;
+}
+
+.hand {
+    cursor: pointer !important;
+}
+
+.pagination > .active > a {
+    background-color: #8CC152;
+    border-color: #8CC152;
+}
+
+.pagination.separated > li > a {
+    margin: 0px 5px;
+}
+
+.pagination > li > a {
+    width: 40px;
+    text-align: center;
+}
+
+.more-margin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.bg-dark .help-block {
+    color: #eee;
+}
+
+.with-nav-tabs.panel-primary .nav-tabs > li > a {
+    color: #37BC9B;
+}
+
+.bg-dark div {
+    color: grey;
+}
+
+    .bg-dark div.progress-bar {
+        color: #fff;
+    }
+
+    .bg-dark div a {
+        color: #37BC9B;
+    }
+
+ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
+    color: #fff;
+    height: initial;
+    display: inline-block;
+    padding: 1px 5px;
+    line-height: 18px;
+    border-radius: 2px;
+    border-bottom: initial;
+    background-color: #8CC152;
+}
+
+.pagination {
+    margin: 10px 0;
+}
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 0; /* Ensure div tag stays behind content; -999 might work, too. */
+}
+
+.stretch {
+    width: 100%;
+    height: 100%;
+}
+
+.panel{
+    background: rgba(238, 238, 238, 0.76);
+}
+
+.modal-backdrop {
+    z-index: 3;
+}
+
+.loginWrapper a, .loginWrapper a:hover {
+    border-bottom: 0px;
+}
+.chat-item {padding: 2px 15px;}
+.spinnercontainer {
+    display: block;
+    position: fixed;
+    text-align: center;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+    filter: alpha(opacity=100);
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+    background: url(/img/loading.gif) no-repeat center;
+    z-index: 1001;
+}
+
+.spinner {
+    display: block;
+    position: fixed;
+    text-align: center;
+    z-index: 1000;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+    background: #000000 no-repeat center;
+    filter: alpha(opacity=10);
+    opacity: 0.1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
+    -moz-opacity: 0.1;
+    -khtml-opacity: 0.1;
+    opacity: 0.1;
+}
+
+ div.login .modal-content{
+	background: #37BC9B;
+	padding: 0;
+}
+
+div.login .modal-header{
+    color: #fff;
+}
