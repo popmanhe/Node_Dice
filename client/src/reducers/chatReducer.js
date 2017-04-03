@@ -1,14 +1,15 @@
 import initialState from './initialState';
+import { socketEmit } from '../utils/socketIoHelper';
 export default (state = initialState.chat, action) => {
     switch (action.type) {
-         // case 'SEND_MESSAGE':
-        //      return {...state, newMessage: '', messages: [...state.messages, {message: action.text, messageId: action.messageId, timeStamp: action.timeStamp} ]};
-        case 'RECV_MESSAGE':{
-        
-            let receivedMessages = [...state.messages, action.message ];
+        case 'SEND_MESSAGE':
+            socketEmit('sendChat', { message: action.message });
+            return state;
+        case 'RECV_MESSAGE': {
+            let receivedMessages = [...state.messages, action.message];
             if (receivedMessages.length > 100)
                 receivedMessages.splice(0, receivedMessages.length - 100);
-            return {...state, messages: receivedMessages};    
+            return { ...state, messages: receivedMessages };
         }
         default:
             return state;

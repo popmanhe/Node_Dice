@@ -503,9 +503,12 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
+var _logger = __webpack_require__(21);
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import logger from '../helper/logger';
 // import uuid from 'uuid';
 // import socketSession from './handshake.js';
 
@@ -515,7 +518,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // };
 
 exports.default = function (io) {
-
+    _logger2.default.info("Web socket is enabled for following domain(s): " + _config2.default.origins);
     io.origins(_config2.default.origins);
     // io.use(socketSession());
 
@@ -1170,41 +1173,31 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var gameName = 'overunder'; /**
-                             * Copyright 2017 Node Dice
-                             *
-                             * Created by Neo on 2017/03/27.
-                             */
-
-//import config from '../../config';
-
-
 var overunder = function overunder(io) {
 
     io.on('connection', function (socket) {
-
+        var gameName = 'overunder';
         socket.join(gameName);
 
-        var session = socket.handshake.session;
         //return a 
         socket.on('roll', function (clientBet) {
 
-            _userModel2.default.GetUserById(session.userid, "clientSalt serverSalt nonce funds", function (err, u) {
-                if (err) socket.emit('roll', { clientSalt: '', error: err });else {
+            _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds", function (err, u) {
+                if (err) socket.emit('rollError', { code: -6 });else {
 
                     //validate input
                     if (!_lodash2.default.isNumber(clientBet.w - 0)) {
-                        socket.emit('rollResult', { code: -3 });
+                        socket.emit('rollError', { code: -3 });
                         return;
                     }
 
                     if (clientBet.w <= 0) {
-                        socket.emit('rollResult', { code: -2 });
+                        socket.emit('rollError', { code: -2 });
                         return;
                     }
                     if (u.getBalance(clientBet.coinName) < clientBet.w) {
                         // not enough fund
-                        socket.emit('rollResult', { code: -1 });
+                        socket.emit('rollError', { code: -1 });
                         return;
                     }
 
@@ -1214,7 +1207,7 @@ var overunder = function overunder(io) {
                     //get lucky number
                     var num = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
                     var bet = new _betModel2.default({
-                        userid: session.userid,
+                        userid: socket.user.userid,
                         clientSalt: u.clientSalt,
                         serverSalt: u.serverSalt,
                         nonce: u.nonce,
@@ -1226,29 +1219,39 @@ var overunder = function overunder(io) {
                         betId: _uuid2.default.v4()
                     });
                     bet.save(function (err) {
-                        if (err) return console.error('Saving bet error:' + err);
+                        if (err) {
+                            console.error('Saving bet error:' + err);
+                            socket.emit('rollError', { code: -4 });
+                            return;
+                        }
                     });
                     //Todo: process bet's result here
-                    u.addProfit(clientBet.coinName, GetProfit(bet.rollNum, bet.selNum, bet.amount));
+                    var profit = GetProfit(bet.rollNum, bet.selNum, bet.amount);
+                    u.addProfit(clientBet.coinName, profit);
                     u.save(function (err) {
-                        if (err) return console.error('Saving user\'s profit error:' + err);
+                        if (err) {
+                            console.error('Saving user\'s profit error:' + err);
+                            socket.emit('rollError', { code: -5 });
+                            return;
+                        }
                     });
                     //Every bet is sent to everyone who is in over/under game. 
                     io.to(gameName).emit('allBets', {
-                        userid: session.userid,
+                        userid: socket.user.userid,
                         rollNum: num,
                         nonce: u.nonce,
                         betTime: bet.betTime,
                         selNum: bet.selNum,
                         amount: bet.amount,
-                        unit: bet.unit
+                        unit: bet.unit,
+                        profit: profit
                     });
                 }
             });
         });
 
         socket.on('getMyBets', function () {
-            _betModel2.default.GetBetsByUser(session.userid, function (err, bets) {
+            _betModel2.default.GetBetsByUser(socket.user.userid, function (err, bets) {
                 if (err) return console.error('GetBetsByUser error:' + err);
                 socket.emit('getMyBets', bets);
             });
@@ -1263,16 +1266,21 @@ var overunder = function overunder(io) {
 
         //functions
         var GetProfit = function GetProfit(rollNum, selNum, amount) {
-            var payout = selNum <= 49.5 ? 99 / selNum : 99 / (100 - selNum);
-            if (selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1 || selNum * 1 >= 50.5 && rollNum * 1 >= selNum * 1) {
+            var payout = selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
+            if (selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1 || selNum * 1 >= 50.49 && rollNum * 1 >= selNum * 1) {
                 return amount * (payout - 1);
             } else {
                 return -1 * amount;
             }
         };
     });
-};
+}; /**
+    * Copyright 2017 Node Dice
+    *
+    * Created by Neo on 2017/03/27.
+    */
 
+//import config from '../../config';
 exports.default = overunder;
 
 /***/ }),

@@ -1,4 +1,5 @@
 import initialState from './initialState';
+import { socketEmit } from '../utils/socketIoHelper';
 export default (state = initialState.user, action) => {
     switch (action.type) {
         case 'SET_USER': {
@@ -6,7 +7,7 @@ export default (state = initialState.user, action) => {
                 return {
                     ...state,
                     userName: action.user.userName,
-                    userid: action.user.guid,
+                    userid: action.user.userid,
                     clientSalt: action.user.clientSalt,
                     funds: action.user.funds,
                     nonce: 0,
@@ -16,6 +17,18 @@ export default (state = initialState.user, action) => {
             else
                 return { ...state, isLoggedIn: action.isLoggedIn };
         }
+        case 'SIGNUP_USER':
+            socketEmit('newUser', { userName: action.userName, password: action.password });
+            return state;
+        case 'LOGIN_USER':
+            socketEmit('loginUser', { userName: action.userName, password: action.password });
+            return state;
+        case 'REFRESH_BALANCE':
+            socketEmit('getBalance', action.coinName);
+            return state;
+        case 'SAVE_CLIENTSALT':
+            socketEmit('clientSalt', action.clientSalt);
+            return state;
         default:
             return state;
     }

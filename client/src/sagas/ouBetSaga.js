@@ -6,11 +6,14 @@ import { takeEvery } from "redux-saga/effects";
 function* getCoinNames() {
     yield socketEmit('coinNames', {});
 }
+function* Roll(action) {
+    yield socketEmit('roll', action.bet);
+}
 
 function* ouSaga() {
     return yield [
-        takeEvery("GET_COINNAMES", getCoinNames)
-
+        takeEvery("GET_COINNAMES", getCoinNames),
+        takeEvery("ROLL", Roll)
     ];
 
 }

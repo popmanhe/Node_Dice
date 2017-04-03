@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { socketOn } from '../utils/socketIoHelper';
 import R from 'ramda';
-
+import { showNotification } from '../utils/tools';
 class Salt extends React.Component {
     constructor(props) {
         super(props);
@@ -17,11 +17,11 @@ class Salt extends React.Component {
         const self = this;
         socketOn('clientSalt', function (data) {
             if (data.error) {
-                alert(data.error);
+                showNotification('ERROR',data.error, 'error');
             }
             else {
                 self.setState({ preClientSalt: data.clientSalt, preServerSalt: data.serverSalt });
-                alert('Client salt has been updated.');
+                showNotification('','Client salt has been updated.');
             }
         });
     }

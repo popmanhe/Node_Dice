@@ -4,6 +4,7 @@ import { socketOn } from '../utils/socketIoHelper';
 import '../styles/bootstrapValidator.css';
 import '../lib/bootstrapValidator';
 import CheckBox from './Basic/CheckBox';
+import { showNotification } from '../utils/tools';
 
 class SignupForm extends React.Component {
 
@@ -75,7 +76,7 @@ class SignupForm extends React.Component {
                 if (result.error) {
                     switch  (result.error.code)
                     {
-                        case 11000: alert('User name exists. Choose different one.'); break;
+                        case 11000: showNotification('User name exists', 'Choose different one.','error'); break;
                         default: this.props.setUser(null, false); 
                     }
                 }
@@ -86,7 +87,7 @@ class SignupForm extends React.Component {
 
         }
         else
-            alert('Please check "I accept" before registering.');
+            showNotification('','Please check "I accept" before registering.','warning');
     }
 
     clearData() {

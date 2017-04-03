@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import CheckBox from './Basic/CheckBox';
 import { connect } from 'react-redux';
 import { socketOn } from '../utils/socketIoHelper';
+import { showNotification } from '../utils/tools';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -22,11 +23,13 @@ class LoginModal extends React.Component {
     loggedUser() {
         socketOn('loggedUser', (result) => {
             if (result.error) {
-                    this.props.setUser(null, false);
-                }
-                else {
-                    this.props.setUser(result, true);
-                }
+                this.props.setUser(null, false);
+                showNotification('', 'Wrong user name and password combination.', 'error');
+            }
+            else {
+                this.props.setUser(result, true);
+                 showNotification('Logged in', 'You have logged in. Start rolling.', 'success');
+            }
         });
     }
 
@@ -71,7 +74,7 @@ class LoginModal extends React.Component {
                                 </div>
                             </div>
                             <div className="form-group">
-                                    <button type="submit" className="btn btn-warning btn-perspective btn-block" onClick={this.onLogin} >LOGIN</button>
+                                <button type="submit" className="btn btn-warning btn-perspective btn-block" onClick={this.onLogin} >LOGIN</button>
                             </div>
                         </form>
                     </div>
