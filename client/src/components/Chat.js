@@ -13,7 +13,6 @@ class Chat extends React.Component {
       componentDidMount() {
             this.initChat();
             this.receiveChats();
-            
             $('#chatList').niceScroll({
                   cursorcolor: "#121212",
                   cursorborder: "0px solid #fff",
@@ -22,29 +21,38 @@ class Chat extends React.Component {
                   cursoropacitymax: 0.2
             });
       }
-      componentWillUnmount() {
-            this.leaveChat();
-      }
+      // componentWillUnmount() {
+      //       this.leaveChat();
+      // }
 
-      leaveChat() {
-            //   socket.close();
-      }
+      // leaveChat() {
+      //       //   socket.close();
+      //       console.log('leaveChat');
+      // }
       receiveChats() {
             const self = this;
             socketOn('recvChat', (result) => {
-                  this.props.onReceiveMessage({ userName: result.userName, timeStamp: moment(result.timeStamp).format('MM-DD HH:mm'), message: result.message });
+                  this.props.onReceiveMessage({
+                        userName: result.userName
+                        , timeStamp: moment(result.timeStamp).format('MM-DD HH:mm')
+                        , message: result.message
+                  });
 
                   self.scrollToBottom();
             });
       }
       initChat() {
+
             const self = this;
             socketEmit('getChats', '');
             socketOn('getChats', function (result) {
-                  // console.log(result);
                   if (result.length > 0) {
                         result.sort((a, b) => a.timeStamp > b.timeStamp ? 1 : -1);
-                        result.map((r) => self.props.onReceiveMessage({ userName: r.userName, timeStamp: moment(r.timeStamp).format('MM-DD HH:mm'), message: r.message }));
+                        result.map((r) => self.props.onReceiveMessage({
+                              userName: r.userName
+                              , timeStamp: moment(r.timeStamp).format('MM-DD HH:mm')
+                              , message: r.message
+                        }));
                   }
                   self.scrollToBottom();
             });

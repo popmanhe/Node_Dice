@@ -21,18 +21,15 @@ class OUBet extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log(this.props);
-        // console.log(nextProps);
         //Get coin balance
         if (nextProps.loggedIn && ((nextProps.loggedIn != this.props.loggedIn) ||
             (nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName))) {
             this.getBalance(nextProps.selectedCoin.coinName);
         }
-        //Set min betAmount
+        //Set min betAmount when changing coin
         if (!this.props.selectedCoin || nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName) {
             this.setBetAmount(nextProps.selectedCoin.min);
         }
-
     }
     handleChange(event) {
         const target = event.target;
@@ -45,14 +42,16 @@ class OUBet extends React.Component {
     showResult(result) {
         if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1)
             || (result.selNum * 1 >= 50.49 && result.rollNum * 1 >= result.selNum * 1)) {
-            if (this.props.numberofRolls == 1) //Don't show notification when auto betting
+            if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
                 showNotification('', 'Dice:' + result.rollNum + '. You won', 'success');
             this.setState({ balance: (this.state.balance * 1 + result.profit * 1).toFixed(8) });
+            return true;
         }
         else {
-            if (this.props.numberofRolls == 1) //Don't show notification when auto betting
+            if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
                 showNotification('', 'Dice:' + result.rollNum + '. You lost', 'error');
             this.setState({ balance: (this.state.balance - result.amount).toFixed(8) });
+            return false;
         }
 
     }
@@ -60,10 +59,37 @@ class OUBet extends React.Component {
     receiveMyBet() {
         const self = this;
         socketOn('allBets', function (result) {
-            if (self.props.user.userid == result.userid) {
-                self.showResult(result);
+            const s = self.state;
+            const p = self.props;
+            let stop = false;
+            if (p.user.userid == result.userid) {
+                const win = self.showResult(result);
+                if (win) {
+                    if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
+                        stop = true;
+                    }
+                    else if (p.autoBet.incWin == 0) {
+                        self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
+                    }
+                    else {
+                        self.setState({ betAmount: s.betAmount * (1 + p.autoBet.incWin / 100).toFixed(8) });
+                    }
+                }
+                else {
+                    if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
+                        stop = true;
+                    }
+                    else if (p.autoBet.incLoss == 0) {
+                        self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
+                    }
+                    else {
+                        self.setState({ betAmount: s.betAmount * (1 + p.autoBet.incLoss / 100).toFixed(8) });
+                    }
+                }
+                if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
+                    self.roll(s.rollNum);
             }
-            self.props.endRoll();
+            self.endRoll();
         });
     }
     receiveErrorRoll() {
@@ -83,8 +109,12 @@ class OUBet extends React.Component {
                     showNotification('ERROR', 'Internal error.', 'warning');
                     break;
             }
-            self.props.endRoll();
+            self.endRoll();
         });
+    }
+    endRoll() {
+        if (this.props.autoBet.numberOfRolls == 1)
+            this.props.endRoll();
     }
     getCoinNames() {
         if (!this.props.coins || this.props.coins.length == 0) {
@@ -137,7 +167,9 @@ class OUBet extends React.Component {
             showNotification('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
             return;
         }
-        this.props.roll(this.state.betAmount, rollNum, this.props.selectedCoin.coinName);
+        this.setState({ rollNum });
+        if (this.props.autoBet.numberOfRolls >= 1)
+            this.props.roll(this.state.betAmount, this.state.rollNum, this.props.selectedCoin.coinName);
     }
     setBetAmount(betAmount) {
         this.setState({ betAmount: betAmount.toFixed(8) });
@@ -202,11 +234,11 @@ class OUBet extends React.Component {
 
                 <div className="row">
                     <div className="col-sm-4 col-sm-offset-2">
-                        <button className="btn btn-success btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => this.roll(rollOver)} >Over {rollOver}</button>
+                        <button className="btn btn-success btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: rollOver }); this.roll(rollOver); }} >Over {rollOver}</button>
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-danger btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => this.roll(rollUnder)}  >Under {rollUnder}</button>
+                        <button className="btn btn-danger btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: rollUnder }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
                     </div>
                 </div>
             </div>
@@ -225,7 +257,7 @@ OUBet.propTypes = {
     selectedCoin: PropTypes.object,
     loggedIn: PropTypes.bool,
     user: PropTypes.object,
-    numberofRolls: PropTypes.number,
+    autoBet: PropTypes.object,
     isRolling: PropTypes.bool,
     endRoll: PropTypes.func,
     setBetAmount: PropTypes.func
@@ -237,7 +269,7 @@ const mapStateToProps = (state) => {
         selectedCoin: state.ou.selectedCoin,
         loggedIn: state.user.userName != null,
         user: state.user,
-        numberofRolls: state.ou.numberofRolls,
+        autoBet: state.ou.autoBet,
         isRolling: state.ou.isRolling
     };
 };

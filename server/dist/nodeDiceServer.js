@@ -160,7 +160,7 @@ var _uuid = __webpack_require__(4);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _coinsConfig = __webpack_require__(5);
+var _coinsConfig = __webpack_require__(6);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
 
@@ -181,7 +181,6 @@ mongoose.Promise = global.Promise;
 /*view models*/
 /*user schema*/
 var userSchema = new mongoose.Schema({
-    guid: { type: String, index: true },
     userName: { type: String, index: { unique: true } },
     password: { type: String },
     clientSalt: String,
@@ -247,7 +246,6 @@ userSchema.statics = {
     CreateNewUser: function CreateNewUser(userName, password, callback) {
         password = _crypto2.default.createHash('sha512').update(password).digest('hex');
         var user = new userModel({
-            guid: _uuid2.default.v4(),
             userName: userName,
             password: password,
             serverSalt: _uuid2.default.v4(),
@@ -277,10 +275,10 @@ userSchema.statics = {
         });
     },
     GetUserById: function GetUserById(userid, fields, callback) {
-        userModel.findOne({ guid: userid }, fields, callback);
+        userModel.findOne({ _id: userid }, fields, callback);
     },
     SaveClientSalt: function SaveClientSalt(userid, clientSalt, callback) {
-        userModel.findOne({ guid: userid }, "clientSalt serverSalt", function (err, u) {
+        userModel.findOne({ _id: userid }, "clientSalt serverSalt", function (err, u) {
             if (err) callback({ error: err }, null);else {
 
                 var _clientSalt = void 0,
@@ -302,7 +300,7 @@ userSchema.statics = {
             if (err) {
                 callback(err, null);
             } else {
-                userModel.findOne({ guid: userid }, "funds", function (err, u) {
+                userModel.findOne({ _id: userid }, "funds", function (err, u) {
                     if (err) {
                         callback(err, null);
                     } else {
@@ -318,7 +316,7 @@ userSchema.statics = {
         var helper = _coinsConfig2.default[coinName];
 
         helper.GetBalance(userid, function (err, amount) {
-            userModel.findOne({ guid: userid }, "funds", function (err, u) {
+            userModel.findOne({ _id: userid }, "funds", function (err, u) {
                 if (err) {
                     callback(err, null);
                 } else {
@@ -332,7 +330,7 @@ userSchema.statics = {
     },
     LoginUser: function LoginUser(userName, password, callback) {
         password = _crypto2.default.createHash('sha512').update(password).digest('hex');
-        userModel.findOne({ userName: userName, password: password }, "guid userName serverSalt clientSalt nonce funds", function (err, u) {
+        userModel.findOne({ userName: userName, password: password }, "_id userName serverSalt clientSalt nonce funds", function (err, u) {
             if (err) {
                 callback(err, null);
             } else {
@@ -372,7 +370,49 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoinHelper = __webpack_require__(19);
+var _path = __webpack_require__(7);
+
+var _path2 = _interopRequireDefault(_path);
+
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _winston = __webpack_require__(34);
+
+var _winston2 = _interopRequireDefault(_winston);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_winston2.default.transports.DailyRotateFile = __webpack_require__(35); /**
+                                                                                      * Copyright 2014 eRealm Info & Tech.
+                                                                                      *
+                                                                                      * Created by Ken on 8/08/2014
+                                                                                      */
+exports.default = new _winston2.default.Logger({
+    transports: [new _winston2.default.transports.Console({
+        level: 'debug',
+        colorize: true
+    }), new _winston2.default.transports.DailyRotateFile({
+        level: 'silly',
+        filename: _path2.default.join(_config2.default.serverRoot, '/logs/access-'),
+        datePattern: 'yyyy-MM-dd.log',
+        maxsize: 5242880 /* 5MB */
+    })]
+});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _bitcoinHelper = __webpack_require__(20);
 
 var _bitcoinHelper2 = _interopRequireDefault(_bitcoinHelper);
 
@@ -391,13 +431,13 @@ exports.default = {
 };
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -407,11 +447,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Faucet = __webpack_require__(15);
+var _Faucet = __webpack_require__(16);
 
 var _Faucet2 = _interopRequireDefault(_Faucet);
 
-var _logger = __webpack_require__(21);
+var _logger = __webpack_require__(5);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -477,7 +517,7 @@ exports.default = function (app) {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -503,7 +543,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _logger = __webpack_require__(21);
+var _logger = __webpack_require__(5);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -528,43 +568,43 @@ exports.default = function (io) {
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("compression");
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("express-validator");
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("http");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("socket.io");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -578,7 +618,7 @@ var _request = __webpack_require__(33);
 
 var _request2 = _interopRequireDefault(_request);
 
-var _faucetModel = __webpack_require__(18);
+var _faucetModel = __webpack_require__(19);
 
 var _faucetModel2 = _interopRequireDefault(_faucetModel);
 
@@ -613,7 +653,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -671,7 +711,7 @@ var betModel = mongoose.model('Bet', betSchema);
 exports.default = betModel;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -715,7 +755,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -789,7 +829,7 @@ var faucetModel = mongoose.model('Faucet', faucetSchema);
 exports.default = faucetModel;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -833,7 +873,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -882,48 +922,6 @@ exports.default = function (key, text) {
 //var nonce = 0;
 
 //crypto lib for hmac function
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _path = __webpack_require__(6);
-
-var _path2 = _interopRequireDefault(_path);
-
-var _config = __webpack_require__(0);
-
-var _config2 = _interopRequireDefault(_config);
-
-var _winston = __webpack_require__(34);
-
-var _winston2 = _interopRequireDefault(_winston);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_winston2.default.transports.DailyRotateFile = __webpack_require__(35); /**
-                                                                                      * Copyright 2014 eRealm Info & Tech.
-                                                                                      *
-                                                                                      * Created by Ken on 8/08/2014
-                                                                                      */
-exports.default = new _winston2.default.Logger({
-    transports: [new _winston2.default.transports.Console({
-        level: 'debug',
-        colorize: true
-    }), new _winston2.default.transports.DailyRotateFile({
-        level: 'silly',
-        filename: _path2.default.join(_config2.default.serverRoot, '/logs/access-'),
-        datePattern: 'yyyy-MM-dd.log',
-        maxsize: 5242880 /* 5MB */
-    })]
-});
 
 /***/ }),
 /* 22 */
@@ -976,7 +974,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _chatModel = __webpack_require__(17);
+var _chatModel = __webpack_require__(18);
 
 var _chatModel2 = _interopRequireDefault(_chatModel);
 
@@ -1032,7 +1030,7 @@ var _crypto = __webpack_require__(3);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
-var _coinsConfig = __webpack_require__(5);
+var _coinsConfig = __webpack_require__(6);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
 
@@ -1053,21 +1051,15 @@ exports.default = function (io) {
                 if (err) {
                     if (err.code == 11000) socket.emit('newUser', { error: { code: 11000 } });
                 } else {
-                    // socket.user.userid = user.guid;
-                    // session.username = user.userName;
-                    // session.save();
-                    // let date = new Date();
-                    // date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
-                    // let expires = "expires=" + date.toGMTString();
                     var newUser = {
-                        userid: user.guid,
+                        userid: user._id,
                         userName: user.userName,
                         clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: 0,
                         hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
                     };
-                    socket.user = { userid: user.guid, userName: user.userName };
+                    socket.user = { userid: newUser.userid, userName: newUser.userName };
                     socket.emit('newUser', newUser);
                 }
             });
@@ -1075,13 +1067,13 @@ exports.default = function (io) {
 
         //return an existing user
         socket.on('existingUser', function () {
-            _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt guid userName funds nonce", function (err, u) {
+            _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce", function (err, u) {
                 if (err) {
                     socket.emit('existingUser', { clientSalt: '', error: err });
                 } else {
                     if (u) {
                         socket.emit('existingUser', {
-                            userid: u.guid,
+                            userid: u._id,
                             userName: u.userName,
                             clientSalt: u.clientSalt,
                             funds: u.funds,
@@ -1121,14 +1113,14 @@ exports.default = function (io) {
             _userModel2.default.LoginUser(user.userName, user.password, function (err, user) {
                 if (err) socket.emit('loggedUser', { error: err });else {
                     var loggedUser = {
-                        userid: user.guid,
+                        userid: user._id,
                         userName: user.userName,
                         clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: user.nonce,
                         hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
                     };
-                    socket.user = socket.user = { userid: user.guid, userName: user.userName };
+                    socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
                     socket.emit('loggedUser', loggedUser);
                 }
             });
@@ -1159,11 +1151,11 @@ var _userModel = __webpack_require__(2);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _betModel = __webpack_require__(16);
+var _betModel = __webpack_require__(17);
 
 var _betModel2 = _interopRequireDefault(_betModel);
 
-var _cryptoroll = __webpack_require__(20);
+var _cryptoroll = __webpack_require__(21);
 
 var _cryptoroll2 = _interopRequireDefault(_cryptoroll);
 
@@ -1294,7 +1286,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _path = __webpack_require__(6);
+var _path = __webpack_require__(7);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -1557,35 +1549,35 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _express = __webpack_require__(11);
+var _express = __webpack_require__(12);
 
 var _express2 = _interopRequireDefault(_express);
 
-var _expressValidator = __webpack_require__(12);
+var _expressValidator = __webpack_require__(13);
 
 var _expressValidator2 = _interopRequireDefault(_expressValidator);
 
-var _compression = __webpack_require__(10);
+var _compression = __webpack_require__(11);
 
 var _compression2 = _interopRequireDefault(_compression);
 
-var _bodyParser = __webpack_require__(9);
+var _bodyParser = __webpack_require__(10);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _http = __webpack_require__(13);
+var _http = __webpack_require__(14);
 
 var _http2 = _interopRequireDefault(_http);
 
-var _socket = __webpack_require__(14);
+var _socket = __webpack_require__(15);
 
 var _socket2 = _interopRequireDefault(_socket);
 
-var _routes = __webpack_require__(7);
+var _routes = __webpack_require__(8);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _sockets = __webpack_require__(8);
+var _sockets = __webpack_require__(9);
 
 var _sockets2 = _interopRequireDefault(_sockets);
 

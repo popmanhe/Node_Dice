@@ -25,21 +25,15 @@ export default (io) => {
                         socket.emit('newUser', { error: { code: 11000 } });
                 }
                 else {
-                    // socket.user.userid = user.guid;
-                    // session.username = user.userName;
-                    // session.save();
-                    // let date = new Date();
-                    // date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // set day value to expiry
-                    // let expires = "expires=" + date.toGMTString();
                     const newUser = {
-                        userid: user.guid,
+                        userid: user._id,
                         userName: user.userName,
                         clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: 0,
                         hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
                     };
-                    socket.user = { userid: user.guid, userName: user.userName };
+                    socket.user = { userid: newUser.userid, userName: newUser.userName };
                     socket.emit('newUser', newUser);
                 }
             });
@@ -47,7 +41,7 @@ export default (io) => {
 
         //return an existing user
         socket.on('existingUser', () => {
-            userModel.GetUserById(socket.user.userid, "clientSalt serverSalt guid userName funds nonce",
+            userModel.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce",
                 (err, u) => {
                     if (err) {
                         socket.emit('existingUser', { clientSalt: '', error: err });
@@ -55,7 +49,7 @@ export default (io) => {
                     else {
                         if (u) {
                             socket.emit('existingUser', {
-                                userid: u.guid,
+                                userid: u._id,
                                 userName: u.userName,
                                 clientSalt: u.clientSalt,
                                 funds: u.funds,
@@ -107,14 +101,14 @@ export default (io) => {
                     socket.emit('loggedUser', { error: err });
                 else {
                     const loggedUser = {
-                        userid: user.guid,
+                        userid: user._id,
                         userName: user.userName,
                         clientSalt: user.clientSalt,
                         funds: user.funds,
                         nonce: user.nonce,
                         hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
                     };
-                    socket.user = socket.user = { userid: user.guid, userName: user.userName };
+                    socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
                     socket.emit('loggedUser', loggedUser);
                 }
             });

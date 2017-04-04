@@ -1,23 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-class CoinPicker extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const c = this.props.coins || [];
-    return (
-      <ul className="dropdown-menu square primary margin-list-rounded with-triangle">
-        {
-          c.map((coin, i) =>
-            <li key={i}> <a href="#" onClick={(e) => { e.preventDefault(); this.props.onChangeCoin(coin); }}>{coin.coinName}</a> </li>
-          )}
-      </ul>
-    );
-  }
-}
+const CoinPicker = (props) => {
+  const c = props.coins || [];
+  return (
+    <ul className="dropdown-menu square primary margin-list-rounded with-triangle">
+      {
+        c.map((coin, i) =>
+          <li key={i}> <a href="#" onClick={(e) => { e.preventDefault(); props.onChangeCoin(coin); }}>{coin.coinName}</a> </li>
+        )}
+    </ul>
+  );
+};
 
 CoinPicker.propTypes = {
   onChangeCoin: PropTypes.func,

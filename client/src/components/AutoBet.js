@@ -6,74 +6,35 @@ import * as commonText from '../utils/commonText';
 class AutoBet extends React.Component {
     constructor() {
         super();
-        this.state = {
-            numberOfRolls: 1,
-            stopWin: 0,
-            stopLoss: 0,
-            increaseOnLose: 0,
-            increaseOnWin: 0,
-            autoBettingButtonText: 'Stop',
-            stop: false,
-            baseAmount: 0
-        };
         this.handleChange = this.handleChange.bind(this);
         this.autoBetting = this.autoBetting.bind(this);
     }
     incRolls() {
-        this.setState({ numberOfRolls: this.state.numberOfRolls + 1 });
+        this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: this.props.autoBet.numberOfRolls + 1 });
     }
     decRolls() {
-        this.setState({ numberOfRolls: Math.max(this.state.numberOfRolls - 1, 0) });
+        this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: this.props.autoBet.numberOfRolls - 1 });
     }
     handleChange(event) {
-
         const target = event.target;
-        const value = target.value;
+        const value = target.value * 1;
         const name = target.name;
-        this.setState({
-            [name]: value
-        });
+        this.props.setAutoBetting({ ...this.props.autoBet, [name]: value });
     }
+
     autoBetting() {
         if (!this.props.loggedIn) {
             showNotification(commonText.USERNOTLOGGEDINTITLE, commonText.USERNOTLOGGEDINTEXT, "warning");
             return;
         }
-        this.setState({ baseAmount: this.props.ou.betAmount });
-        this.startAutoBetting();
-    }
-    startAutoBetting() {
-        if (this.state.numberofRolls > 1) {
-            if (win) {
-                if (this.state.stopWin * 1 > 0 && this.props.ou.betAmount >= this.state.stopWin) {
-                    this.setState({ stop: true });
-                }
-                else if (this.state.incWin == 0) {
-                    this.state.betAmount((this.state.ou.baseAmount * 1).toFixed(8));
-                }
-                else {
-                    this.state.betAmount((this.state.ou.betAmount * (1 + this.state.incWin / 100)).toFixed(8));
-                }
-            }
-            else {
-                if (this.state.stopLoss * 1 > 0 && this.state.betAmount >= this.state.stopLoss) {
-                    this.setState({ stop: true });
-                }
-                else if (this.state.incLoss() == 0) {
-                    this.state.betAmount((this.state.baseAmount() * 1).toFixed(8));
-                }
-                else {
-                    this.state.betAmount((this.state.betAmount * (1 + this.state.incLoss() / 100)).toFixed(8));
-                }
-            }
-            if (!stop) {
-                this.state.submitBet(this.state.selectedNumber <= 49.5 ? 0 : 1);
-                this.state.numberofRolls(this.state.numberofRolls - 1);
-            }
+        if (this.props.ou.isRolling) {
+            this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: 1 });
         }
     }
+
     render() {
         const coinName = this.props.ou.selectedCoin ? this.props.ou.selectedCoin.coinName : "";
+        const autoBet = this.props.autoBet;
         return (
 
             <div className="the-box bg-cover">
@@ -81,7 +42,7 @@ class AutoBet extends React.Component {
                 <div className="form-group">
                     <label htmlFor="numofrolls">Number of Rolls(0=unlimited)</label>
                     <div className="input-group">
-                        <input className="form-control" name="numberOfRolls" onChange={this.handleChange} value={this.state.numberOfRolls} />
+                        <input className="form-control" name="numberOfRolls" onChange={this.handleChange} value={autoBet.numberOfRolls} />
                         <span className="input-group-addon hand" onClick={() => this.incRolls()}>+</span>
                         <span className="input-group-addon hand" onClick={() => this.decRolls()}>-</span>
                     </div>
@@ -93,7 +54,7 @@ class AutoBet extends React.Component {
                             <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input className="form-control" name="stopWin" onChange={this.handleChange} value={this.state.stopWin} />
+                        <input className="form-control" name="stopWin" onChange={this.handleChange} value={autoBet.stopWin} />
                     </div>
                 </div>
                 <div className="form-group">
@@ -103,25 +64,27 @@ class AutoBet extends React.Component {
                             <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input className="form-control" name="stopLoss" onChange={this.handleChange} value={this.state.stopLoss} />
+                        <input className="form-control" name="stopLoss" onChange={this.handleChange} value={autoBet.stopLoss} />
                     </div>
                 </div>
                 <div className="form-group">
                     <label htmlFor="stopatloss">Increase on loss (0=return to base)</label>
                     <div className="input-group">
-                        <input className="form-control" name="increaseOnLose" onChange={this.handleChange} value={this.state.increaseOnLose} />
+                        <input className="form-control" name="increaseOnLose" onChange={this.handleChange} value={autoBet.increaseOnLose} />
                         <span className="input-group-addon hand">%</span>
                     </div>
                 </div>
                 <div className="form-group">
                     <label htmlFor="stopatloss">Increase on win (0=return to base)</label>
                     <div className="input-group">
-                        <input className="form-control" name="increaseOnWin" onChange={this.handleChange} value={this.state.increaseOnWin} />
+                        <input className="form-control" name="increaseOnWin" onChange={this.handleChange} value={autoBet.increaseOnWin} />
                         <span className="input-group-addon hand">%</span>
                     </div>
                 </div>
-                <div className="col-lg-offset-4 col-md-offset-4 col-sm-offset-4">
-                    <button className="btn btn-warning btn-perspective btn-sm" disabled={!this.props.ou.isRolling} onClick={() => this.autoBetting()}>{this.state.autoBettingButtonText}</button>
+                <div>
+                    <button className="btn btn-warning btn-perspective btn-md"
+                        disabled={this.props.autoBet.numberOfRolls == 1 || !this.props.ou.isRolling} onClick={() => this.autoBetting()}>
+                        Stop Auto Betting</button>
                 </div>
             </div>
         );
@@ -130,17 +93,20 @@ class AutoBet extends React.Component {
 AutoBet.propTypes = {
     loggedIn: PropTypes.bool,
     ou: PropTypes.object,
-    roll: PropTypes.func
+    autoBet: PropTypes.object,
+    roll: PropTypes.func,
+    setAutoBetting: PropTypes.func
 };
 const mapStateToProps = (state) => {
     return {
         loggedIn: state.user.userName != null,
-        ou: state.ou
+        ou: state.ou,
+        autoBet: state.ou.autoBet
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        roll: (betAmount, selectedNumber, coinName) => dispatch({ type: 'ROLL', bet: { w: betAmount, sn: selectedNumber, coinName: coinName } })
+        setAutoBetting: (autoBet) => dispatch({ type: 'SET_AUTOBETTING', autoBet })
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AutoBet);

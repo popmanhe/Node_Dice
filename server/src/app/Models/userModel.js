@@ -15,7 +15,6 @@ mongoose.Promise = global.Promise;
 /*view models*/
 /*user schema*/
 const userSchema = new mongoose.Schema({
-    guid: { type: String, index: true },
     userName: { type: String, index: { unique: true } },
     password: { type: String },
     clientSalt: String,
@@ -84,7 +83,6 @@ userSchema.statics = {
         password = crypto.createHash('sha512').update(password).digest('hex');
         let user = new userModel(
             {
-                guid: uuid.v4(),
                 userName: userName,
                 password: password,
                 serverSalt: uuid.v4(),
@@ -116,10 +114,10 @@ userSchema.statics = {
         });
     },
     GetUserById: (userid, fields, callback) => {
-        userModel.findOne({ guid: userid }, fields, callback);
+        userModel.findOne({ _id: userid }, fields, callback);
     },
     SaveClientSalt: (userid, clientSalt, callback) => {
-        userModel.findOne({ guid: userid }, "clientSalt serverSalt", (err, u) => {
+        userModel.findOne({ _id: userid }, "clientSalt serverSalt", (err, u) => {
             if (err)
                 callback({ error: err }, null);
             else {
@@ -143,7 +141,7 @@ userSchema.statics = {
                 callback(err, null);
             }
             else {
-                userModel.findOne({ guid: userid }, "funds", (err, u) => {
+                userModel.findOne({ _id: userid }, "funds", (err, u) => {
                     if (err) { callback(err, null); }
                     else {
                         u.setDepositAddr('BTC', addr);
@@ -159,7 +157,7 @@ userSchema.statics = {
         const helper = coinsConfig[coinName];
 
         helper.GetBalance(userid, (err, amount) => {
-            userModel.findOne({ guid: userid }, "funds", (err, u) => {
+            userModel.findOne({ _id: userid }, "funds", (err, u) => {
                 if (err) { callback(err, null); }
                 else {
                     u.setDeposit(coinName, amount);
@@ -172,7 +170,7 @@ userSchema.statics = {
     },
     LoginUser: (userName, password, callback) => {
         password = crypto.createHash('sha512').update(password).digest('hex');
-        userModel.findOne({ userName, password }, "guid userName serverSalt clientSalt nonce funds", (err, u) => {
+        userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds", (err, u) => {
             if (err) { callback(err, null); }
             else {
                 if (u) {

@@ -32,7 +32,6 @@
   "license": "MIT",
   "dependencies": {
     "cookieparser": "0.1.0",
-    "lodash": "4.17.4",
     "moment": "2.18.1",
     "object-assign": "4.1.1",
     "ramda": "0.23.0",

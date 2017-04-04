@@ -1,11 +1,11 @@
 export default {
   chat: {
-    messages:[]
+    messages: []
   },
-  user: {userName:null, isLoggedIn: false},
-  ou:{ 
+  user: { userName: null, isLoggedIn: false },
+  ou: {
     isRolling: false,
-    numberofRolls:1,
-    coins:[]
+    autoBet: { numberOfRolls: 1, stopWin: 0, stopLoss: 0, increaseOnLose: 0, increaseOnWin: 0 },
+    coins: []
   }
 };
