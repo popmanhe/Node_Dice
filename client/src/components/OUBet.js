@@ -64,28 +64,30 @@ class OUBet extends React.Component {
             let stop = false;
             if (p.user.userid == result.userid) {
                 const win = self.showResult(result);
+ 
                 if (win) {
                     if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
                         stop = true;
                     }
-                    else if (p.autoBet.incWin == 0) {
+                    else if (p.autoBet.increaseOnWin == 0) {
                         self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
                     }
                     else {
-                        self.setState({ betAmount: s.betAmount * (1 + p.autoBet.incWin / 100).toFixed(8) });
+                        self.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnWin / 100)).toFixed(8) });
                     }
                 }
                 else {
                     if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
                         stop = true;
                     }
-                    else if (p.autoBet.incLoss == 0) {
+                    else if (p.autoBet.increaseOnLose == 0) {
                         self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
                     }
                     else {
-                        self.setState({ betAmount: s.betAmount * (1 + p.autoBet.incLoss / 100).toFixed(8) });
+                        self.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
                     }
                 }
+                
                 if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
                     self.roll(s.rollNum);
             }
@@ -234,11 +236,11 @@ class OUBet extends React.Component {
 
                 <div className="row">
                     <div className="col-sm-4 col-sm-offset-2">
-                        <button className="btn btn-success btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: rollOver }); this.roll(rollOver); }} >Over {rollOver}</button>
+                        <button className="btn btn-success btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollOver); }} >Over {rollOver}</button>
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-danger btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: rollUnder }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
+                        <button className="btn btn-danger btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
                     </div>
                 </div>
             </div>

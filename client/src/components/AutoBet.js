@@ -28,7 +28,7 @@ class AutoBet extends React.Component {
             return;
         }
         if (this.props.ou.isRolling) {
-            this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: 1 });
+            this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: 1, stop: true });
         }
     }
 

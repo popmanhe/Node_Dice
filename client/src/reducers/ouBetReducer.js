@@ -18,14 +18,18 @@ export default (state = initialState.ou, action) => {
         case 'CHANGE_COIN':
             return { ...state, selectedCoin: action.coin };
         case 'SET_AUTOBETTING':
-            return { ...state, autoBet: action.autoBet };
+            {
+
+
+                return { ...state, isRolling: action.stop ? state.isRolling : action.stop, autoBet: action.autoBet };
+            }
         case 'ROLL':
             {
                 socketEmit('roll', action.bet);
                 let numberOfRolls = state.autoBet.numberOfRolls;
                 if (numberOfRolls > 1)
                     numberOfRolls -= 1;
-                    
+
                 return {
                     ...state, isRolling: true, betAmout: action.bet.w, selectedNumber: action.bet.sn
                     , autoBet: { ...state.autoBet, numberOfRolls }
