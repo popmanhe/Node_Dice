@@ -691,8 +691,7 @@ var betSchema = new mongoose.Schema({
     selNum: Number,
     unit: String,
     betTime: { type: Date, expires: 60 * 60 * 24 * 30, index: true },
-    rollNum: Number,
-    betId: String
+    rollNum: Number
 }, { autoIndex: _config2.default.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
@@ -1143,10 +1142,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _uuid = __webpack_require__(4);
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
 var _userModel = __webpack_require__(2);
 
 var _userModel2 = _interopRequireDefault(_userModel);
@@ -1165,6 +1160,13 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Copyright 2017 Node Dice
+ *
+ * Created by Neo on 2017/03/27.
+ */
+
+//import config from '../../config';
 var overunder = function overunder(io) {
 
     io.on('connection', function (socket) {
@@ -1207,8 +1209,7 @@ var overunder = function overunder(io) {
                         selNum: clientBet.sn,
                         unit: clientBet.coinName,
                         betTime: new Date(),
-                        rollNum: num,
-                        betId: _uuid2.default.v4()
+                        rollNum: num
                     });
                     bet.save(function (err) {
                         if (err) {
@@ -1218,7 +1219,8 @@ var overunder = function overunder(io) {
                         }
                     });
                     //Todo: process bet's result here
-                    var profit = GetProfit(bet.rollNum, bet.selNum, bet.amount);
+                    var payout = bet.selNum <= 49.5 ? 99 / bet.selNum : 99 / (99.99 - bet.selNum);
+                    var profit = GetProfit(bet.rollNum, bet.selNum, bet.amount, payout);
                     u.addProfit(clientBet.coinName, profit);
                     u.save(function (err) {
                         if (err) {
@@ -1228,7 +1230,7 @@ var overunder = function overunder(io) {
                         }
                     });
                     //Every bet is sent to everyone who is in over/under game. 
-                    io.to(gameName).emit('allBets', {
+                    var result = {
                         userid: socket.user.userid,
                         rollNum: num,
                         nonce: u.nonce,
@@ -1236,8 +1238,12 @@ var overunder = function overunder(io) {
                         selNum: bet.selNum,
                         amount: bet.amount,
                         unit: bet.unit,
-                        profit: profit
-                    });
+                        profit: profit,
+                        payout: payout
+                    };
+
+                    console.log(result);
+                    io.to(gameName).emit('allBets', result);
                 }
             });
         });
@@ -1257,8 +1263,8 @@ var overunder = function overunder(io) {
         });
 
         //functions
-        var GetProfit = function GetProfit(rollNum, selNum, amount) {
-            var payout = selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
+        var GetProfit = function GetProfit(rollNum, selNum, amount, payout) {
+
             if (selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1 || selNum * 1 >= 50.49 && rollNum * 1 >= selNum * 1) {
                 return amount * (payout - 1);
             } else {
@@ -1266,13 +1272,8 @@ var overunder = function overunder(io) {
             }
         };
     });
-}; /**
-    * Copyright 2017 Node Dice
-    *
-    * Created by Neo on 2017/03/27.
-    */
+};
 
-//import config from '../../config';
 exports.default = overunder;
 
 /***/ }),

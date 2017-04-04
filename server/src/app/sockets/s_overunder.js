@@ -5,7 +5,6 @@
  */
 
 //import config from '../../config';
-import uuid from 'uuid';
 import userHelper from '../Models/userModel';
 import betHelper from '../Models/betModel';
 import rollDice from '../helper/cryptoroll';
@@ -55,8 +54,7 @@ const overunder = (io) => {
                         selNum: clientBet.sn,
                         unit: clientBet.coinName,
                         betTime: new Date(),
-                        rollNum: num,
-                        betId: uuid.v4()
+                        rollNum: num
                     });
                     bet.save((err) => {
                         if (err) {
@@ -66,7 +64,8 @@ const overunder = (io) => {
                         }
                     });
                     //Todo: process bet's result here
-                    let profit = GetProfit(bet.rollNum, bet.selNum, bet.amount);
+                    const payout = bet.selNum <= 49.5 ? 99 / bet.selNum : 99 / (99.99 - bet.selNum);
+                    const profit = GetProfit(bet.rollNum, bet.selNum, bet.amount,  payout);
                     u.addProfit(clientBet.coinName, profit);
                     u.save((err) => {
                         if (err) {
@@ -76,7 +75,7 @@ const overunder = (io) => {
                         }
                     });
                     //Every bet is sent to everyone who is in over/under game. 
-                    io.to(gameName).emit('allBets', {
+                    const result = {
                         userid: socket.user.userid,
                         rollNum: num,
                         nonce: u.nonce,
@@ -84,8 +83,12 @@ const overunder = (io) => {
                         selNum: bet.selNum,
                         amount: bet.amount,
                         unit: bet.unit,
-                        profit: profit
-                    });
+                        profit,
+                        payout
+                    };
+
+                    console.log(result);
+                    io.to(gameName).emit('allBets', result);
                 }
             });
         });
@@ -105,8 +108,8 @@ const overunder = (io) => {
         });
 
         //functions
-        const GetProfit = (rollNum, selNum, amount) => {
-            let payout = selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
+        const GetProfit = (rollNum, selNum, amount, payout) => {
+
             if ((selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1)
                 || (selNum * 1 >= 50.49 && rollNum * 1 >= selNum * 1)) {
                 return amount * (payout - 1);

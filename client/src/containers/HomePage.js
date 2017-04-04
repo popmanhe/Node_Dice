@@ -1,9 +1,9 @@
 import React from 'react';
-import OUBet from './OUBet';
-import AutoBet from './AutoBet';
-import Chat from './Chat';
-import Salt from './Salt';
-
+import OUBet from '../components/OUBet';
+import AutoBet from '../components/AutoBet';
+import Chat from '../components/Chat';
+import Salt from '../components/Salt';
+import BetHistory from './BetHistory';
 const HomePage = () => {
     return (
         <div className="row">
@@ -42,7 +42,7 @@ const HomePage = () => {
             <div className="col-sm-3 col-md-3 col-lg-3">
                 <Chat />
             </div>
-
+            <BetHistory />
         </div>
     );
 };

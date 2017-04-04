@@ -171,7 +171,7 @@ class OUBet extends React.Component {
         }
         this.setState({ rollNum });
         if (this.props.autoBet.numberOfRolls >= 1)
-            this.props.roll(this.state.betAmount, this.state.rollNum, this.props.selectedCoin.coinName);
+            this.props.roll(this.state.betAmount, rollNum, this.props.selectedCoin.coinName);
     }
     setBetAmount(betAmount) {
         this.setState({ betAmount: betAmount.toFixed(8) });

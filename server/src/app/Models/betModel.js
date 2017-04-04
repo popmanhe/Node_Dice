@@ -19,8 +19,7 @@ const betSchema = new mongoose.Schema({
     selNum: Number,
     unit: String,
     betTime: { type: Date, expires: 60 * 60 * 24 * 30, index: true },
-    rollNum: Number,
-    betId: String
+    rollNum: Number
 }, { autoIndex: config.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {

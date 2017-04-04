@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import App from './components/App';
-import HomePage from './components/HomePage';
+import HomePage from './containers/HomePage';
 import Investment from './components/Investment';
 import NotFoundPage from './components/NotFoundPage';
 import Verification from './components/Verification';
