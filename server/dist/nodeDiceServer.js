@@ -684,6 +684,7 @@ var mongoose = _dbConnect2.default.mongoose;
 /*bet schema*/
 var betSchema = new mongoose.Schema({
     userid: String,
+    userName: String,
     clientSalt: String,
     serverSalt: String,
     nonce: Number,
@@ -1202,6 +1203,7 @@ var overunder = function overunder(io) {
                     var num = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
                     var bet = new _betModel2.default({
                         userid: socket.user.userid,
+                        userName: socket.user.userName,
                         clientSalt: u.clientSalt,
                         serverSalt: u.serverSalt,
                         nonce: u.nonce,
@@ -1232,6 +1234,7 @@ var overunder = function overunder(io) {
                     //Every bet is sent to everyone who is in over/under game. 
                     var result = {
                         userid: socket.user.userid,
+                        userName: socket.user.userName,
                         rollNum: num,
                         nonce: u.nonce,
                         betTime: bet.betTime,
@@ -1242,7 +1245,6 @@ var overunder = function overunder(io) {
                         payout: payout
                     };
 
-                    console.log(result);
                     io.to(gameName).emit('allBets', result);
                 }
             });

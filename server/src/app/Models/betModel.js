@@ -12,6 +12,7 @@ const mongoose = dbConnect.mongoose;
 /*bet schema*/
 const betSchema = new mongoose.Schema({
     userid: String,
+    userName: String,
     clientSalt: String,
     serverSalt: String,
     nonce: Number,

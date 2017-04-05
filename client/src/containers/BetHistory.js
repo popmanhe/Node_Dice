@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import BetList from '../components/BetList';
-import { socketEmit, socketOn } from '../utils/socketIoHelper';
+import { socketOn } from '../utils/socketIoHelper';
 import moment from 'moment';
 class BetHistory extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class BetHistory extends Component {
             }
             //add bet to allbets list
             self.setState({ allBets: self.addToList(result, self.state.allBets) });
-
+            //add high rollers to the list
             if (result.amount >= 0.001)
                 self.setState({ highRollers: self.addToList(result, self.state.highRollers) });
         });
@@ -53,7 +53,7 @@ class BetHistory extends Component {
                                 <div className="row">
                                     <div className="col-sm-12">
                                         <div className="table-responsive the-box">
-                                            <BetList betList={this.state.myBets} />
+                                            <BetList betList={this.state.myBets} showUserName={false} />
                                         </div>
                                     </div>
                                 </div>
