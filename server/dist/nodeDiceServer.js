@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 36);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -77,15 +77,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _all = __webpack_require__(26);
+var _all = __webpack_require__(27);
 
 var _all2 = _interopRequireDefault(_all);
 
-var _development = __webpack_require__(27);
+var _development = __webpack_require__(28);
 
 var _development2 = _interopRequireDefault(_development);
 
-var _production = __webpack_require__(28);
+var _production = __webpack_require__(29);
 
 var _production2 = _interopRequireDefault(_production);
 
@@ -113,7 +113,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _mongoose = __webpack_require__(32);
+var _mongoose = __webpack_require__(33);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -156,11 +156,11 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _uuid = __webpack_require__(4);
+var _uuid = __webpack_require__(7);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _coinsConfig = __webpack_require__(6);
+var _coinsConfig = __webpack_require__(5);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
 
@@ -355,12 +355,6 @@ module.exports = require("crypto");
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-module.exports = require("uuid");
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -370,7 +364,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _path = __webpack_require__(7);
+var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -378,13 +372,13 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _winston = __webpack_require__(34);
+var _winston = __webpack_require__(35);
 
 var _winston2 = _interopRequireDefault(_winston);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_winston2.default.transports.DailyRotateFile = __webpack_require__(35); /**
+_winston2.default.transports.DailyRotateFile = __webpack_require__(36); /**
                                                                                       * Copyright 2014 eRealm Info & Tech.
                                                                                       *
                                                                                       * Created by Ken on 8/08/2014
@@ -402,7 +396,7 @@ exports.default = new _winston2.default.Logger({
 });
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -412,11 +406,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoinHelper = __webpack_require__(20);
+var _bitcoinHelper = __webpack_require__(21);
 
 var _bitcoinHelper2 = _interopRequireDefault(_bitcoinHelper);
 
-var _nxtHelper = __webpack_require__(22);
+var _nxtHelper = __webpack_require__(23);
 
 var _nxtHelper2 = _interopRequireDefault(_nxtHelper);
 
@@ -431,10 +425,16 @@ exports.default = {
 };
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
 
 /***/ }),
 /* 8 */
@@ -447,11 +447,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Faucet = __webpack_require__(16);
+var _Faucet = __webpack_require__(17);
 
 var _Faucet2 = _interopRequireDefault(_Faucet);
 
-var _logger = __webpack_require__(5);
+var _logger = __webpack_require__(4);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -527,15 +527,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _s_common = __webpack_require__(24);
+var _s_common = __webpack_require__(25);
 
 var _s_common2 = _interopRequireDefault(_s_common);
 
-var _s_overunder = __webpack_require__(25);
+var _s_overunder = __webpack_require__(26);
 
 var _s_overunder2 = _interopRequireDefault(_s_overunder);
 
-var _s_chat = __webpack_require__(23);
+var _s_chat = __webpack_require__(24);
 
 var _s_chat2 = _interopRequireDefault(_s_chat);
 
@@ -543,7 +543,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _logger = __webpack_require__(5);
+var _logger = __webpack_require__(4);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -610,15 +610,128 @@ module.exports = require("socket.io");
 "use strict";
 
 
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _express = __webpack_require__(12);
+
+var _express2 = _interopRequireDefault(_express);
+
+var _expressValidator = __webpack_require__(13);
+
+var _expressValidator2 = _interopRequireDefault(_expressValidator);
+
+var _compression = __webpack_require__(11);
+
+var _compression2 = _interopRequireDefault(_compression);
+
+var _bodyParser = __webpack_require__(10);
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _http = __webpack_require__(14);
+
+var _http2 = _interopRequireDefault(_http);
+
+var _socket = __webpack_require__(15);
+
+var _socket2 = _interopRequireDefault(_socket);
+
+var _routes = __webpack_require__(8);
+
+var _routes2 = _interopRequireDefault(_routes);
+
+var _sockets = __webpack_require__(9);
+
+var _sockets2 = _interopRequireDefault(_sockets);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import cookieParser from 'cookie-parser';
+// import session from 'express-session';
+// import MongoConnect from 'connect-mongo';
+// import socketHandshake from 'socket.io-handshake';
+
+//favicon from 'serve-favicon'),
+var app = (0, _express2.default)();
+// const MongoStore = MongoConnect(session);
+//if (process.env.SITE_USER) {
+//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
+//}
+
+/*set up session for express*/
+// const sessionStore = new MongoStore(config.mongoStore);
+// app.use(cookieParser(config.cookieSecret));
+// app.use(session({
+//     resave: true,
+//     saveUninitialized: true,
+//     secret: config.cookieSecret,
+//     store: sessionStore,
+//     cookie: {
+//       maxAge: config.session.timeout //session will expire in 30 days
+//     }
+// }));
+
+/*require socket.io*/
+/**
+ * Copyright 2017 Node Dice
+ *
+ * Created by Neo on 2017/02/08
+ */
+
+//import newrelic from 'newrelic';
+//import cluster from 'cluster');
+var server = _http2.default.createServer(app);
+var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
+
+/*Adding session to socket*/
+// io.use(socketHandshake({
+//     store: sessionStore, 
+//     key: 'connect.id', 
+//     secret: config.cookieSecret, 
+//     parser: cookieParser()
+// }));
+
+//config express in all environments
+app.disable('x-powered-by');
+
+//Add express's middlewares
+//app.use(favicon(config.clientRoot + '/favicon.ico'));
+//Only used in development. In production, use nginx to serve static files
+if (process.env.NODE_ENV == 'development') {
+  app.use(_express2.default.static(_config2.default.clientRoot));
+  app.use((0, _compression2.default)({ threshold: 512 }));
+}
+app.use(_bodyParser2.default.json());
+app.use(_bodyParser2.default.urlencoded({ extended: true }));
+app.use((0, _expressValidator2.default)([]));
+
+//map routes for pages
+(0, _routes2.default)(app);
+//socket communication for games
+(0, _sockets2.default)(io);
+
+server.listen(_config2.default.port, function () {
+  console.log('Server running on port ' + _config2.default.port);
+});
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _request = __webpack_require__(33);
+var _request = __webpack_require__(34);
 
 var _request2 = _interopRequireDefault(_request);
 
-var _faucetModel = __webpack_require__(19);
+var _faucetModel = __webpack_require__(20);
 
 var _faucetModel2 = _interopRequireDefault(_faucetModel);
 
@@ -653,7 +766,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -711,7 +824,7 @@ var betModel = mongoose.model('Bet', betSchema);
 exports.default = betModel;
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -755,7 +868,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -829,7 +942,7 @@ var faucetModel = mongoose.model('Faucet', faucetSchema);
 exports.default = faucetModel;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -839,7 +952,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoin = __webpack_require__(30);
+var _bitcoin = __webpack_require__(31);
 
 var _bitcoin2 = _interopRequireDefault(_bitcoin);
 
@@ -873,7 +986,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -924,7 +1037,7 @@ exports.default = function (key, text) {
 //crypto lib for hmac function
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -934,7 +1047,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _uuid = __webpack_require__(4);
+var _uuid = __webpack_require__(7);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
@@ -964,7 +1077,7 @@ exports.default = {
 // import config from '../../config';
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -974,7 +1087,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _chatModel = __webpack_require__(18);
+var _chatModel = __webpack_require__(19);
 
 var _chatModel2 = _interopRequireDefault(_chatModel);
 
@@ -1012,7 +1125,7 @@ var chat = function chat(io) {
 exports.default = chat;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1030,7 +1143,7 @@ var _crypto = __webpack_require__(3);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
-var _coinsConfig = __webpack_require__(6);
+var _coinsConfig = __webpack_require__(5);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
 
@@ -1133,7 +1246,7 @@ exports.default = function (io) {
     */
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1147,15 +1260,15 @@ var _userModel = __webpack_require__(2);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _betModel = __webpack_require__(17);
+var _betModel = __webpack_require__(18);
 
 var _betModel2 = _interopRequireDefault(_betModel);
 
-var _cryptoroll = __webpack_require__(21);
+var _cryptoroll = __webpack_require__(22);
 
 var _cryptoroll2 = _interopRequireDefault(_cryptoroll);
 
-var _lodash = __webpack_require__(31);
+var _lodash = __webpack_require__(32);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -1279,7 +1392,7 @@ var overunder = function overunder(io) {
 exports.default = overunder;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1289,11 +1402,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _path = __webpack_require__(7);
+var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _package = __webpack_require__(29);
+var _package = __webpack_require__(30);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -1337,7 +1450,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1377,7 +1490,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1419,7 +1532,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1488,14 +1601,15 @@ module.exports = {
 		"babel-cli": "^6.24.0",
 		"babel-eslint": "7.1.1",
 		"babel-loader": "^6.4.1",
-		"babel-preset-latest": "^6.24.0",
 		"babel-preset-es2015": "^6.24.0",
+		"babel-preset-env": "^1.3.2",
 		"babel-preset-stage-0": "^6.22.0",
 		"debug": "~0.7.4",
 		"eslint": "3.17.1",
 		"eslint-plugin-import": "2.2.0",
 		"eslint-plugin-node": "4.2.1",
 		"eslint-watch": "3.0.1",
+		"nodemon": "^1.11.0",
 		"npm-run-all": "4.0.2",
 		"webpack": "2.3.2",
 		"webpack-bundle-analyzer": "2.3.1",
@@ -1506,153 +1620,40 @@ module.exports = {
 };
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = require("bitcoin");
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("request");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston-daily-rotate-file");
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _config = __webpack_require__(0);
-
-var _config2 = _interopRequireDefault(_config);
-
-var _express = __webpack_require__(12);
-
-var _express2 = _interopRequireDefault(_express);
-
-var _expressValidator = __webpack_require__(13);
-
-var _expressValidator2 = _interopRequireDefault(_expressValidator);
-
-var _compression = __webpack_require__(11);
-
-var _compression2 = _interopRequireDefault(_compression);
-
-var _bodyParser = __webpack_require__(10);
-
-var _bodyParser2 = _interopRequireDefault(_bodyParser);
-
-var _http = __webpack_require__(14);
-
-var _http2 = _interopRequireDefault(_http);
-
-var _socket = __webpack_require__(15);
-
-var _socket2 = _interopRequireDefault(_socket);
-
-var _routes = __webpack_require__(8);
-
-var _routes2 = _interopRequireDefault(_routes);
-
-var _sockets = __webpack_require__(9);
-
-var _sockets2 = _interopRequireDefault(_sockets);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// import cookieParser from 'cookie-parser';
-// import session from 'express-session';
-// import MongoConnect from 'connect-mongo';
-// import socketHandshake from 'socket.io-handshake';
-
-//favicon from 'serve-favicon'),
-var app = (0, _express2.default)();
-// const MongoStore = MongoConnect(session);
-//if (process.env.SITE_USER) {
-//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
-//}
-
-/*set up session for express*/
-// const sessionStore = new MongoStore(config.mongoStore);
-// app.use(cookieParser(config.cookieSecret));
-// app.use(session({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: config.cookieSecret,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: config.session.timeout //session will expire in 30 days
-//     }
-// }));
-
-/*require socket.io*/
-/**
- * Copyright 2017 Node Dice
- *
- * Created by Neo on 2017/02/08
- */
-
-//import newrelic from 'newrelic';
-//import cluster from 'cluster');
-var server = _http2.default.createServer(app);
-var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
-
-/*Adding session to socket*/
-// io.use(socketHandshake({
-//     store: sessionStore, 
-//     key: 'connect.id', 
-//     secret: config.cookieSecret, 
-//     parser: cookieParser()
-// }));
-
-//config express in all environments
-app.disable('x-powered-by');
-
-//Add express's middlewares
-//app.use(favicon(config.clientRoot + '/favicon.ico'));
-//Only used in development. In production, use nginx to serve static files
-if (process.env.NODE_ENV == 'development') {
-  app.use(_express2.default.static(_config2.default.clientRoot));
-  app.use((0, _compression2.default)({ threshold: 512 }));
-}
-app.use(_bodyParser2.default.json());
-app.use(_bodyParser2.default.urlencoded({ extended: true }));
-app.use((0, _expressValidator2.default)([]));
-
-//map routes for pages
-(0, _routes2.default)(app);
-//socket communication for games
-(0, _sockets2.default)(io);
-
-server.listen(_config2.default.port, function () {
-  console.log('Server running on port ' + _config2.default.port);
-});
 
 /***/ })
 /******/ ]);
