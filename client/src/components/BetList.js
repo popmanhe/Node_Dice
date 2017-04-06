@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 
 const propTypes = {
-    betList: PropTypes.array
+    betList: PropTypes.array,
+    showUserName: PropTypes.bool
 };
 
 const BetList = (props) => {
@@ -10,6 +11,7 @@ const BetList = (props) => {
         <table className="table table-th-block table-hover">
             <thead>
                 <tr>
+                    {props.showUserName && <th>Name</th>}
                     <th>Time</th>
                     <th>Bet on</th>
                     <th>Lucky Number</th>
@@ -22,8 +24,9 @@ const BetList = (props) => {
                 {
                     props.betList.map((bet, i) =>
                         <tr key={i}>
+                            {props.showUserName && <td>{bet.userName}</td>}
                             <td>{bet.betTime}</td>
-                            <td>{bet.selNum >= 59.49 ? 'Over ' + bet.selNum : 'Under ' + bet.selNum}</td>
+                            <td>{bet.selNum >= 50.49 ? 'Over ' + bet.selNum : 'Under ' + bet.selNum}</td>
                             <td>
                                 <p className="text-danger">{bet.rollNum}</p>
                             </td>
@@ -38,6 +41,9 @@ const BetList = (props) => {
     );
 };
 BetList.propTypes = propTypes;
-
+BetList.defaultProps = {
+    betList: [],
+    showUserName: true
+};
 
 export default BetList;

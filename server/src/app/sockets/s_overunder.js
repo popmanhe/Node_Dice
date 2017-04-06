@@ -47,6 +47,7 @@ const overunder = (io) => {
                     let num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
                     let bet = new betHelper({
                         userid: socket.user.userid,
+                        userName: socket.user.userName,
                         clientSalt: u.clientSalt,
                         serverSalt: u.serverSalt,
                         nonce: u.nonce,
@@ -77,6 +78,7 @@ const overunder = (io) => {
                     //Every bet is sent to everyone who is in over/under game. 
                     const result = {
                         userid: socket.user.userid,
+                        userName: socket.user.userName,
                         rollNum: num,
                         nonce: u.nonce,
                         betTime: bet.betTime,
@@ -87,7 +89,6 @@ const overunder = (io) => {
                         payout
                     };
 
-                    console.log(result);
                     io.to(gameName).emit('allBets', result);
                 }
             });
