@@ -23,7 +23,7 @@ RUN rm -v /etc/nginx/nginx.conf
 
 # Copy a configuration file from the current directory
 ADD nginx.conf /etc/nginx/
-
+ADD nginx-mime.types /etc/nginx/
 # Append "daemon off;" to the configuration file
 # Added in config file
 # RUN echo "daemon off;" >> /etc/nginx/nginx.conf

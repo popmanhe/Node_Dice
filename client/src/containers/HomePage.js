@@ -8,7 +8,7 @@ const HomePage = () => {
     return (
         <div className="row">
             <div className="col-sm-9 col-md-9 col-lg-9">
-                <div className="panel panel-primary">
+                <div className="panel panel-info">
                     <div className="panel-heading">
                         Over or Under?
                     </div>
