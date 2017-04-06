@@ -10,6 +10,10 @@ fs.readdirSync('node_modules')
   .forEach(function(mod) {
     nodeModules[mod] = 'commonjs ' + mod;
   });
+const GLOBALS = {
+  'process.env.NODE_ENV': JSON.stringify('production'),
+  __DEV__: false
+};
 
 module.exports = {
   entry: './src/app.js',
@@ -20,11 +24,7 @@ module.exports = {
   },
    externals: nodeModules,
    plugins: [
-    //   new webpack.DefinePlugin({
-     //   __DEV__: true
-    // }),
-    // new webpack.BannerPlugin('require("source-map-support").install();',
-    //                          { raw: true, entryOnly: false }),
+    new webpack.DefinePlugin(GLOBALS),
     new webpack.LoaderOptionsPlugin({
       minimize: false,
       debug: true,

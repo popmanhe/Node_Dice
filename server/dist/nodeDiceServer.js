@@ -92,9 +92,10 @@ var _production2 = _interopRequireDefault(_production);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // default is development environment
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log('process.env.NODE_ENV' + "production");
+// process.env.NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development');
+var config =  true ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
 
-var config = process.env.NODE_ENV == "development" ? Object.assign(_all2.default, _development2.default) : Object.assign(_all2.default, _production2.default);
 // Load app configuration
 exports.default = config;
 
@@ -699,7 +700,7 @@ app.disable('x-powered-by');
 //Add express's middlewares
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
 //Only used in development. In production, use nginx to serve static files
-if (process.env.NODE_ENV == 'development') {
+if (false) {
   app.use(_express2.default.static(_config2.default.clientRoot));
   app.use((0, _compression2.default)({ threshold: 512 }));
 }
@@ -970,7 +971,7 @@ exports.default = {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
-        if (process.env.NODE_ENV == "development")
+        if (false)
             //In development, return 10 BTC for testing.
             callback(null, 10);else client.getReceivedByAccount(userid, 2, callback);
     },
@@ -1060,7 +1061,7 @@ exports.default = {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
-        if (process.env.NODE_ENV == "development")
+        if (false)
             //In development, return 10 BTC for testing.
             callback(null, 1000000);else callback(null, 0);
     },
@@ -1418,7 +1419,7 @@ var config = {
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {
-        name: process.env.NODE_ENV === 'production' ? _package2.default.name + ' (' + _package2.default.version + ')' : _package2.default.name + ' [' + _package2.default.version + ']',
+        name:  true ? _package2.default.name + ' (' + _package2.default.version + ')' : _package2.default.name + ' [' + _package2.default.version + ']',
         version: _package2.default.version,
         description: _package2.default.description
     },
@@ -1509,7 +1510,7 @@ var config = {
         autoRemove: 'interval',
         autoRemoveInterval: 10 // In minutes. Default 
     },
-    port: 8080,
+    port: 4000,
     origins: "*:*", //For security, it's better to set origins in prod
     bitcoin: {
         host: 'rpc.blockchain.info',

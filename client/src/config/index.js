@@ -4,7 +4,7 @@ const configureDev = {
 };
 
 const configureProd = { 
-    socketUrl: "http://localhost:3000/"
+    socketUrl: "http://localhost:4000/"
 };
 
 const config  = process.env.NODE_ENV === 'production' ? configureProd : configureDev;

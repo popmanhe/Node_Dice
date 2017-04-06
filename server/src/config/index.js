@@ -3,8 +3,9 @@ import development from './development';
 import production from './production';
 
 // default is development environment
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+console.log('process.env.NODE_ENV' + process.env.NODE_ENV);
+// process.env.NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development');
+const config = process.env.NODE_ENV === 'production' ? Object.assign(all, production) : Object.assign(all, development);
 
-const config = process.env.NODE_ENV == "development" ? Object.assign(all, development) : Object.assign(all, production);
 // Load app configuration
 export default config;

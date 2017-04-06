@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import config from '../webpack.config.dev';
+import config from '../webpack.config.prod';
 
 webpack(config).run(function(err, stats) {
     if(err) {
