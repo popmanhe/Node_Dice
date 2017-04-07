@@ -30,7 +30,7 @@ ADD nginx-mime.types /etc/nginx/
 
 #Copy node_dice client to server
 RUN mkdir /usr/www
-ADD dist /usr/www/
+#ADD dist /usr/www/
 # Expose ports
 EXPOSE 80
 
