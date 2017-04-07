@@ -972,9 +972,11 @@ exports.default = {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
-        if (false)
-            //In development, return 10 BTC for testing.
-            callback(null, 10);else client.getReceivedByAccount(userid, 2, callback);
+        // if (process.env.NODE_ENV == "development")
+        //     //In development, return 10 BTC for testing.
+        callback(null, 10);
+        // else
+        //     client.getReceivedByAccount(userid, 2, callback);
     },
     WithdrawFunds: function WithdrawFunds(userid, unit) {
         //dummy code for lint rules
@@ -1062,9 +1064,11 @@ exports.default = {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
-        if (false)
-            //In development, return 10 BTC for testing.
-            callback(null, 1000000);else callback(null, 0);
+        // if (process.env.NODE_ENV == "development")
+        //     //In development, return 10 BTC for testing.
+        callback(null, 1000000);
+        // else
+        //     callback(null, 0);
     },
     WithdrawFunds: function WithdrawFunds(userid, unit) {
         //dummy code for lint rules
