@@ -15,8 +15,8 @@
   },
   "scripts": {
     "start": "npm-run-all --parallel open:src run:dev lint:watch",
-    "build": "npm-run-all open:dist run:prod", //use pm2 to host server
-    "prod": "npm-run-all open:dist", //don't use pm2. docker will handle it
+    "build": "npm-run-all open:dist run:prod",  
+    "prod": "npm-run-all open:dist",  
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
     "run:dev": "nodemon dist/nodeDiceServer.js --watch dist",
