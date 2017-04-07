@@ -1,12 +1,12 @@
 
 const configureDev = {
-    socketUrl: "http://localhost:3000/"
+    socketUrl: 'http://' + window.location.hostname + ':3000/'
 };
 
-const configureProd = { 
-    socketUrl: "http://localhost:4000/"
+const configureProd = {
+    socketUrl: 'http://' + window.location.hostname + ':4000' //assume client and server are running at the same address
 };
 
-const config  = process.env.NODE_ENV === 'production' ? configureProd : configureDev;
+const config = process.env.NODE_ENV === 'production' ? configureProd : configureDev;
 
 export default config; 
