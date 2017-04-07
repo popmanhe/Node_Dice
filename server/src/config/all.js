@@ -7,8 +7,8 @@ import pkg  from  '../../package.json';
 const rootPath = path.resolve('.');
 const config = {
     root: rootPath,
-    serverRoot: rootPath + '/dist/',
-    clientRoot: rootPath + '/dist/html/',
+    serverRoot: rootPath + '/',
+    clientRoot: rootPath + '/html/',
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {

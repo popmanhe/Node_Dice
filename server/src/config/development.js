@@ -5,11 +5,11 @@ const config = {
         port: 27017,
         dbname: 'node_dice'
     },
-    mongoStore: {
-        url: 'mongodb://localhost/node_dice',
-        autoRemove: 'interval',
-        autoRemoveInterval: 10 // In minutes. Default 
-    },
+    // mongoStore: {
+    //     url: 'mongodb://localhost/node_dice',
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10 // In minutes. Default 
+    // },
     bitcoin: {
         host: 'rpc.blockchain.info',
         port: 443,

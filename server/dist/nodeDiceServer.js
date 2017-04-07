@@ -474,10 +474,10 @@ exports.default = function (app) {
         next();
     });
 
-    //default page
-    // app.get('/',  (req, res) => {
-    //     res.sendFile(config.clientRoot + 'index.html');
-    // });
+    // default page
+    app.get('/', function (req, res) {
+        res.send('hello node dice');
+    });
 
     // app.get('/Roll_Over_Or_Under', (req, res) => {
 
@@ -1416,8 +1416,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var rootPath = _path2.default.resolve('.');
 var config = {
     root: rootPath,
-    serverRoot: rootPath + '/dist/',
-    clientRoot: rootPath + '/dist/html/',
+    serverRoot: rootPath + '/',
+    clientRoot: rootPath + '/html/',
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {
@@ -1467,11 +1467,11 @@ var config = {
         port: 27017,
         dbname: 'node_dice'
     },
-    mongoStore: {
-        url: 'mongodb://localhost/node_dice',
-        autoRemove: 'interval',
-        autoRemoveInterval: 10 // In minutes. Default 
-    },
+    // mongoStore: {
+    //     url: 'mongodb://localhost/node_dice',
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10 // In minutes. Default 
+    // },
     bitcoin: {
         host: 'rpc.blockchain.info',
         port: 443,
@@ -1502,16 +1502,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 var config = {
     mongodb: {
-        hostaddress: 'mongodb://localhost',
+        hostaddress: 'mongodb://mongo',
         port: 27017,
         dbname: 'node_dice',
         autoIndex: false
     },
-    mongoStore: {
-        url: 'mongodb://localhost/node_dice',
-        autoRemove: 'interval',
-        autoRemoveInterval: 10 // In minutes. Default 
-    },
+    // mongoStore: {
+    //     url: 'mongodb://localhost/node_dice',
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10 // In minutes. Default 
+    // },
     port: 4000,
     origins: "*:*", //For security, it's better to set origins in prod
     bitcoin: {

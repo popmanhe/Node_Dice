@@ -1,0 +1,18 @@
+version: "2"
+services:
+  web:
+    build: .\client
+    ports:
+      - "8080:80"
+  server:
+    build: .\server
+    ports:
+      - "4000:4000"
+    links:
+      - mongo
+  mongo:
+    image: mongo
+    volumes:
+      - /data/mongodb/db:/data/db
+    ports:
+      - "27017:27017"

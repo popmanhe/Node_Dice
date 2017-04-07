@@ -17,10 +17,10 @@ export default (app)=> {
     });
       
     
-    //default page
-    // app.get('/',  (req, res) => {
-    //     res.sendFile(config.clientRoot + 'index.html');
-    // });
+    // default page
+    app.get('/',  (req, res) => {
+        res.send('hello node dice');
+    });
 
     // app.get('/Roll_Over_Or_Under', (req, res) => {
          

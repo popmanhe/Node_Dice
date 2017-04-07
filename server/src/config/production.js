@@ -2,16 +2,16 @@
 
 const config = {
     mongodb: {
-        hostaddress: 'mongodb://localhost',
+        hostaddress: 'mongodb://mongo',
         port: 27017,
         dbname: 'node_dice',
         autoIndex: false
     },
-    mongoStore: {
-        url: 'mongodb://localhost/node_dice',
-        autoRemove: 'interval',
-        autoRemoveInterval: 10 // In minutes. Default 
-    },
+    // mongoStore: {
+    //     url: 'mongodb://localhost/node_dice',
+    //     autoRemove: 'interval',
+    //     autoRemoveInterval: 10 // In minutes. Default 
+    // },
     port: 4000,
     origins: "*:*", //For security, it's better to set origins in prod
     bitcoin:
