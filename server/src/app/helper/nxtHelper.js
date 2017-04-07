@@ -10,11 +10,11 @@ export default {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
-        if (process.env.NODE_ENV == "development")
-            //In development, return 10 BTC for testing.
+        // if (process.env.NODE_ENV == "development")
+        //     //In development, return 10 BTC for testing.
             callback(null, 1000000);
-        else
-            callback(null, 0);
+        // else
+        //     callback(null, 0);
     },
     WithdrawFunds: (userid, unit) => {
         //dummy code for lint rules
