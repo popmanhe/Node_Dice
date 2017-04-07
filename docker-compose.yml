@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80"
   server:
-    build: .\server
+    build: ./server
     volumes:
       - ./server:/usr/nodedice
     ports:
