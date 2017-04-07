@@ -5,7 +5,6 @@ The site is built on
 <li>Backend: node.js + socket.io + mongodb</li>
 <li>Frontend: bootstrap + jquery + react.js</li>
 </ul>
-<p>Session uses mongodb as session store, so the site can be expanded to multiple servers.</p>
 
 <p>Before you run this site, please set up connection to mongodb in config/developement.js or production.js.</p>
 
