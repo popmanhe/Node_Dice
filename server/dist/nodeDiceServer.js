@@ -92,7 +92,7 @@ var _production2 = _interopRequireDefault(_production);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // default is development environment
-console.log('process.env.NODE_ENV' + "production");
+//console.log('process.env.socket: ' + process.env.SOCKET);
 // process.env.NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development');
 var config =  true ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
 
@@ -1558,6 +1558,7 @@ module.exports = {
 	"scripts": {
 		"start": "npm-run-all --parallel open:src run:dev lint:watch",
 		"build": "npm-run-all open:dist run:prod",
+		"prod": "npm-run-all open:dist",
 		"open:src": "babel-node tools/srcServer.js",
 		"open:dist": "babel-node tools/distServer.js",
 		"run:dev": "nodemon dist/nodeDiceServer.js --watch dist",
