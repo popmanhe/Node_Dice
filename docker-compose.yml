@@ -1,15 +1,15 @@
 version: "2"
 services:
   web:
-    build: .\client
+    build: ./client
     volumes:
-      - /usr/nodedice/application/client/dist:/usr/www
+      - ./client/dist:/usr/www
     ports:
-      - "8080:80"
+      - "80:80"
   server:
     build: .\server
     volumes:
-      - /usr/nodedice/application/server:/usr/nodedice
+      - ./server:/usr/nodedice
     ports:
       - "4000:4000"
     links:
