@@ -23,7 +23,7 @@ The site is built on
 <p>The whole site uses three docker containers. One is for front-end, hosted by nginx images. The second one is for back-end, hosted by node 7.8 and socket.io. The third one is using mongo db images. You can see three containers in docker-compose.yml.  </p>
 <h4>How to setup the site? </h4>
 <strong>NOTE: If you are on windows to build docker container, read below before setting up the site.</strong>
-<p>Before step 1, you may need to disable IIS or change the port mapping of <strong>web</strong> section in docker-compose.yml. eg. 80:80 -> 8080:80 </p>
+<p>Before step 1, you may need to disable IIS or change the port mapping of <strong>web</strong> section in docker-compose.yml. eg. <pre>80:80 -> 8080:80</pre> </p>
 <p>Before step 3, you may need to open up docker settings and set the share drive. And may need to comment out volumes for mongo in docker-compose.yml<br />
 	<pre>
 	volumes:
