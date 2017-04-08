@@ -21,10 +21,10 @@ The site is built on
 <li>2017-04-07:  Use docker containers to deploy a working beta.</li>
 </ul>
 <p>The whole site uses three docker containers. One is for front-end, hosted by nginx images. The second one is for back-end, hosted by node 7.8 and socket.io. The third one is using mongo db images. You can see three containers in docker-compose.yml.  </p>
-<h4>How to build the site? </h4>
+<h4>How to setup the site? </h4>
 <ol>
-<li>Build client: cd client && npm run prod</li>
-<li>Build server: cd server && npm run prod</li>
+<li>Build client:<strong> cd client && npm run prod</strong></li>
+<li>Build server:<strong> cd server && npm run prod</strong></li>
 <li>docker-compose build</li>
 <li>docker-compose up -d</li>
 </ol>
