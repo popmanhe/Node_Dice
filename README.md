@@ -18,6 +18,7 @@ The site is built on
 	             Amount of faucet and interval can be adjusted in config file.</li>
 <li>2015-03-29:  Move to ubuntu and use nginx as web server.</li>
 <li>2017-01-25:  Start rewriting in ES6 and react. Use babel to transform ES6 to ES5. Node.js acts as restful api/socket.io server and does not render front-end html any more. Will use docker to host application in the future.</li>
+<li>2017-04-07:  Use docker containers to deploy a working beta.</li>
 </ul>
 
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
