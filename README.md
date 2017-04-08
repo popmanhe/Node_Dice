@@ -25,15 +25,18 @@ The site is built on
 <strong>NOTE: If you are on windows to build docker container, read below before setting up the site.</strong>
 <p>Before step 1, you may need to disable IIS or change the port mapping of <strong>web</strong> section in docker-compose.yml. eg. 80:80 -> 8080:80 </p>
 <p>Before step 3, you may need to open up docker settings and set the share drive. And may need to comment out volumes for mongo in docker-compose.yml<br />
-	<code>volumes:<br />
+	<pre>
+	volumes:
       - ./mongodb/db:/data/dbvolumn
-      </code>
+      </pre>
 </p>
+<h4>Steps:</h4>
 <ol>
 <li>Build client:<strong> cd client && npm run prod</strong></li>
 <li>Build server:<strong> cd server && npm run prod</strong></li>
 <li>docker-compose build</li>
 <li>docker-compose up -d</li>
+<li>Open browser: http://localhost</li>
 </ol>
-Or just run <strong>build.bat</strong>
+<p>Or just run <strong>build.bat</strong>. It does all 4 steps for you.<p>
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>
