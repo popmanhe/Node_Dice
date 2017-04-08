@@ -90,8 +90,7 @@ export default {
     }),
     new CopyWebpackPlugin([
       { from: 'src/lib', to: "lib" },
-      { from: 'src/img', to: 'img' },
-      { from: 'src/styles', to: 'styles' }
+      { from: 'src/img', to: 'img' }
     ],
       { copyUnmodified: true })
   ],
