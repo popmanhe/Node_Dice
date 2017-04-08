@@ -79,17 +79,6 @@ class App extends React.Component {
                     {/* BEGIN SIDEBAR LEFT */}
                     {/* /.sidebar-left */}
                     {/* END SIDEBAR LEFT */}
-
-                    {/* BEGIN SIDEBAR RIGHT */}
-                    <div className="sidebar-right sidebar-nicescroller">
-                        <div className="tab-content">
-                            <div className="tab-pane fade in active" id="online-chat">
-                                {/*    <Chat /> */}
-                            </div>
-
-                        </div> {/* /.tab-content */}
-                    </div> {/* /.sidebar-right */}
-                    {/* END SIDEBAR RIGHT */}
                     {/* BEGIN PAGE CONTENT */}
                     <div className="page-content">
                         <div className="container-fluid">
