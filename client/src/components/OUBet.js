@@ -235,12 +235,12 @@ class OUBet extends React.Component {
                 </div>
 
                 <div className="row">
-                    <div className="col-sm-4 col-sm-offset-2">
-                        <button className="btn btn-success btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollOver); }} >Over {rollOver}</button>
+                    <div className="col-xs-5 col-sm-4 col-sm-offset-2">
+                        <button className="btn btn-success btn-perspective" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollOver); }} >Over {rollOver}</button>
                     </div>
 
-                    <div className="col-sm-4">
-                        <button className="btn btn-danger btn-perspective btn-lg" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
+                    <div className="col-xs-5 col-sm-4">
+                        <button className="btn btn-danger btn-perspective" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
                     </div>
                 </div>
             </div>

@@ -32,11 +32,16 @@ The site is built on
 </p>
 <h4>Steps:</h4>
 <ol>
-<li>Build client:<strong> cd client && npm run prod</strong></li>
-<li>Build server:<strong> cd server && npm run prod</strong></li>
+<li>Install node.js and npm</li>
+<li>Install docker</li>
+<li>Go to the root folder of source code where docker-compose.yml resides.</li>
+<li>Build client:<strong> cd client && npm run prod && cd ..</strong></li>
+<li>Build server:<strong> cd server && npm run prod && cd ..</strong></li>
 <li>docker-compose build</li>
 <li>docker-compose up -d</li>
 <li>Open browser: http://localhost</li>
 </ol>
-<p>Or just run <strong>build.bat</strong>. It does all 4 steps for you.<p>
+<p>Or just run <strong>build.bat</strong>. It does steps 3-6 for you.<p>
+<h4>How to update the site? </h4>
+<p>The physical files are not actually in the containers, as you can see volumes in each section of docker-compose.yml. volumes maps host path to the internal path of container. So you just need to update files in host. After you test and build your local souce code by using <strong>npm run prod</strong> for client or server, push the changes to github. Then in your host machine, just type <strong>git pull</strong> and get the changes from github. That's it. You update you site. </p>
 <p>If you have any questions, contact me at: popman.he@gmail.com.</p>

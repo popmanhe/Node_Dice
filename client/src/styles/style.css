@@ -734,7 +734,7 @@ ul.sidebar-menu li.text-content.profile-summary{
 	margin-left: 250px;
 	margin-top: 0;
 	z-index: 2;
-	background: #E8E9EE;
+	/*background: #E8E9EE;*/
 	-webkit-transition:All 0.3s ease;
 	-moz-transition:All 0.3s ease;
 	-o-transition:All 0.3s ease;
@@ -1435,12 +1435,12 @@ FOOTER
 -------------------------------------------
 **/
 footer{
-	background: #fff;
+	/*background: #fff;*/
 	text-align: center;
 	font-size: 13px;
 	padding: 15px;
 	margin-top: 20px;
-	border-top: 1px solid #E6E9ED;
+	/*border-top: 1px solid #E6E9ED;*/
 	line-height: 170%;
 }
 

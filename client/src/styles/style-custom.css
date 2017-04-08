@@ -64,13 +64,9 @@ ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
     margin: 10px 0;
 }
 
-#background {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    z-index: 0; /* Ensure div tag stays behind content; -999 might work, too. */
+.wrapper {
+    background-image: url(../img/bg-11-full.jpg);
+    
 }
 
 .stretch {
@@ -78,9 +74,9 @@ ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
     height: 100%;
 }
 
-.panel{
+/*.panel{
     background: rgba(238, 238, 238, 0.76);
-}
+}*/
 
 .modal-backdrop {
     z-index: 3;
