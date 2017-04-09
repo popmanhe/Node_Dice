@@ -16,7 +16,7 @@ import bodyParser from 'body-parser';
 // import session from 'express-session';
 // import MongoConnect from 'connect-mongo';
 // import socketHandshake from 'socket.io-handshake';
-import http from 'https';
+import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';

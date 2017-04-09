@@ -596,7 +596,7 @@ module.exports = require("express-validator");
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("https");
+module.exports = require("http");
 
 /***/ }),
 /* 15 */
@@ -631,9 +631,9 @@ var _bodyParser = __webpack_require__(10);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _https = __webpack_require__(14);
+var _http = __webpack_require__(14);
 
-var _https2 = _interopRequireDefault(_https);
+var _http2 = _interopRequireDefault(_http);
 
 var _socket = __webpack_require__(15);
 
@@ -666,7 +666,7 @@ var app = (0, _express2.default)();
 
 //import newrelic from 'newrelic';
 //import cluster from 'cluster');
-var server = _https2.default.createServer(app);
+var server = _http2.default.createServer(app);
 
 var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
 
