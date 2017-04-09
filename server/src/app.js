@@ -16,42 +16,24 @@ import bodyParser from 'body-parser';
 // import session from 'express-session';
 // import MongoConnect from 'connect-mongo';
 // import socketHandshake from 'socket.io-handshake';
-import http from 'http';
+import http from 'https';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';
-
+// import crypto from 'crypto';
+import fs from 'fs';
 const app = express();
-// const MongoStore = MongoConnect(session);
-//if (process.env.SITE_USER) {
-//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
-//}
 
-/*set up session for express*/
-// const sessionStore = new MongoStore(config.mongoStore);
-// app.use(cookieParser(config.cookieSecret));
-// app.use(session({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: config.cookieSecret,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: config.session.timeout //session will expire in 30 days
-//     }
-// }));
- 
 /*require socket.io*/
-const server = http.createServer(app);
-const io = socketio(server, {cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true});
+const options = {
+    key: fs.readFileSync('privatekey.key'),
+    cert: fs.readFileSync('certificate.cert')
+};
+//const credentials = crypto.createCredentials({ key: privateKey, cert: certificate });
+const server = http.createServer(options, app);
 
-/*Adding session to socket*/
-// io.use(socketHandshake({
-//     store: sessionStore, 
-//     key: 'connect.id', 
-//     secret: config.cookieSecret, 
-//     parser: cookieParser()
-// }));
-
+const io = socketio(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
+ 
 //config express in all environments
 app.disable('x-powered-by');
 
@@ -73,7 +55,7 @@ routes(app);
 sockets(io);
 
 server.listen(config.port, function () {
-    console.log('Server running on port ' + config.port);
+    console.log('Https Server running on port ' + config.port);
 });
 
 
