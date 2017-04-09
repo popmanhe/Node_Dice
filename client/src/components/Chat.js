@@ -77,7 +77,7 @@ class Chat extends React.Component {
 
             return (
                   <div>
-                        <ul id="chatList" className="list-group" style={{ "maxHeight": "500px", "overflowY": "auto" }}>
+                        <ul id="chatList" className="list-group" style={{ "maxHeight": "600px", "overflowY": "auto" }}>
                               {
                                     messages.map((msg, i) =>
                                           <li className="list-group-item" key={i}>
@@ -87,13 +87,13 @@ class Chat extends React.Component {
                                     )}
 
                         </ul>
-                        <form onSubmit={this.sendMsg}>
+                        <form onSubmit={this.sendMsg} className="the-box">
                               <div className="form-group">
                                     <label>Message:</label>
                                     <input type="text" ref={(input) => { this.newMessage = input; }} className="form-control rounded" placeholder="Enter message" />
                               </div>
 
-                              <button type="submit" disabled={!this.props.enabled} onClick={this.sendMsg} className="btn btn-default">Send</button>
+                              <button type="submit" disabled={!this.props.enabled} onClick={this.sendMsg} className="btn btn-primary">Send</button>
                         </form>
                   </div>);
       }

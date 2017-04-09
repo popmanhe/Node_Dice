@@ -38,41 +38,39 @@ class BetHistory extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-lg-12 col-md-12 col-sm-12">
-                    <div className="panel with-nav-tabs panel-default">
-                        <div className="panel-heading">
-                            <ul className="nav nav-tabs nav-justified">
-                                <li><a href="#tab1" data-toggle="tab">My bets</a></li>
-                                <li className="active"><a href="#tab2" data-toggle="tab">All bets</a></li>
-                                <li><a href="#tab3" data-toggle="tab">High Rollers</a></li>
-                            </ul>
+            <div >
+                <div className="panel with-nav-tabs panel-default">
+                    <div className="panel-heading">
+                        <ul className="nav nav-tabs nav-justified">
+                            <li><a href="#tab1" data-toggle="tab">My bets</a></li>
+                            <li className="active"><a href="#tab2" data-toggle="tab">All bets</a></li>
+                            <li><a href="#tab3" data-toggle="tab">High Rollers</a></li>
+                        </ul>
+                    </div>
+                    <div className="tab-content">
+                        <div className="tab-pane fade in" id="tab1">
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="table-responsive the-box">
+                                        <BetList betList={this.state.myBets} showUserName={false} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="tab-content">
-                            <div className="tab-pane fade in" id="tab1">
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="table-responsive the-box">
-                                            <BetList betList={this.state.myBets} showUserName={false} />
-                                        </div>
+                        <div className="tab-pane fade in active" id="tab2">
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="table-responsive the-box">
+                                        <BetList betList={this.state.allBets} />
                                     </div>
                                 </div>
                             </div>
-                            <div className="tab-pane fade in active" id="tab2">
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="table-responsive the-box">
-                                            <BetList betList={this.state.allBets} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="tab-pane fade in" id="tab3">
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <div className="table-responsive the-box">
-                                            <BetList betList={this.state.highRollers} />
-                                        </div>
+                        </div>
+                        <div className="tab-pane fade in" id="tab3">
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <div className="table-responsive the-box">
+                                        <BetList betList={this.state.highRollers} />
                                     </div>
                                 </div>
                             </div>
@@ -80,6 +78,7 @@ class BetHistory extends Component {
                     </div>
                 </div>
             </div>
+
         );
     }
 }

@@ -38,11 +38,12 @@ const HomePage = () => {
                         </div>
                     </div>
                 </div>
+                 <BetHistory />
             </div>
             <div className="col-sm-3 col-md-3 col-lg-3">
                 <Chat />
             </div>
-            <BetHistory />
+          
         </div>
     );
 };

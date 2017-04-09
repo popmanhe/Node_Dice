@@ -64,7 +64,7 @@ class OUBet extends React.Component {
             let stop = false;
             if (p.user.userid == result.userid) {
                 const win = self.showResult(result);
- 
+
                 if (win) {
                     if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
                         stop = true;
@@ -87,7 +87,7 @@ class OUBet extends React.Component {
                         self.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
                     }
                 }
-                
+
                 if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
                     self.roll(s.rollNum);
             }
@@ -244,7 +244,6 @@ class OUBet extends React.Component {
                     </div>
                 </div>
             </div>
-
         );
 
     }
