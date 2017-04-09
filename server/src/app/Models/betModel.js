@@ -20,18 +20,24 @@ const betSchema = new mongoose.Schema({
     selNum: Number,
     unit: String,
     betTime: { type: Date, expires: 60 * 60 * 24 * 30, index: true },
-    rollNum: Number
+    rollNum: Number,
+    profit: Number,
+    payout: Number
 }, { autoIndex: config.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
-    GetBetsByUser: function (userid, callback) {
-        const query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+    getBetsByUser: function (userid, callback) {
+        const query = betModel.find({ userid: userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },
-    GetAllBets: function (callback) {
-        const query = betModel.find({}, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+    getAllBets: function (callback) {
+        const query = betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
+    },
+    getPayout: function(selNum){
+      return  selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
     }
+    
 };
 
 const betModel = mongoose.model('Bet', betSchema);

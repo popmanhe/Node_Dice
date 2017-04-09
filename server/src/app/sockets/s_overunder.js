@@ -44,7 +44,9 @@ const overunder = (io) => {
                     u.nonce++;
 
                     //get lucky number
-                    let num = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    let rollNum = rollDice(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    const payout = betHelper.getPayout(clientBet.sn);
+                    const profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
                     let bet = new betHelper({
                         userid: socket.user.userid,
                         userName: socket.user.userName,
@@ -55,7 +57,9 @@ const overunder = (io) => {
                         selNum: clientBet.sn,
                         unit: clientBet.coinName,
                         betTime: new Date(),
-                        rollNum: num
+                        rollNum,
+                        profit,
+                        payout
                     });
                     bet.save((err) => {
                         if (err) {
@@ -65,8 +69,7 @@ const overunder = (io) => {
                         }
                     });
                     //Todo: process bet's result here
-                    const payout = bet.selNum <= 49.5 ? 99 / bet.selNum : 99 / (99.99 - bet.selNum);
-                    const profit = GetProfit(bet.rollNum, bet.selNum, bet.amount,  payout);
+
                     u.addProfit(clientBet.coinName, profit);
                     u.save((err) => {
                         if (err) {
@@ -79,7 +82,7 @@ const overunder = (io) => {
                     const result = {
                         userid: socket.user.userid,
                         userName: socket.user.userName,
-                        rollNum: num,
+                        rollNum,
                         nonce: u.nonce,
                         betTime: bet.betTime,
                         selNum: bet.selNum,
@@ -95,14 +98,14 @@ const overunder = (io) => {
         });
 
         socket.on('getMyBets', function () {
-            betHelper.GetBetsByUser(socket.user.userid, function (err, bets) {
+            betHelper.getBetsByUser(socket.user.userid, function (err, bets) {
                 if (err) return console.error('GetBetsByUser error:' + err);
                 socket.emit('getMyBets', bets);
             });
         });
-
+ 
         socket.on('getAllBets', function () {
-            betHelper.GetAllBets(function (err, bets) {
+            betHelper.getAllBets(function (err, bets) {
                 if (err) return console.error('getAllBets error:' + err);
                 socket.emit('getAllBets', bets);
             });

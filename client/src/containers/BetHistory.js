@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import BetList from '../components/BetList';
-import { socketOn } from '../utils/socketIoHelper';
+import { socketEmit, socketOn } from '../utils/socketIoHelper';
 import moment from 'moment';
 class BetHistory extends Component {
     constructor(props) {
@@ -12,21 +12,32 @@ class BetHistory extends Component {
             highRollers: []
         };
     }
+
     componentDidMount() {
         const self = this;
-        socketOn('allBets', function (result) {
-            result.betTime = moment(result.betTime).format('MM-DD HH:mm:ss');
-
-            //add bet to mybets list
-            if (result.userid == self.props.user.userid) {
-                self.setState({ myBets: self.addToList(result, self.state.myBets) });
-            }
-            //add bet to allbets list
-            self.setState({ allBets: self.addToList(result, self.state.allBets) });
-            //add high rollers to the list
-            if (result.amount >= 0.001)
-                self.setState({ highRollers: self.addToList(result, self.state.highRollers) });
+        socketEmit('getAllBets');
+        socketOn('getAllBets', (bets) => {
+            bets.forEach((bet) => {
+                self.addToHistory(self, bet);
+            });
         });
+        socketOn('allBets', (bet) => {
+            self.addToHistory(bet);
+        });
+    }
+    addToHistory(self, bet) {
+        bet.betTime = moment(bet.betTime).format('MM-DD HH:mm:ss');
+
+        //add bet to mybets list
+        if (bet.userid == self.props.user.userid) {
+            self.setState({ myBets: self.addToList(bet, self.state.myBets) });
+        }
+        //add bet to allbets list
+        self.setState({ allBets: self.addToList(bet, self.state.allBets) });
+        //add high rollers to the list
+        if (bet.amount >= 0.001)
+            bet.setState({ highRollers: self.addToList(bet, self.state.highRollers) });
+
     }
 
     addToList(bet, list) {

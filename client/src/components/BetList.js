@@ -30,9 +30,9 @@ const BetList = (props) => {
                             <td>
                                 <p className="text-danger">{bet.rollNum}</p>
                             </td>
-                            <td>{bet.amount.toFixed(8)}</td>
-                            <td>{bet.payout.toFixed(0)}x</td>
-                            <td className={bet.profit < 0 ? 'text-danger' : 'text-success'}><strong>{bet.profit.toFixed(8)}</strong></td>
+                            <td>{bet.amount && bet.amount.toFixed(8)}</td>
+                            <td>{bet.payout && bet.payout.toFixed(0)}x</td>
+                            <td className={bet.profit < 0 ? 'text-danger' : 'text-success'}><strong>{bet.profit && bet.profit.toFixed(8)}</strong></td>
                         </tr>
                     )
                 }

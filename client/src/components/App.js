@@ -82,9 +82,9 @@ class App extends React.Component {
                     {/* BEGIN PAGE CONTENT */}
                     <div className="page-content">
                         <div className="container-fluid">
-                            {/*     <div id="background">
-                    <img src="/img/bg-11-full.jpg" className="stretch" alt="" />
-                </div>*/}
+                            <div id="background">
+                                <img src="/img/bg-11-full.jpg" className="stretch" alt="" />
+                            </div>
                             {/* BEGIN SiTE INFORMATIONS */}
                             <p>{' '}</p>
                             {this.props.children}

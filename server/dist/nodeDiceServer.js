@@ -806,18 +806,24 @@ var betSchema = new mongoose.Schema({
     selNum: Number,
     unit: String,
     betTime: { type: Date, expires: 60 * 60 * 24 * 30, index: true },
-    rollNum: Number
+    rollNum: Number,
+    profit: Number,
+    payout: Number
 }, { autoIndex: _config2.default.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
-    GetBetsByUser: function GetBetsByUser(userid, callback) {
-        var query = betModel.find({ userid: userid }, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+    getBetsByUser: function getBetsByUser(userid, callback) {
+        var query = betModel.find({ userid: userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
     },
-    GetAllBets: function GetAllBets(callback) {
-        var query = betModel.find({}, 'rollNum nonce betTime selNum amount unit', { limit: 100 });
+    getAllBets: function getAllBets(callback) {
+        var query = betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
         query.sort({ betTime: -1 }).exec(callback);
+    },
+    getPayout: function getPayout(selNum) {
+        return selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
     }
+
 };
 
 var betModel = mongoose.model('Bet', betSchema);
@@ -1318,7 +1324,9 @@ var overunder = function overunder(io) {
                     u.nonce++;
 
                     //get lucky number
-                    var num = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    var rollNum = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    var payout = _betModel2.default.getPayout(clientBet.sn);
+                    var profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
                     var bet = new _betModel2.default({
                         userid: socket.user.userid,
                         userName: socket.user.userName,
@@ -1329,7 +1337,9 @@ var overunder = function overunder(io) {
                         selNum: clientBet.sn,
                         unit: clientBet.coinName,
                         betTime: new Date(),
-                        rollNum: num
+                        rollNum: rollNum,
+                        profit: profit,
+                        payout: payout
                     });
                     bet.save(function (err) {
                         if (err) {
@@ -1339,8 +1349,7 @@ var overunder = function overunder(io) {
                         }
                     });
                     //Todo: process bet's result here
-                    var payout = bet.selNum <= 49.5 ? 99 / bet.selNum : 99 / (99.99 - bet.selNum);
-                    var profit = GetProfit(bet.rollNum, bet.selNum, bet.amount, payout);
+
                     u.addProfit(clientBet.coinName, profit);
                     u.save(function (err) {
                         if (err) {
@@ -1353,7 +1362,7 @@ var overunder = function overunder(io) {
                     var result = {
                         userid: socket.user.userid,
                         userName: socket.user.userName,
-                        rollNum: num,
+                        rollNum: rollNum,
                         nonce: u.nonce,
                         betTime: bet.betTime,
                         selNum: bet.selNum,
@@ -1369,14 +1378,14 @@ var overunder = function overunder(io) {
         });
 
         socket.on('getMyBets', function () {
-            _betModel2.default.GetBetsByUser(socket.user.userid, function (err, bets) {
+            _betModel2.default.getBetsByUser(socket.user.userid, function (err, bets) {
                 if (err) return console.error('GetBetsByUser error:' + err);
                 socket.emit('getMyBets', bets);
             });
         });
 
         socket.on('getAllBets', function () {
-            _betModel2.default.GetAllBets(function (err, bets) {
+            _betModel2.default.getAllBets(function (err, bets) {
                 if (err) return console.error('getAllBets error:' + err);
                 socket.emit('getAllBets', bets);
             });
@@ -1543,7 +1552,7 @@ exports.default = config;
 module.exports = {
 	"name": "nodedice_server",
 	"description": "An open source dice game faucet built on node.js for BTC/NXT",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"keywords": [
 		"open source",
 		"node.js",
@@ -1561,7 +1570,7 @@ module.exports = {
 		"prod": "npm-run-all open:dist",
 		"open:src": "babel-node tools/srcServer.js",
 		"open:dist": "babel-node tools/distServer.js",
-		"run:dev": "nodemon dist/nodeDiceServer.js --watch dist",
+		"run:dev": "nodemon dev/nodeDiceServer.js --watch dev",
 		"run:prod": "pm2 start dist/nodeDiceServer.js",
 		"lint": "esw src --color",
 		"lint:watch": "npm run lint -- --watch"
