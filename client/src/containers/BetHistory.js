@@ -11,6 +11,8 @@ class BetHistory extends Component {
             allBets: [],
             highRollers: []
         };
+
+        this.addToHistory = this.addToHistory.bind(this);
     }
 
     componentDidMount() {
@@ -18,25 +20,25 @@ class BetHistory extends Component {
         socketEmit('getAllBets');
         socketOn('getAllBets', (bets) => {
             bets.forEach((bet) => {
-                self.addToHistory(self, bet);
+                self.addToHistory(bet);
             });
         });
         socketOn('allBets', (bet) => {
             self.addToHistory(bet);
         });
     }
-    addToHistory(self, bet) {
+    addToHistory(bet) {
         bet.betTime = moment(bet.betTime).format('MM-DD HH:mm:ss');
 
         //add bet to mybets list
-        if (bet.userid == self.props.user.userid) {
-            self.setState({ myBets: self.addToList(bet, self.state.myBets) });
+        if (bet.userid == this.props.user.userid) {
+            this.setState({ myBets: this.addToList(bet, this.state.myBets) });
         }
         //add bet to allbets list
-        self.setState({ allBets: self.addToList(bet, self.state.allBets) });
+        this.setState({ allBets: this.addToList(bet, this.state.allBets) });
         //add high rollers to the list
         if (bet.amount >= 0.001)
-            bet.setState({ highRollers: self.addToList(bet, self.state.highRollers) });
+            bet.setState({ highRollers: this.addToList(bet, this.state.highRollers) });
 
     }
 

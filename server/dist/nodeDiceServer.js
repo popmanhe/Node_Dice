@@ -1552,7 +1552,7 @@ exports.default = config;
 module.exports = {
 	"name": "nodedice_server",
 	"description": "An open source dice game faucet built on node.js for BTC/NXT",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"keywords": [
 		"open source",
 		"node.js",
