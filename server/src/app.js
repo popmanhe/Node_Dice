@@ -20,17 +20,11 @@ import http from 'https';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';
-// import crypto from 'crypto';
-import fs from 'fs';
+
 const app = express();
 
 /*require socket.io*/
-const options = {
-    key: fs.readFileSync('privatekey.key'),
-    cert: fs.readFileSync('certificate.cert')
-};
-//const credentials = crypto.createCredentials({ key: privateKey, cert: certificate });
-const server = http.createServer(options, app);
+const server = http.createServer(app);
 
 const io = socketio(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
  
@@ -55,7 +49,7 @@ routes(app);
 sockets(io);
 
 server.listen(config.port, function () {
-    console.log('Https server running on port ' + config.port);
+    console.log('Server running on port ' + config.port);
 });
 
 
