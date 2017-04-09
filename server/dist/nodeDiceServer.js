@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -77,15 +77,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _all = __webpack_require__(27);
+var _all = __webpack_require__(28);
 
 var _all2 = _interopRequireDefault(_all);
 
-var _development = __webpack_require__(28);
+var _development = __webpack_require__(29);
 
 var _development2 = _interopRequireDefault(_development);
 
-var _production = __webpack_require__(29);
+var _production = __webpack_require__(30);
 
 var _production2 = _interopRequireDefault(_production);
 
@@ -114,7 +114,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _mongoose = __webpack_require__(33);
+var _mongoose = __webpack_require__(34);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -373,13 +373,13 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _winston = __webpack_require__(35);
+var _winston = __webpack_require__(36);
 
 var _winston2 = _interopRequireDefault(_winston);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_winston2.default.transports.DailyRotateFile = __webpack_require__(36); /**
+_winston2.default.transports.DailyRotateFile = __webpack_require__(37); /**
                                                                                       * Copyright 2014 eRealm Info & Tech.
                                                                                       *
                                                                                       * Created by Ken on 8/08/2014
@@ -407,11 +407,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoinHelper = __webpack_require__(21);
+var _bitcoinHelper = __webpack_require__(22);
 
 var _bitcoinHelper2 = _interopRequireDefault(_bitcoinHelper);
 
-var _nxtHelper = __webpack_require__(23);
+var _nxtHelper = __webpack_require__(24);
 
 var _nxtHelper2 = _interopRequireDefault(_nxtHelper);
 
@@ -448,7 +448,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Faucet = __webpack_require__(17);
+var _Faucet = __webpack_require__(18);
 
 var _Faucet2 = _interopRequireDefault(_Faucet);
 
@@ -528,15 +528,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _s_common = __webpack_require__(25);
+var _s_common = __webpack_require__(26);
 
 var _s_common2 = _interopRequireDefault(_s_common);
 
-var _s_overunder = __webpack_require__(26);
+var _s_overunder = __webpack_require__(27);
 
 var _s_overunder2 = _interopRequireDefault(_s_overunder);
 
-var _s_chat = __webpack_require__(24);
+var _s_chat = __webpack_require__(25);
 
 var _s_chat2 = _interopRequireDefault(_s_chat);
 
@@ -596,16 +596,22 @@ module.exports = require("express-validator");
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("http");
+module.exports = require("fs");
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = require("socket.io");
+module.exports = require("https");
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports) {
+
+module.exports = require("socket.io");
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -631,11 +637,11 @@ var _bodyParser = __webpack_require__(10);
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _http = __webpack_require__(14);
+var _https = __webpack_require__(15);
 
-var _http2 = _interopRequireDefault(_http);
+var _https2 = _interopRequireDefault(_https);
 
-var _socket = __webpack_require__(15);
+var _socket = __webpack_require__(16);
 
 var _socket2 = _interopRequireDefault(_socket);
 
@@ -647,34 +653,12 @@ var _sockets = __webpack_require__(9);
 
 var _sockets2 = _interopRequireDefault(_sockets);
 
+var _fs = __webpack_require__(14);
+
+var _fs2 = _interopRequireDefault(_fs);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import cookieParser from 'cookie-parser';
-// import session from 'express-session';
-// import MongoConnect from 'connect-mongo';
-// import socketHandshake from 'socket.io-handshake';
-
-//favicon from 'serve-favicon'),
-var app = (0, _express2.default)();
-// const MongoStore = MongoConnect(session);
-//if (process.env.SITE_USER) {
-//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
-//}
-
-/*set up session for express*/
-// const sessionStore = new MongoStore(config.mongoStore);
-// app.use(cookieParser(config.cookieSecret));
-// app.use(session({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: config.cookieSecret,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: config.session.timeout //session will expire in 30 days
-//     }
-// }));
-
-/*require socket.io*/
 /**
  * Copyright 2017 Node Dice
  *
@@ -683,16 +667,26 @@ var app = (0, _express2.default)();
 
 //import newrelic from 'newrelic';
 //import cluster from 'cluster');
-var server = _http2.default.createServer(app);
-var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
+var app = (0, _express2.default)();
 
-/*Adding session to socket*/
-// io.use(socketHandshake({
-//     store: sessionStore, 
-//     key: 'connect.id', 
-//     secret: config.cookieSecret, 
-//     parser: cookieParser()
-// }));
+/*require socket.io*/
+
+// import crypto from 'crypto';
+
+// import cookieParser from 'cookie-parser';
+// import session from 'express-session';
+// import MongoConnect from 'connect-mongo';
+// import socketHandshake from 'socket.io-handshake';
+
+//favicon from 'serve-favicon'),
+var options = {
+    key: _fs2.default.readFileSync('privatekey.key'),
+    cert: _fs2.default.readFileSync('certificate.cert')
+};
+//const credentials = crypto.createCredentials({ key: privateKey, cert: certificate });
+var server = _https2.default.createServer(options, app);
+
+var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
 
 //config express in all environments
 app.disable('x-powered-by');
@@ -701,8 +695,8 @@ app.disable('x-powered-by');
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
 //Only used in development. In production, use nginx to serve static files
 if (false) {
-  app.use(_express2.default.static(_config2.default.clientRoot));
-  app.use((0, _compression2.default)({ threshold: 512 }));
+    app.use(_express2.default.static(_config2.default.clientRoot));
+    app.use((0, _compression2.default)({ threshold: 512 }));
 }
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
@@ -714,11 +708,11 @@ app.use((0, _expressValidator2.default)([]));
 (0, _sockets2.default)(io);
 
 server.listen(_config2.default.port, function () {
-  console.log('Server running on port ' + _config2.default.port);
+    console.log('Https Server running on port ' + _config2.default.port);
 });
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -728,11 +722,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _request = __webpack_require__(34);
+var _request = __webpack_require__(35);
 
 var _request2 = _interopRequireDefault(_request);
 
-var _faucetModel = __webpack_require__(20);
+var _faucetModel = __webpack_require__(21);
 
 var _faucetModel2 = _interopRequireDefault(_faucetModel);
 
@@ -767,7 +761,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -831,7 +825,7 @@ var betModel = mongoose.model('Bet', betSchema);
 exports.default = betModel;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -875,7 +869,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -949,7 +943,7 @@ var faucetModel = mongoose.model('Faucet', faucetSchema);
 exports.default = faucetModel;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -959,7 +953,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoin = __webpack_require__(31);
+var _bitcoin = __webpack_require__(32);
 
 var _bitcoin2 = _interopRequireDefault(_bitcoin);
 
@@ -995,7 +989,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1046,7 +1040,7 @@ exports.default = function (key, text) {
 //crypto lib for hmac function
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1088,7 +1082,7 @@ exports.default = {
 // import config from '../../config';
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1098,7 +1092,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _chatModel = __webpack_require__(19);
+var _chatModel = __webpack_require__(20);
 
 var _chatModel2 = _interopRequireDefault(_chatModel);
 
@@ -1136,7 +1130,7 @@ var chat = function chat(io) {
 exports.default = chat;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1257,7 +1251,7 @@ exports.default = function (io) {
     */
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1271,15 +1265,15 @@ var _userModel = __webpack_require__(2);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _betModel = __webpack_require__(18);
+var _betModel = __webpack_require__(19);
 
 var _betModel2 = _interopRequireDefault(_betModel);
 
-var _cryptoroll = __webpack_require__(22);
+var _cryptoroll = __webpack_require__(23);
 
 var _cryptoroll2 = _interopRequireDefault(_cryptoroll);
 
-var _lodash = __webpack_require__(32);
+var _lodash = __webpack_require__(33);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -1406,7 +1400,7 @@ var overunder = function overunder(io) {
 exports.default = overunder;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1420,7 +1414,7 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _package = __webpack_require__(30);
+var _package = __webpack_require__(31);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -1464,7 +1458,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1504,7 +1498,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1546,7 +1540,7 @@ var config = {
 exports.default = config;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1635,37 +1629,37 @@ module.exports = {
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("bitcoin");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("request");
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston-daily-rotate-file");
