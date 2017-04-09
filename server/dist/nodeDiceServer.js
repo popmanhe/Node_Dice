@@ -94,7 +94,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // default is development environment
 //console.log('process.env.socket: ' + process.env.SOCKET);
 // process.env.NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development');
-var config =  false ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
+var config =  true ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
 
 // Load app configuration
 exports.default = config;
@@ -700,7 +700,7 @@ app.disable('x-powered-by');
 //Add express's middlewares
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
 //Only used in development. In production, use nginx to serve static files
-if (true) {
+if (false) {
   app.use(_express2.default.static(_config2.default.clientRoot));
   app.use((0, _compression2.default)({ threshold: 512 }));
 }
@@ -1425,7 +1425,7 @@ var config = {
     cookieSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {
-        name:  false ? _package2.default.name + ' (' + _package2.default.version + ')' : _package2.default.name + ' [' + _package2.default.version + ']',
+        name:  true ? _package2.default.name + ' (' + _package2.default.version + ')' : _package2.default.name + ' [' + _package2.default.version + ']',
         version: _package2.default.version,
         description: _package2.default.description
     },

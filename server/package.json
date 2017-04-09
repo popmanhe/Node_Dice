@@ -19,7 +19,7 @@
     "prod": "npm-run-all open:dist",  
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
-    "run:dev": "nodemon dist/nodeDiceServer.js --watch dist",
+    "run:dev": "nodemon src/nodeDiceServer.js --watch src",
     "run:prod": "pm2 start dist/nodeDiceServer.js",
     "lint": "esw src --color",
     "lint:watch": "npm run lint -- --watch"

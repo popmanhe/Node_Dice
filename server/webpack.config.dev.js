@@ -18,7 +18,7 @@ module.exports = {
   entry: './src/app.js',
   target: 'node',
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'src'),
     filename: 'nodeDiceServer.js'
   },
   externals: nodeModules,
