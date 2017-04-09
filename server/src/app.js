@@ -55,7 +55,7 @@ routes(app);
 sockets(io);
 
 server.listen(config.port, function () {
-    console.log('Https Server running on port ' + config.port);
+    console.log('Https server running on port ' + config.port);
 });
 
 

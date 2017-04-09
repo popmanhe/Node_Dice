@@ -708,7 +708,7 @@ app.use((0, _expressValidator2.default)([]));
 (0, _sockets2.default)(io);
 
 server.listen(_config2.default.port, function () {
-    console.log('Https Server running on port ' + _config2.default.port);
+    console.log('Https server running on port ' + _config2.default.port);
 });
 
 /***/ }),
