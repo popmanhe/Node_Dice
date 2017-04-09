@@ -9,7 +9,7 @@ WORKDIR /usr/nodedice/
 RUN npm install pm2 -g
 #expose node server port
 EXPOSE  4000
-CMD ["pm2-docker", "dist/nodeDiceServer.js --watch"]
+CMD ["pm2-docker", "dist/nodeDiceServer.js --watch --ignore-watch='logs'"]
 
 
 
