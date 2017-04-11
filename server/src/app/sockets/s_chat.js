@@ -1,29 +1,33 @@
 ﻿import chatModel from '../Models/chatModel';
-// import logger from '../helper/logger';
+import logger from '../helper/logger';
 
 const chat = (io) => {
-
-
     io.on('connection', (socket) => {
-        socket.on('getChats', () => {
-            chatModel.GetChats((err, chats) => {
-                if (err) return console.error('getChats error:' + err);
+        socket.on('getChats', async () => {
+            try {
+                const chats = await chatModel.GetChats();
                 socket.emit('getChats', chats);
-            });
+            }
+            catch (err) {
+                logger.error(err);
+            }
         });
 
-        socket.on('sendChat', (chat) => {
+        socket.on('sendChat',async (chat) => {
             if (socket.user) {
                 chat.userName = socket.user.userName;
                 chat.timeStamp = new Date();
-                chatModel.AddChat(chat, (err) => {
-                    if (err) return console.error('sendChat error:' + err);
-                });
-                io.emit('recvChat', {
-                    userName: chat.userName, 
-                    timeStamp: chat.timeStamp,
-                    message: chat.message
-                });
+                try {
+                    await chatModel.AddChat(chat);
+                    io.emit('recvChat', {
+                        userName: chat.userName,
+                        timeStamp: chat.timeStamp,
+                        message: chat.message
+                    });
+                }
+                catch (err) {
+                    logger.error(err);
+                }
             }
         });
     });

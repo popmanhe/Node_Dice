@@ -20,7 +20,7 @@ import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';
-
+import logger from './app/helper/logger';
 const app = express();
 
 /*require socket.io*/
@@ -49,7 +49,7 @@ routes(app);
 sockets(io);
 
 server.listen(config.port, function () {
-    console.log('Server running on port ' + config.port);
+    logger.info('Server running on port ' + config.port);
 });
 
 

@@ -1,4 +1,15 @@
 {
-  "presets": ["env","es2015","stage-0"],
-  "ignore": ["node_modules"]
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "ignore": [
+    "node_modules"
+  ]
 }

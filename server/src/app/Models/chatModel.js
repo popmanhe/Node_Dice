@@ -13,16 +13,16 @@ const chatModel = mongoose.model('Chat', chatSchema);
 
 export default {
     Chat: chatModel,
-    GetChats: (callback) => { 
-        chatModel.find({},'userName timeStamp message').sort({timeStamp: -1}).limit(100).exec(callback);
+    GetChats: async () => {
+        return await chatModel.find({}, 'userName timeStamp message').sort({ timeStamp: -1 }).limit(100);
     },
-    AddChat: (chat, callback) =>{
+    AddChat: async (chat) => {
         const c = new chatModel({
             userName: chat.userName,
             timeStamp: chat.timeStamp,
             message: chat.message
         });
 
-        c.save(callback);
+        await c.save();
     }
 };

@@ -24,7 +24,7 @@ class LoginModal extends React.Component {
         socketOn('loggedUser', (result) => {
             if (result.error) {
                 this.props.setUser(null, false);
-                showNotification('', 'Wrong user name and password combination.', 'error');
+                showNotification('', result.error, 'error');
             }
             else {
                 this.props.setUser(result, true);

@@ -15,7 +15,16 @@ export default (state = initialState.user, action) => {
                     isLoggedIn: action.isLoggedIn
                 };
             else
-                return { ...state, isLoggedIn: action.isLoggedIn };
+                return {
+                    ...state,
+                    userName: null,
+                    userid: null,
+                    clientSalt: '',
+                    funds: null,
+                    nonce: 0,
+                    hashedServerSalt: '',
+                    isLoggedIn: false
+                };
         }
         case 'SIGNUP_USER':
             socketEmit('newUser', { userName: action.userName, password: action.password });

@@ -50,7 +50,7 @@
     "lru-cache": "^4.0.2",
     "method-override": "^2.3.8",
     "mongodb": "^2.2.25",
-    "mongoose": "^4.9.2",
+    "mongoose": "^4.9.4",
     "morgan": "^1.8.1",
     "nodemailer": "3.1.7",
     "request": "^2.81.0",
