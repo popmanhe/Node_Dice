@@ -72,12 +72,15 @@ class SignupForm extends React.Component {
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
             socketOn('newUser', (result) => {
-                 console.log(result);
+
                 if (result.error) {
-                    switch  (result.error.code)
-                    {
-                        case 11000: showNotification('User name exists', 'Choose different one.','error'); break;
-                        default: this.props.setUser(null, false); 
+                    switch (result.error.code) {
+                        case 11000:
+                            showNotification('User name exists', 'Choose different one.', 'error');
+                            break;
+                        default:
+                            showNotification('Error', result.error, 'error');
+                            this.props.setUser(null, false);
                     }
                 }
                 else {
@@ -87,7 +90,7 @@ class SignupForm extends React.Component {
 
         }
         else
-            showNotification('','Please check "I accept" before registering.','warning');
+            showNotification('', 'Please check "I accept" before registering.', 'warning');
     }
 
     clearData() {
@@ -136,9 +139,9 @@ class SignupForm extends React.Component {
                         </div>
                     </div>
                     <div className="form-group">
-                        
-                            <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-perspective btn-block">REGISTER</button>
-                       
+
+                        <button type="submit" onClick={this.onSignup} className="btn btn-warning btn-perspective btn-block">REGISTER</button>
+
                     </div>
                 </form>
             </div>

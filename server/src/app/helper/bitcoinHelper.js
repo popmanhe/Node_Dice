@@ -3,16 +3,22 @@ import config from '../../config';
 
 const client = new bitcoin.Client(config.bitcoin);
 export default {
-    GetNewAddress: (userid, callback) => {
-        client.getNewAddress(userid, callback);
+    GetNewAddress: (userid) => {
+       return new Promise(
+            (resovle, reject) => {
+                client.getNewAddress(userid, resovle, reject);
+            }
+        );
     },
-    GetBalance: (userid, callback) => {
+    GetBalance:
+    //(userid) => {
+    () => {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
         // if (process.env.NODE_ENV == "development")
         //     //In development, return 10 BTC for testing.
-            callback(null, 10);
+        return 10;
         // else
         //     client.getReceivedByAccount(userid, 2, callback);
     },

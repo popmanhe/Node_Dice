@@ -1,5 +1,5 @@
 /newrelic_agent.log
 node_modules
 #dist
-dist/logs/*.log
+dist/logs
 dev

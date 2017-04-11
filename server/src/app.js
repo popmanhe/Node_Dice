@@ -20,38 +20,14 @@ import http from 'http';
 import socketio from 'socket.io';
 import routes from './app/routes';
 import sockets from './app/sockets/';
-
+import logger from './app/helper/logger';
 const app = express();
-// const MongoStore = MongoConnect(session);
-//if (process.env.SITE_USER) {
-//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
-//}
 
-/*set up session for express*/
-// const sessionStore = new MongoStore(config.mongoStore);
-// app.use(cookieParser(config.cookieSecret));
-// app.use(session({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: config.cookieSecret,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: config.session.timeout //session will expire in 30 days
-//     }
-// }));
- 
 /*require socket.io*/
 const server = http.createServer(app);
-const io = socketio(server, {cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true});
 
-/*Adding session to socket*/
-// io.use(socketHandshake({
-//     store: sessionStore, 
-//     key: 'connect.id', 
-//     secret: config.cookieSecret, 
-//     parser: cookieParser()
-// }));
-
+const io = socketio(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
+ 
 //config express in all environments
 app.disable('x-powered-by');
 
@@ -73,7 +49,7 @@ routes(app);
 sockets(io);
 
 server.listen(config.port, function () {
-    console.log('Server running on port ' + config.port);
+    logger.info('Server running on port ' + config.port);
 });
 
 

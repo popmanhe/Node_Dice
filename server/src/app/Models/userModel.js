@@ -79,7 +79,7 @@ userSchema.methods.setDepositAddr = function (coinName, addr) {
 
 //Static methods
 userSchema.statics = {
-    CreateNewUser: (userName, password, callback) => {
+    CreateNewUser: async (userName, password) => {
         password = crypto.createHash('sha512').update(password).digest('hex');
         let user = new userModel(
             {
@@ -103,83 +103,48 @@ userSchema.statics = {
                 }]
             });
 
-        user.save(err => {
-            if (err) {
-                callback(err, null);
-                // console.error('Saving user error: ' + err);
-            }
-            else {
-                callback(null, user);
-            }
-        });
+        return await user.save();
     },
-    GetUserById: (userid, fields, callback) => {
-        userModel.findOne({ _id: userid }, fields, callback);
+    GetUserById: async (userid, fields) => {
+        return await userModel.findOne({ _id: userid }, fields);
     },
-    SaveClientSalt: (userid, clientSalt, callback) => {
-        userModel.findOne({ _id: userid }, "clientSalt serverSalt", (err, u) => {
-            if (err)
-                callback({ error: err }, null);
-            else {
+    SaveClientSalt: async (userid, clientSalt) => {
 
-                let _clientSalt, _serverSalt;
-                _clientSalt = u.clientSalt;
-                _serverSalt = u.serverSalt;
+        let u = await userModel.findOne({ _id: userid }, "clientSalt serverSalt");
+        let _clientSalt, _serverSalt;
+        _clientSalt = u.clientSalt;
+        _serverSalt = u.serverSalt;
 
-                u.clientSalt = clientSalt;
-                u.serverSalt = uuid.v4();
-                u.nonce = 0;
-                u.save();
-                callback(null, { clientSalt: _clientSalt, serverSalt: _serverSalt });
-            }
-        });
+        u.clientSalt = clientSalt;
+        u.serverSalt = uuid.v4();
+        u.nonce = 0;
+        await u.save();
+        return { clientSalt: _clientSalt, serverSalt: _serverSalt };
+
     },
-    GetNewAddress: (userid, coinName, callback) => {
+    GetNewAddress: async (userid, coinName) => {
         let helper = coinsConfig[coinName];
-        helper.GetNewAddress(userid, (err, addr) => {
-            if (err) {
-                callback(err, null);
-            }
-            else {
-                userModel.findOne({ _id: userid }, "funds", (err, u) => {
-                    if (err) { callback(err, null); }
-                    else {
-                        u.setDepositAddr('BTC', addr);
-                        u.save();
-                        callback(err, { address: addr });
-                    }
-                });
-            }
-        });
+        const addr = await helper.GetNewAddress(userid);
 
+        let u = await userModel.findOne({ _id: userid }, "funds");
+        u.setDepositAddr('BTC', addr);
+        await u.save();
+        return addr;
     },
-    GetBalance: (userid, coinName, callback) => {
+    GetBalance: async (userid, coinName) => {
         const helper = coinsConfig[coinName];
+        const amount = helper.GetBalance(userid);
 
-        helper.GetBalance(userid, (err, amount) => {
-            userModel.findOne({ _id: userid }, "funds", (err, u) => {
-                if (err) { callback(err, null); }
-                else {
-                    u.setDeposit(coinName, amount);
-                    u.save();
+        const u = await userModel.findOne({ _id: userid }, "funds");
 
-                    callback(err,  u.getBalance(coinName));
-                }
-            });
-        });
+        u.setDeposit(coinName, amount);
+        await u.save();
+
+        return u.getBalance(coinName);
     },
-    LoginUser: (userName, password, callback) => {
+    LoginUser: async (userName, password) => {
         password = crypto.createHash('sha512').update(password).digest('hex');
-        userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds", (err, u) => {
-            if (err) { callback(err, null); }
-            else {
-                if (u) {
-                    callback(null, u);
-                }
-                else
-                    callback('user not found', null);
-            }
-        });
+        return await userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds");
     }
 };
 

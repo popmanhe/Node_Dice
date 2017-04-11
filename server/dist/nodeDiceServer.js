@@ -656,23 +656,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 //favicon from 'serve-favicon'),
 var app = (0, _express2.default)();
-// const MongoStore = MongoConnect(session);
-//if (process.env.SITE_USER) {
-//    app.use(express.basicAuth(process.env.SITE_USER, process.env.SITE_PASS));
-//}
-
-/*set up session for express*/
-// const sessionStore = new MongoStore(config.mongoStore);
-// app.use(cookieParser(config.cookieSecret));
-// app.use(session({
-//     resave: true,
-//     saveUninitialized: true,
-//     secret: config.cookieSecret,
-//     store: sessionStore,
-//     cookie: {
-//       maxAge: config.session.timeout //session will expire in 30 days
-//     }
-// }));
 
 /*require socket.io*/
 /**
@@ -684,15 +667,8 @@ var app = (0, _express2.default)();
 //import newrelic from 'newrelic';
 //import cluster from 'cluster');
 var server = _http2.default.createServer(app);
-var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
 
-/*Adding session to socket*/
-// io.use(socketHandshake({
-//     store: sessionStore, 
-//     key: 'connect.id', 
-//     secret: config.cookieSecret, 
-//     parser: cookieParser()
-// }));
+var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
 
 //config express in all environments
 app.disable('x-powered-by');

@@ -26,18 +26,19 @@ const betSchema = new mongoose.Schema({
 }, { autoIndex: config.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
-    getBetsByUser: function (userid, callback) {
-        const query = betModel.find({ userid: userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
-        query.sort({ betTime: -1 }).exec(callback);
+    getBetsByUser: async (userid) => {
+        return await betModel.find({ userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout')
+            .sort({ betTime: -1 }).limit(100);
+
     },
-    getAllBets: function (callback) {
-        const query = betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
-        query.sort({ betTime: -1 }).exec(callback);
+    getAllBets: async () => {
+        return await betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout')
+        .sort({ betTime: -1 }).limit(100);
     },
-    getPayout: function(selNum){
-      return  selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
+    getPayout: function (selNum) {
+        return selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
     }
-    
+
 };
 
 const betModel = mongoose.model('Bet', betSchema);

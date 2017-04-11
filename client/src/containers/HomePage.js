@@ -23,7 +23,9 @@ const HomePage = () => {
                                     <div className="tab-pane fade active in" id="rollDice">
                                         <div className="panel-body">
                                             <OUBet />
+                                            <label>Source code: <a href="https://github.com/popmanhe/Node_Dice" target="_blank">https://github.com/popmanhe/Node_Dice</a></label>
                                         </div>
+
                                     </div>
                                     <div className="tab-pane fade" id="fairness">
                                         <div className="panel-body">
@@ -38,12 +40,12 @@ const HomePage = () => {
                         </div>
                     </div>
                 </div>
-                 <BetHistory />
+                <BetHistory />
             </div>
             <div className="col-sm-3 col-md-3 col-lg-3">
                 <Chat />
             </div>
-          
+
         </div>
     );
 };

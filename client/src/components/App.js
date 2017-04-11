@@ -1,8 +1,15 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Login from '../containers/UserLogin';
+import { socketOn } from '../utils/socketIoHelper';
 
 class App extends React.Component {
+    componentDidMount() {
+        socketOn('invalidUser', () => {
+            this.props.userNotLogin();
+        });
+    }
     render() {
         const p = this.props;
         return (
@@ -121,7 +128,11 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-    children: PropTypes.element
+    children: PropTypes.element,
+    userNotLogin: PropTypes.func
 };
+const mapDispatchToProps = dispatch => ({
+    userNotLogin: () => dispatch({ type: 'SET_USER', user: null }),
+});
+export default connect(null, mapDispatchToProps)(App);
 
-export default App;
