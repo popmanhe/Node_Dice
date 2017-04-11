@@ -1,0 +1,5 @@
+apps:
+    - script: 'dist/nodeDiceServer.js'
+      name: 'nodedice_server'
+      watch: true
+      ignore_watch: ['node_modules', 'logs']
