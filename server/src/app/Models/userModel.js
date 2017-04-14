@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
-userSchema.methods.getFund = function (coinName) {
+userSchema.methods.getFund = (coinName) => {
     for (let i in this.funds) {
         let fund = this.funds[i];
         if (fund.coinName == coinName)
@@ -40,7 +40,7 @@ userSchema.methods.getFund = function (coinName) {
     return null;
 };
 
-userSchema.methods.getBalance = function (coinName) {
+userSchema.methods.getBalance = (coinName) => {
 
     let fund = this.getFund(coinName);
     if (fund)
@@ -49,7 +49,7 @@ userSchema.methods.getBalance = function (coinName) {
     return 0;
 };
 
-userSchema.methods.addProfit = function (coinName, profit) {
+userSchema.methods.addProfit = (coinName, profit) => {
 
     let fund = this.getFund(coinName);
     if (fund) {
@@ -58,7 +58,7 @@ userSchema.methods.addProfit = function (coinName, profit) {
     }
 };
 
-userSchema.methods.setDeposit = function (coinName, amount) {
+userSchema.methods.setDeposit = (coinName, amount) => {
 
     let fund = this.getFund(coinName);
     if (fund && amount) {
@@ -68,7 +68,15 @@ userSchema.methods.setDeposit = function (coinName, amount) {
     return fund;
 };
 
-userSchema.methods.setDepositAddr = function (coinName, addr) {
+userSchema.methods.getDepositAddr = async (coinName) => {
+    let helper = coinsConfig[coinName];
+    const addr = await helper.GetNewAddress(this._id, coinName);
+
+    this.setDepositAddr(coinName, addr);
+    return addr;
+};
+
+userSchema.methods.setDepositAddr = (coinName, addr) => {
 
     let fund = this.getFund(coinName);
     if (fund) {
@@ -124,10 +132,8 @@ userSchema.statics = {
     },
     GetNewAddress: async (userid, coinName) => {
         let helper = coinsConfig[coinName];
-        const addr = await helper.GetNewAddress(userid);
-
         let u = await userModel.findOne({ _id: userid }, "funds");
-        u.setDepositAddr('BTC', addr);
+        u.getDepositAddr('BTC');
         await u.save();
         return addr;
     },

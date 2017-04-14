@@ -5,7 +5,7 @@
   "keywords": [
     "open source",
     "node.js",
-    "nodejs dice btc faucet"
+    "nodejs dice bitcoin btc faucet"
   ],
   "homepage": "https://github.com/popmanhe/node_dice",
   "author": "Neo He",
@@ -15,8 +15,8 @@
   },
   "scripts": {
     "start": "npm-run-all --parallel open:src run:dev lint:watch",
-    "build": "npm-run-all open:dist run:prod",  
-    "prod": "npm-run-all open:dist",  
+    "build": "npm-run-all open:dist run:prod",
+    "prod": "npm-run-all open:dist",
     "open:src": "babel-node tools/srcServer.js",
     "open:dist": "babel-node tools/distServer.js",
     "run:dev": "nodemon dev/nodeDiceServer.js --watch dev",
@@ -34,6 +34,7 @@
   "license": "MIT BSD",
   "dependencies": {
     "bitcoin": "^3.0.1",
+    "blockchain.info": "^2.6.0",
     "body-parser": "^1.16.0",
     "bson": "^1.0.4",
     "compression": "^1.6.2",

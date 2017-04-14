@@ -1,7 +1,17 @@
 {
   "name": "nodedice_client",
   "version": "2.0.3",
-  "description": "",
+   "keywords": [
+    "open source",
+    "node.js",
+    "nodejs dice bitcoin btc faucet"
+  ],
+  "homepage": "https://github.com/popmanhe/node_dice",
+  "author": "Neo He",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/popmanhe/node_dice"
+  },
   "engines": {
     "npm": ">=3"
   },
@@ -29,7 +39,6 @@
     "open:cover": "npm run test:cover && open coverage/lcov-report/index.html",
     "analyze-bundle": "babel-node ./tools/analyzeBundle.js"
   },
-  "author": "Neo He",
   "license": "MIT",
   "dependencies": {
     "cookieparser": "0.1.0",
