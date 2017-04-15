@@ -19,8 +19,8 @@ const config = {
         host: 'rpc.blockchain.info',
         port: 443,
         ssl: true,
-        user: 'your identification',
-        pass: 'your password'
+        user: process.env.bitcoinUser,
+        pass: process.env.bitcoinPwd
     },
     faucet:
     {
