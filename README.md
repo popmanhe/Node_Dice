@@ -1,5 +1,5 @@
-Demo site: [http://ccroll.com](http://ccroll.com)
-Donation: 16nebJYitZ7FMXbyDbC16bcZrEnuciyac9
+<p>Demo site: [http://ccroll.com](http://ccroll.com) </p>
+<p>Donation: <strong>16nebJYitZ7FMXbyDbC16bcZrEnuciyac9</strong></p>
 The site is built on 
 <ul>
 <li>Backend: node.js + socket.io + mongodb</li>
