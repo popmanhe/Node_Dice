@@ -1,4 +1,4 @@
-<p>Demo site: [http://ccroll.com](http://ccroll.com) </p>
+<p>Demo site: http://ccroll.com</p>
 <p>Donation: <strong>16nebJYitZ7FMXbyDbC16bcZrEnuciyac9</strong></p>
 The site is built on 
 <ul>
