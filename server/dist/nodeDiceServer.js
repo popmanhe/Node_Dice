@@ -94,268 +94,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // default is development environment
 //console.log('process.env.socket: ' + process.env.SOCKET);
 // process.env.NODE_ENV = JSON.stringify(process.env.NODE_ENV || 'development');
-var config =  true ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
+const config =  true ? Object.assign(_all2.default, _production2.default) : Object.assign(_all2.default, _development2.default);
 
 // Load app configuration
 exports.default = config;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _config = __webpack_require__(0);
-
-var _config2 = _interopRequireDefault(_config);
-
-var _mongoose = __webpack_require__(33);
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//   ttl = require('mongoose-ttl');
-/**
- * Copyright 2014 Node Dice
- *
- * Created by Neo on 2014/11/27.
- */
-
-_mongoose2.default.connect(_config2.default.mongodb.hostaddress + '/' + _config2.default.mongodb.dbname); //connect to the mongodb driver.
-
-//request the config files.
-var db = _mongoose2.default.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-
-exports.default = {
-  db: db,
-  mongoose: _mongoose2.default
-};
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _dbConnect = __webpack_require__(1);
-
-var _dbConnect2 = _interopRequireDefault(_dbConnect);
-
-var _config = __webpack_require__(0);
-
-var _config2 = _interopRequireDefault(_config);
-
-var _uuid = __webpack_require__(7);
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
-var _coinsConfig = __webpack_require__(5);
-
-var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
-
-var _crypto = __webpack_require__(3);
-
-var _crypto2 = _interopRequireDefault(_crypto);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// import logger from '../helper/logger';
-var mongoose = _dbConnect2.default.mongoose; /**
-                                              * Copyright 2017 Node Dice
-                                              *
-                                              * Created by Neo on 2017/01/19.
-                                              */
-
-mongoose.Promise = global.Promise;
-/*view models*/
-/*user schema*/
-var userSchema = new mongoose.Schema({
-    userName: { type: String, index: { unique: true } },
-    password: { type: String },
-    clientSalt: String,
-    serverSalt: String,
-    nonce: Number,
-    createTime: { type: Date },
-    funds: [{
-        coinName: String,
-        depositAmount: Number,
-        depositAddress: String,
-        withdrawAddress: String,
-        withdrawAmount: Number,
-        profit: Number
-    }]
-}, { autoIndex: _config2.default.mongodb.autoIndex });
-//Instance methods
-userSchema.methods.getFund = function (coinName) {
-    for (var i in this.funds) {
-        var fund = this.funds[i];
-        if (fund.coinName == coinName) return fund;
-    }
-    return null;
-};
-
-userSchema.methods.getBalance = function (coinName) {
-
-    var fund = this.getFund(coinName);
-    if (fund) return fund.depositAmount - fund.withdrawAmount + fund.profit;
-
-    return 0;
-};
-
-userSchema.methods.addProfit = function (coinName, profit) {
-
-    var fund = this.getFund(coinName);
-    if (fund) {
-        fund.profit += profit;
-        return fund;
-    }
-};
-
-userSchema.methods.setDeposit = function (coinName, amount) {
-
-    var fund = this.getFund(coinName);
-    if (fund && amount) {
-        fund.depositAmount = amount;
-    }
-
-    return fund;
-};
-
-userSchema.methods.setDepositAddr = function (coinName, addr) {
-
-    var fund = this.getFund(coinName);
-    if (fund) {
-        fund.depositAddress = addr;
-        return fund;
-    }
-};
-
-//Static methods
-userSchema.statics = {
-    CreateNewUser: function CreateNewUser(userName, password, callback) {
-        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
-        var user = new userModel({
-            userName: userName,
-            password: password,
-            serverSalt: _uuid2.default.v4(),
-            clientSalt: _uuid2.default.v4(),
-            nonce: 0,
-            createTime: new Date(),
-            funds: [{
-                coinName: 'BTC',
-                depositAddress: '', depositAmount: 0,
-                withdrawAddress: '', withdrawAmount: 0,
-                profit: 0
-            }, {
-                coinName: 'NXT',
-                depositAddress: '', depositAmount: 0,
-                withdrawAddress: '', withdrawAmount: 0,
-                profit: 0
-            }]
-        });
-
-        user.save(function (err) {
-            if (err) {
-                callback(err, null);
-                // console.error('Saving user error: ' + err);
-            } else {
-                callback(null, user);
-            }
-        });
-    },
-    GetUserById: function GetUserById(userid, fields, callback) {
-        userModel.findOne({ _id: userid }, fields, callback);
-    },
-    SaveClientSalt: function SaveClientSalt(userid, clientSalt, callback) {
-        userModel.findOne({ _id: userid }, "clientSalt serverSalt", function (err, u) {
-            if (err) callback({ error: err }, null);else {
-
-                var _clientSalt = void 0,
-                    _serverSalt = void 0;
-                _clientSalt = u.clientSalt;
-                _serverSalt = u.serverSalt;
-
-                u.clientSalt = clientSalt;
-                u.serverSalt = _uuid2.default.v4();
-                u.nonce = 0;
-                u.save();
-                callback(null, { clientSalt: _clientSalt, serverSalt: _serverSalt });
-            }
-        });
-    },
-    GetNewAddress: function GetNewAddress(userid, coinName, callback) {
-        var helper = _coinsConfig2.default[coinName];
-        helper.GetNewAddress(userid, function (err, addr) {
-            if (err) {
-                callback(err, null);
-            } else {
-                userModel.findOne({ _id: userid }, "funds", function (err, u) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        u.setDepositAddr('BTC', addr);
-                        u.save();
-                        callback(err, { address: addr });
-                    }
-                });
-            }
-        });
-    },
-    GetBalance: function GetBalance(userid, coinName, callback) {
-        var helper = _coinsConfig2.default[coinName];
-
-        helper.GetBalance(userid, function (err, amount) {
-            userModel.findOne({ _id: userid }, "funds", function (err, u) {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    u.setDeposit(coinName, amount);
-                    u.save();
-
-                    callback(err, u.getBalance(coinName));
-                }
-            });
-        });
-    },
-    LoginUser: function LoginUser(userName, password, callback) {
-        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
-        userModel.findOne({ userName: userName, password: password }, "_id userName serverSalt clientSalt nonce funds", function (err, u) {
-            if (err) {
-                callback(err, null);
-            } else {
-                if (u) {
-                    callback(null, u);
-                } else callback('user not found', null);
-            }
-        });
-    }
-};
-
-var userModel = mongoose.model('User', userSchema);
-
-/*exports models*/
-exports.default = userModel;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = require("crypto");
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -397,6 +142,228 @@ exports.default = new _winston2.default.Logger({
 });
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _mongoose = __webpack_require__(33);
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//   ttl = require('mongoose-ttl');
+/**
+ * Copyright 2014 Node Dice
+ *
+ * Created by Neo on 2014/11/27.
+ */
+
+_mongoose2.default.connect(_config2.default.mongodb.hostaddress + '/' + _config2.default.mongodb.dbname, { config: { autoIndex: "production" === 'development' } }); //connect to the mongodb driver.
+
+//request the config files.
+const db = _mongoose2.default.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+exports.default = {
+  db,
+  mongoose: _mongoose2.default
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _dbConnect = __webpack_require__(2);
+
+var _dbConnect2 = _interopRequireDefault(_dbConnect);
+
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _uuid = __webpack_require__(7);
+
+var _uuid2 = _interopRequireDefault(_uuid);
+
+var _coinsConfig = __webpack_require__(5);
+
+var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
+
+var _crypto = __webpack_require__(4);
+
+var _crypto2 = _interopRequireDefault(_crypto);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import logger from '../helper/logger';
+const mongoose = _dbConnect2.default.mongoose; /**
+                                                * Copyright 2017 Node Dice
+                                                *
+                                                * Created by Neo on 2017/01/19.
+                                                */
+
+mongoose.Promise = global.Promise;
+/*view models*/
+/*user schema*/
+const userSchema = new mongoose.Schema({
+    userName: { type: String, index: { unique: true } },
+    password: { type: String },
+    clientSalt: String,
+    serverSalt: String,
+    nonce: Number,
+    createTime: { type: Date },
+    funds: [{
+        coinName: String,
+        depositAmount: Number,
+        depositAddress: String,
+        withdrawAddress: String,
+        withdrawAmount: Number,
+        profit: Number
+    }]
+}, { autoIndex: _config2.default.mongodb.autoIndex });
+//Instance methods
+userSchema.methods.getFund = function (coinName) {
+    for (let i in this.funds) {
+        let fund = this.funds[i];
+        if (fund.coinName == coinName) return fund;
+    }
+    return null;
+};
+
+userSchema.methods.getBalance = function (coinName) {
+
+    let fund = this.getFund(coinName);
+    if (fund) return fund.depositAmount - fund.withdrawAmount + fund.profit;
+
+    return 0;
+};
+
+userSchema.methods.addProfit = function (coinName, profit) {
+
+    let fund = this.getFund(coinName);
+    if (fund) {
+        fund.profit += profit;
+        return fund;
+    }
+};
+
+userSchema.methods.setDeposit = function (coinName, amount) {
+
+    let fund = this.getFund(coinName);
+    if (fund && amount) {
+        fund.depositAmount = amount;
+    }
+
+    return fund;
+};
+
+userSchema.methods.setDepositAddr = function (coinName, addr) {
+
+    let fund = this.getFund(coinName);
+    if (fund) {
+        fund.depositAddress = addr;
+        return fund;
+    }
+};
+
+//Static methods
+userSchema.statics = {
+    CreateNewUser: async (userName, password) => {
+        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
+        let user = new userModel({
+            userName: userName,
+            password: password,
+            serverSalt: _uuid2.default.v4(),
+            clientSalt: _uuid2.default.v4(),
+            nonce: 0,
+            createTime: new Date(),
+            funds: [{
+                coinName: 'BTC',
+                depositAddress: '', depositAmount: 0,
+                withdrawAddress: '', withdrawAmount: 0,
+                profit: 0
+            }, {
+                coinName: 'NXT',
+                depositAddress: '', depositAmount: 0,
+                withdrawAddress: '', withdrawAmount: 0,
+                profit: 0
+            }]
+        });
+
+        return await user.save();
+    },
+    GetUserById: async (userid, fields) => {
+        return await userModel.findOne({ _id: userid }, fields);
+    },
+    SaveClientSalt: async (userid, clientSalt) => {
+
+        let u = await userModel.findOne({ _id: userid }, "clientSalt serverSalt");
+        let _clientSalt, _serverSalt;
+        _clientSalt = u.clientSalt;
+        _serverSalt = u.serverSalt;
+
+        u.clientSalt = clientSalt;
+        u.serverSalt = _uuid2.default.v4();
+        u.nonce = 0;
+        await u.save();
+        return { clientSalt: _clientSalt, serverSalt: _serverSalt };
+    },
+    GetNewAddress: async (userid, coinName) => {
+        let helper = _coinsConfig2.default[coinName];
+        const addr = await helper.GetNewAddress(userid);
+
+        let u = await userModel.findOne({ _id: userid }, "funds");
+        u.setDepositAddr('BTC', addr);
+        await u.save();
+        return addr;
+    },
+    GetBalance: async (userid, coinName) => {
+        const helper = _coinsConfig2.default[coinName];
+        const amount = helper.GetBalance(userid);
+
+        const u = await userModel.findOne({ _id: userid }, "funds");
+
+        u.setDeposit(coinName, amount);
+        await u.save();
+
+        return u.getBalance(coinName);
+    },
+    LoginUser: async (userName, password) => {
+        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
+        return await userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds");
+    }
+};
+
+const userModel = mongoose.model('User', userSchema);
+
+/*exports models*/
+exports.default = userModel;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = require("crypto");
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -420,7 +387,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     'BTC': _bitcoinHelper2.default,
     'NXT': _nxtHelper2.default,
-    getCoinNames: function getCoinNames() {
+    getCoinNames: function () {
         return [{ coinName: 'BTC', min: 0.00000001, max: 1 }, { coinName: 'NXT', min: 1, max: 1000 }];
     }
 };
@@ -452,7 +419,7 @@ var _Faucet = __webpack_require__(17);
 
 var _Faucet2 = _interopRequireDefault(_Faucet);
 
-var _logger = __webpack_require__(4);
+var _logger = __webpack_require__(1);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -466,16 +433,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Created by Neo on 03/20/2017
  */
 
-exports.default = function (app) {
+exports.default = app => {
 
     //  const seo_title = 'bit coin btc nxt altcoin dice game';
-    app.use(function (req, res, next) {
+    app.use((req, res, next) => {
         _logger2.default.info(new Date() + ' Request: ', req.originalUrl);
         next();
     });
 
     // default page
-    app.get('/', function (req, res) {
+    app.get('/', (req, res) => {
         res.send('hello node dice');
     });
 
@@ -502,8 +469,8 @@ exports.default = function (app) {
     // });
 
     //verify the response and return new balance if succeeded.
-    app.post('/reCaptCha', function (req, res) {
-        _Faucet2.default.VerifyResponse(req.session.userid, req.body.g_recaptcha_response, function (err, result) {
+    app.post('/reCaptCha', (req, res) => {
+        _Faucet2.default.VerifyResponse(req.session.userid, req.body.g_recaptcha_response, (err, result) => {
             if (err) {
                 res.json(err);
             } else {
@@ -544,7 +511,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _logger = __webpack_require__(4);
+var _logger = __webpack_require__(1);
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -558,10 +525,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //         return next();
 // };
 
-exports.default = function (io) {
+exports.default = io => {
     _logger2.default.info("Web socket is enabled for following domain(s): " + _config2.default.origins);
     io.origins(_config2.default.origins);
-    // io.use(socketSession());
 
     (0, _s_common2.default)(io);
     (0, _s_overunder2.default)(io);
@@ -647,17 +613,12 @@ var _sockets = __webpack_require__(9);
 
 var _sockets2 = _interopRequireDefault(_sockets);
 
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import cookieParser from 'cookie-parser';
-// import session from 'express-session';
-// import MongoConnect from 'connect-mongo';
-// import socketHandshake from 'socket.io-handshake';
-
-//favicon from 'serve-favicon'),
-var app = (0, _express2.default)();
-
-/*require socket.io*/
 /**
  * Copyright 2017 Node Dice
  *
@@ -666,9 +627,19 @@ var app = (0, _express2.default)();
 
 //import newrelic from 'newrelic';
 //import cluster from 'cluster');
-var server = _http2.default.createServer(app);
+const app = (0, _express2.default)();
 
-var io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
+/*require socket.io*/
+
+// import cookieParser from 'cookie-parser';
+// import session from 'express-session';
+// import MongoConnect from 'connect-mongo';
+// import socketHandshake from 'socket.io-handshake';
+
+//favicon from 'serve-favicon'),
+const server = _http2.default.createServer(app);
+
+const io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
 
 //config express in all environments
 app.disable('x-powered-by');
@@ -690,7 +661,7 @@ app.use((0, _expressValidator2.default)([]));
 (0, _sockets2.default)(io);
 
 server.listen(_config2.default.port, function () {
-  console.log('Server running on port ' + _config2.default.port);
+  _logger2.default.info('Server running on port ' + _config2.default.port);
 });
 
 /***/ }),
@@ -719,7 +690,7 @@ var _config2 = _interopRequireDefault(_config);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    VerifyResponse: function VerifyResponse(userid, response, callback) {
+    VerifyResponse: function (userid, response, callback) {
 
         _request2.default.post({
             url: 'https://www.google.com/recaptcha/api/siteverify',
@@ -729,8 +700,8 @@ exports.default = {
             },
             method: 'POST',
             proxy: _config2.default.faucet.proxy
-        }, function (err, httpResponse, body) {
-            var re = JSON.parse(body);
+        }, (err, httpResponse, body) => {
+            let re = JSON.parse(body);
             if (re.success) {
                 _faucetModel2.default.GetPay(userid, function (err, result) {
                     callback(err, result);
@@ -753,7 +724,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _dbConnect = __webpack_require__(1);
+var _dbConnect = __webpack_require__(2);
 
 var _dbConnect2 = _interopRequireDefault(_dbConnect);
 
@@ -769,10 +740,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Created by Neo on 2017/02/24.
  */
 
-var mongoose = _dbConnect2.default.mongoose;
+const mongoose = _dbConnect2.default.mongoose;
 //const db = dbConnect.db;
 /*bet schema*/
-var betSchema = new mongoose.Schema({
+const betSchema = new mongoose.Schema({
     userid: String,
     userName: String,
     clientSalt: String,
@@ -788,21 +759,19 @@ var betSchema = new mongoose.Schema({
 }, { autoIndex: _config2.default.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
-    getBetsByUser: function getBetsByUser(userid, callback) {
-        var query = betModel.find({ userid: userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
-        query.sort({ betTime: -1 }).exec(callback);
+    getBetsByUser: async userid => {
+        return await betModel.find({ userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
     },
-    getAllBets: function getAllBets(callback) {
-        var query = betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout', { limit: 100 });
-        query.sort({ betTime: -1 }).exec(callback);
+    getAllBets: async () => {
+        return await betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
     },
-    getPayout: function getPayout(selNum) {
+    getPayout: function (selNum) {
         return selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
     }
 
 };
 
-var betModel = mongoose.model('Bet', betSchema);
+const betModel = mongoose.model('Bet', betSchema);
 
 exports.default = betModel;
 
@@ -817,36 +786,36 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _dbConnect = __webpack_require__(1);
+var _dbConnect = __webpack_require__(2);
 
 var _dbConnect2 = _interopRequireDefault(_dbConnect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mongoose = _dbConnect2.default.mongoose;
+const mongoose = _dbConnect2.default.mongoose;
 mongoose.Promise = global.Promise;
 /*chat schema*/
-var chatSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
     userName: String,
     timeStamp: { type: Date, expires: 60 * 60 * 24 * 7 }, //msg expired in a week
     message: String
 });
 
-var chatModel = mongoose.model('Chat', chatSchema);
+const chatModel = mongoose.model('Chat', chatSchema);
 
 exports.default = {
     Chat: chatModel,
-    GetChats: function GetChats(callback) {
-        chatModel.find({}, 'userName timeStamp message').sort({ timeStamp: -1 }).limit(100).exec(callback);
+    GetChats: async () => {
+        return await chatModel.find({}, 'userName timeStamp message').sort({ timeStamp: -1 }).limit(100);
     },
-    AddChat: function AddChat(chat, callback) {
-        var c = new chatModel({
+    AddChat: async chat => {
+        const c = new chatModel({
             userName: chat.userName,
             timeStamp: chat.timeStamp,
             message: chat.message
         });
 
-        c.save(callback);
+        await c.save();
     }
 };
 
@@ -861,7 +830,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _dbConnect = __webpack_require__(1);
+var _dbConnect = __webpack_require__(2);
 
 var _dbConnect2 = _interopRequireDefault(_dbConnect);
 
@@ -869,27 +838,27 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _userModel = __webpack_require__(2);
+var _userModel = __webpack_require__(3);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var mongoose = _dbConnect2.default.mongoose;
+const mongoose = _dbConnect2.default.mongoose;
 
-var faucetSchema = new mongoose.Schema({
+const faucetSchema = new mongoose.Schema({
     lastTime: Date,
     userid: String
 });
 /*Static methods*/
 faucetSchema.statics = {
-    GetPay: function GetPay(userid, callback) {
-        _userModel2.default.GetUserById(userid, 'funds', function (err, u) {
+    GetPay: (userid, callback) => {
+        _userModel2.default.GetUserById(userid, 'funds', (err, u) => {
             if (err) {
                 callback(err, null);
             } else {
-                faucetModel.findOne({ userid: userid }, 'lastTime', function (err, fa) {
-                    var now = new Date();
+                faucetModel.findOne({ userid: userid }, 'lastTime', (err, fa) => {
+                    let now = new Date();
                     if (!fa) {
                         fa = new faucetModel({
                             userid: userid,
@@ -903,7 +872,7 @@ faucetSchema.statics = {
                         fa.lastTime = now;
                         fa.save();
 
-                        var amount = randomIntInc(_config2.default.faucet.min, _config2.default.faucet.max);
+                        let amount = randomIntInc(_config2.default.faucet.min, _config2.default.faucet.max);
                         u.addProfit('BTC', amount * 0.00000001);
                         u.save();
 
@@ -917,10 +886,10 @@ faucetSchema.statics = {
     }
 };
 /*functions*/
-var randomIntInc = function randomIntInc(low, high) {
+const randomIntInc = (low, high) => {
     return Math.floor(Math.random() * (high - low + 1) + low);
 };
-var faucetModel = mongoose.model('Faucet', faucetSchema);
+const faucetModel = mongoose.model('Faucet', faucetSchema);
 
 exports.default = faucetModel;
 
@@ -945,22 +914,26 @@ var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var client = new _bitcoin2.default.Client(_config2.default.bitcoin);
+const client = new _bitcoin2.default.Client(_config2.default.bitcoin);
 exports.default = {
-    GetNewAddress: function GetNewAddress(userid, callback) {
-        client.getNewAddress(userid, callback);
+    GetNewAddress: userid => {
+        return new Promise((resovle, reject) => {
+            client.getNewAddress(userid, resovle, reject);
+        });
     },
-    GetBalance: function GetBalance(userid, callback) {
+    GetBalance:
+    //(userid) => {
+    () => {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
         // if (process.env.NODE_ENV == "development")
         //     //In development, return 10 BTC for testing.
-        callback(null, 10);
+        return 10;
         // else
         //     client.getReceivedByAccount(userid, 2, callback);
     },
-    WithdrawFunds: function WithdrawFunds(userid, unit) {
+    WithdrawFunds: (userid, unit) => {
         //dummy code for lint rules
         userid = '';
         unit = 'BTC';
@@ -981,20 +954,20 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _crypto = __webpack_require__(3);
+var _crypto = __webpack_require__(4);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (key, text) {
+exports.default = (key, text) => {
 
     //create HMAC using server seed as key and client seed as message
-    var hash = _crypto2.default.createHmac('sha512', key).update(text).digest('hex');
+    let hash = _crypto2.default.createHmac('sha512', key).update(text).digest('hex');
 
-    var index = 0;
+    let index = 0;
 
-    var lucky = parseInt(hash.substring(index * 5, index * 5 + 5), 16);
+    let lucky = parseInt(hash.substring(index * 5, index * 5 + 5), 16);
 
     //keep grabbing characters from the hash while greater than 
     while (lucky >= Math.pow(10, 6)) {
@@ -1039,20 +1012,21 @@ var _uuid2 = _interopRequireDefault(_uuid);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    GetNewAddress: function GetNewAddress(userid, callback) {
+    GetNewAddress: (userid, callback) => {
         callback(null, _uuid2.default.v4());
     },
-    GetBalance: function GetBalance(userid, callback) {
+    GetBalance: // (userid) => {
+    () => {
         //mini confirmation is 2, BTC only
         //Altcoin may need bigger confirmations.
 
         // if (process.env.NODE_ENV == "development")
         //     //In development, return 10 BTC for testing.
-        callback(null, 1000000);
+        return 1000000;
         // else
         //     callback(null, 0);
     },
-    WithdrawFunds: function WithdrawFunds(userid, unit) {
+    WithdrawFunds: (userid, unit) => {
         //dummy code for lint rules
         userid = '';
         unit = 'NXT';
@@ -1078,32 +1052,37 @@ var _chatModel = __webpack_require__(19);
 
 var _chatModel2 = _interopRequireDefault(_chatModel);
 
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import logger from '../helper/logger';
-
-var chat = function chat(io) {
-
-    io.on('connection', function (socket) {
-        socket.on('getChats', function () {
-            _chatModel2.default.GetChats(function (err, chats) {
-                if (err) return console.error('getChats error:' + err);
+const chat = io => {
+    io.on('connection', socket => {
+        socket.on('getChats', async () => {
+            try {
+                const chats = await _chatModel2.default.GetChats();
                 socket.emit('getChats', chats);
-            });
+            } catch (err) {
+                _logger2.default.error(err);
+            }
         });
 
-        socket.on('sendChat', function (chat) {
+        socket.on('sendChat', async chat => {
             if (socket.user) {
                 chat.userName = socket.user.userName;
                 chat.timeStamp = new Date();
-                _chatModel2.default.AddChat(chat, function (err) {
-                    if (err) return console.error('sendChat error:' + err);
-                });
-                io.emit('recvChat', {
-                    userName: chat.userName,
-                    timeStamp: chat.timeStamp,
-                    message: chat.message
-                });
+                try {
+                    await _chatModel2.default.AddChat(chat);
+                    io.emit('recvChat', {
+                        userName: chat.userName,
+                        timeStamp: chat.timeStamp,
+                        message: chat.message
+                    });
+                } catch (err) {
+                    _logger2.default.error(err);
+                }
             }
         });
     });
@@ -1122,11 +1101,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _userModel = __webpack_require__(2);
+var _userModel = __webpack_require__(3);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _crypto = __webpack_require__(3);
+var _crypto = __webpack_require__(4);
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
@@ -1134,103 +1113,142 @@ var _coinsConfig = __webpack_require__(5);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
 
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (io) {
+/**
+ * Copyright 2017 Node Dice
+ *
+ * Created by Neo on 2017/01/17.
+ */
+exports.default = io => {
 
     //socket.io events
-    io.on('connection', function (socket) {
+    io.on('connection', socket => {
+        const validateUser = user => {
+            if (!user || !user.userid) {
+                socket.emit('invalidUser', {});
+                return false;
+            }
+            return true;
+        };
+
         // const session = socket.handshake.session;
-        socket.on('coinNames', function () {
-            return socket.emit('coinNames', _coinsConfig2.default.getCoinNames());
-        });
+        socket.on('coinNames', () => socket.emit('coinNames', _coinsConfig2.default.getCoinNames()));
 
         //return a new user
-        socket.on('newUser', function (u) {
-            _userModel2.default.CreateNewUser(u.userName, u.password, function (err, user) {
-                if (err) {
-                    if (err.code == 11000) socket.emit('newUser', { error: { code: 11000 } });
-                } else {
-                    var newUser = {
-                        userid: user._id,
-                        userName: user.userName,
-                        clientSalt: user.clientSalt,
-                        funds: user.funds,
-                        nonce: 0,
-                        hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
-                    };
-                    socket.user = { userid: newUser.userid, userName: newUser.userName };
-                    socket.emit('newUser', newUser);
+        socket.on('newUser', async u => {
+
+            try {
+                const user = await _userModel2.default.CreateNewUser(u.userName, u.password);
+                const newUser = {
+                    userid: user._id,
+                    userName: user.userName,
+                    clientSalt: user.clientSalt,
+                    funds: user.funds,
+                    nonce: 0,
+                    hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
+                };
+                socket.user = { userid: newUser.userid, userName: newUser.userName };
+                socket.emit('newUser', newUser);
+            } catch (err) {
+                if (err.code == 11000) socket.emit('newUser', { error: { code: 11000 } });else {
+                    _logger2.default.error(err);
+                    socket.emit('newUser', { error: 'Internal error. Try later.' });
                 }
-            });
+            }
         });
 
         //return an existing user
-        socket.on('existingUser', function () {
-            _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce", function (err, u) {
-                if (err) {
-                    socket.emit('existingUser', { clientSalt: '', error: err });
+        socket.on('existingUser', async () => {
+            if (!validateUser(socket.user)) return;
+
+            try {
+                const u = await _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce");
+
+                if (u) {
+                    socket.emit('existingUser', {
+                        userid: u._id,
+                        userName: u.userName,
+                        clientSalt: u.clientSalt,
+                        funds: u.funds,
+                        nonce: u.nonce,
+                        hashedServerSalt: _crypto2.default.createHash('sha512').update(u.serverSalt).digest('hex')
+                    });
                 } else {
-                    if (u) {
-                        socket.emit('existingUser', {
-                            userid: u._id,
-                            userName: u.userName,
-                            clientSalt: u.clientSalt,
-                            funds: u.funds,
-                            nonce: u.nonce,
-                            hashedServerSalt: _crypto2.default.createHash('sha512').update(u.serverSalt).digest('hex')
-                        });
-                    } else {
-                        socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
-                    }
+                    socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
                 }
-            });
+            } catch (err) {
+                _logger2.default.error(err);
+                socket.emit('existingUser', { clientSalt: '', error: err });
+            }
         });
 
         //update client salt
-        socket.on('clientSalt', function (clientSalt) {
-            _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt, function (err, oldSalt) {
-                if (err) socket.emit('clientSalt', err);else socket.emit('clientSalt', oldSalt);
-            });
+        socket.on('clientSalt', async clientSalt => {
+            if (!validateUser(socket.user)) return;
+            try {
+                const oldSalt = await _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt);
+
+                socket.emit('clientSalt', oldSalt);
+            } catch (err) {
+                socket.emit('clientSalt', err);
+            }
         });
 
         //get new bitcion address
-        socket.on('newCoinAddr', function (coinName) {
-            _userModel2.default.GetNewAddress(socket.user.userid, coinName, function (err, addr) {
-                if (err) socket.emit('newCoinAddr', err);else socket.emit('newCoinAddr', addr);
-            });
+        socket.on('newCoinAddr', async coinName => {
+            if (!validateUser(socket.user)) return;
+            try {
+                const addr = await _userModel2.default.GetNewAddress(socket.user.userid, coinName);
+                socket.emit('newCoinAddr', addr);
+            } catch (err) {
+                _logger2.default.error(err);
+                socket.emit('newCoinAddr', err);
+            }
         });
 
         //get user balance
-        socket.on('getBalance', function (coinName) {
-            _userModel2.default.GetBalance(socket.user.userid, coinName, function (err, balance) {
-                if (err) socket.emit('getBalance', err);else socket.emit('getBalance', balance);
-            });
+        socket.on('getBalance', async coinName => {
+            if (!validateUser(socket.user)) return;
+            try {
+                const balance = await _userModel2.default.GetBalance(socket.user.userid, coinName);
+                socket.emit('getBalance', balance);
+            } catch (err) {
+                _logger2.default.info(err);
+                socket.emit('loggedUser', { error: 'Internal error. Try later.' });
+            }
         });
 
         //get user balance
-        socket.on('loginUser', function (user) {
-            _userModel2.default.LoginUser(user.userName, user.password, function (err, user) {
-                if (err) socket.emit('loggedUser', { error: err });else {
-                    var loggedUser = {
-                        userid: user._id,
-                        userName: user.userName,
-                        clientSalt: user.clientSalt,
-                        funds: user.funds,
-                        nonce: user.nonce,
-                        hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
-                    };
-                    socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
-                    socket.emit('loggedUser', loggedUser);
+        socket.on('loginUser', async u => {
+            try {
+                const user = await _userModel2.default.LoginUser(u.userName, u.password);
+
+                if (!user) {
+                    socket.emit('loggedUser', { error: 'Wrong user name and password combination.' });
+                    return;
                 }
-            });
+                const loggedUser = {
+                    userid: user._id,
+                    userName: user.userName,
+                    clientSalt: user.clientSalt,
+                    funds: user.funds,
+                    nonce: user.nonce,
+                    hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
+                };
+                socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
+                socket.emit('loggedUser', loggedUser);
+            } catch (err) {
+                _logger2.default.info(err);
+                socket.emit('loggedUser', { error: 'Internal error. Try later.' });
+            }
         });
     });
-}; /**
-    * Copyright 2017 Node Dice
-    *
-    * Created by Neo on 2017/01/17.
-    */
+};
 
 /***/ }),
 /* 26 */
@@ -1243,7 +1261,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _userModel = __webpack_require__(2);
+var _userModel = __webpack_require__(3);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
@@ -1255,120 +1273,131 @@ var _cryptoroll = __webpack_require__(22);
 
 var _cryptoroll2 = _interopRequireDefault(_cryptoroll);
 
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
 var _lodash = __webpack_require__(32);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Copyright 2017 Node Dice
- *
- * Created by Neo on 2017/03/27.
- */
+const overunder = io => {
 
-//import config from '../../config';
-var overunder = function overunder(io) {
-
-    io.on('connection', function (socket) {
-        var gameName = 'overunder';
+    io.on('connection', socket => {
+        const gameName = 'overunder';
         socket.join(gameName);
-
+        const validateUser = user => {
+            if (!user || !user.userid) {
+                socket.emit('invalidUser', {});
+                return false;
+            }
+            return true;
+        };
         //return a 
-        socket.on('roll', function (clientBet) {
-
-            _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds", function (err, u) {
-                if (err) socket.emit('rollError', { code: -6 });else {
-
-                    //validate input
-                    if (!_lodash2.default.isNumber(clientBet.w - 0)) {
-                        socket.emit('rollError', { code: -3 });
-                        return;
-                    }
-
-                    if (clientBet.w <= 0) {
-                        socket.emit('rollError', { code: -2 });
-                        return;
-                    }
-                    if (u.getBalance(clientBet.coinName) < clientBet.w) {
-                        // not enough fund
-                        socket.emit('rollError', { code: -1 });
-                        return;
-                    }
-
-                    //increase nonce
-                    u.nonce++;
-
-                    //get lucky number
-                    var rollNum = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
-                    var payout = _betModel2.default.getPayout(clientBet.sn);
-                    var profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
-                    var bet = new _betModel2.default({
-                        userid: socket.user.userid,
-                        userName: socket.user.userName,
-                        clientSalt: u.clientSalt,
-                        serverSalt: u.serverSalt,
-                        nonce: u.nonce,
-                        amount: clientBet.w,
-                        selNum: clientBet.sn,
-                        unit: clientBet.coinName,
-                        betTime: new Date(),
-                        rollNum: rollNum,
-                        profit: profit,
-                        payout: payout
-                    });
-                    bet.save(function (err) {
-                        if (err) {
-                            console.error('Saving bet error:' + err);
-                            socket.emit('rollError', { code: -4 });
-                            return;
-                        }
-                    });
-                    //Todo: process bet's result here
-
-                    u.addProfit(clientBet.coinName, profit);
-                    u.save(function (err) {
-                        if (err) {
-                            console.error('Saving user\'s profit error:' + err);
-                            socket.emit('rollError', { code: -5 });
-                            return;
-                        }
-                    });
-                    //Every bet is sent to everyone who is in over/under game. 
-                    var result = {
-                        userid: socket.user.userid,
-                        userName: socket.user.userName,
-                        rollNum: rollNum,
-                        nonce: u.nonce,
-                        betTime: bet.betTime,
-                        selNum: bet.selNum,
-                        amount: bet.amount,
-                        unit: bet.unit,
-                        profit: profit,
-                        payout: payout
-                    };
-
-                    io.to(gameName).emit('allBets', result);
+        socket.on('roll', async clientBet => {
+            if (!validateUser(socket.user)) return;
+            try {
+                let u = await _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
+                //validate input
+                if (!_lodash2.default.isNumber(clientBet.w - 0)) {
+                    socket.emit('rollError', { code: -3 });
+                    return;
                 }
-            });
+
+                if (clientBet.w <= 0) {
+                    socket.emit('rollError', { code: -2 });
+                    return;
+                }
+                if (u.getBalance(clientBet.coinName) < clientBet.w) {
+                    // not enough fund
+                    socket.emit('rollError', { code: -1 });
+                    return;
+                }
+
+                //increase nonce
+                u.nonce++;
+
+                //get lucky number
+                let rollNum = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                const payout = _betModel2.default.getPayout(clientBet.sn);
+                const profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
+                let bet = new _betModel2.default({
+                    userid: socket.user.userid,
+                    userName: socket.user.userName,
+                    clientSalt: u.clientSalt,
+                    serverSalt: u.serverSalt,
+                    nonce: u.nonce,
+                    amount: clientBet.w,
+                    selNum: clientBet.sn,
+                    unit: clientBet.coinName,
+                    betTime: new Date(),
+                    rollNum,
+                    profit,
+                    payout
+                });
+                try {
+                    await bet.save();
+                } catch (err) {
+                    _logger2.default.error('Saving bet error:' + err);
+                    socket.emit('rollError', { code: -4 });
+                    return;
+                }
+
+                //Todo: process bet's result here
+                u.addProfit(clientBet.coinName, profit);
+                try {
+
+                    await u.save();
+                } catch (err) {
+                    _logger2.default.error('Saving user profit error:' + err);
+                    socket.emit('rollError', { code: -5 });
+                    return;
+                }
+
+                //Every bet is sent to everyone who is in over/under game. 
+                const result = {
+                    userid: socket.user.userid,
+                    userName: socket.user.userName,
+                    rollNum,
+                    nonce: u.nonce,
+                    betTime: bet.betTime,
+                    selNum: bet.selNum,
+                    amount: bet.amount,
+                    unit: bet.unit,
+                    profit,
+                    payout
+                };
+
+                io.to(gameName).emit('allBets', result);
+            } catch (err) {
+                _logger2.default.error(err);
+                socket.emit('rollError', { code: -6 });
+            }
         });
 
-        socket.on('getMyBets', function () {
-            _betModel2.default.getBetsByUser(socket.user.userid, function (err, bets) {
-                if (err) return console.error('GetBetsByUser error:' + err);
+        socket.on('getMyBets', async () => {
+            if (!validateUser(socket.user)) return;
+            try {
+                const bets = await _betModel2.default.getBetsByUser(socket.user.userid);
                 socket.emit('getMyBets', bets);
-            });
+            } catch (err) {
+                _logger2.default.error('GetBetsByUser error:' + err);
+            }
         });
 
-        socket.on('getAllBets', function () {
-            _betModel2.default.getAllBets(function (err, bets) {
-                if (err) return console.error('getAllBets error:' + err);
+        socket.on('getAllBets', async () => {
+            try {
+                const bets = await _betModel2.default.getAllBets();
                 socket.emit('getAllBets', bets);
-            });
+            } catch (err) {
+                _logger2.default.error('getAllBets error:' + err);
+            }
         });
 
         //functions
-        var GetProfit = function GetProfit(rollNum, selNum, amount, payout) {
+        const GetProfit = (rollNum, selNum, amount, payout) => {
 
             if (selNum * 1 <= 49.5 && rollNum * 1 <= selNum * 1 || selNum * 1 >= 50.49 && rollNum * 1 >= selNum * 1) {
                 return amount * (payout - 1);
@@ -1377,8 +1406,13 @@ var overunder = function overunder(io) {
             }
         };
     });
-};
+}; /**
+    * Copyright 2017 Node Dice
+    *
+    * Created by Neo on 2017/03/27.
+    */
 
+//import config from '../../config';
 exports.default = overunder;
 
 /***/ }),
@@ -1402,8 +1436,8 @@ var _package2 = _interopRequireDefault(_package);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var rootPath = _path2.default.resolve('.');
-var config = {
+const rootPath = _path2.default.resolve('.');
+const config = {
     root: rootPath,
     serverRoot: rootPath + '/',
     clientRoot: rootPath + '/html/',
@@ -1450,7 +1484,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var config = {
+const config = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,
@@ -1489,7 +1523,7 @@ exports.default = config;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var config = {
+const config = {
     mongodb: {
         hostaddress: 'mongodb://mongo',
         port: 27017,
@@ -1563,6 +1597,7 @@ module.exports = {
 		"bitcoin": "^3.0.1",
 		"body-parser": "^1.16.0",
 		"bson": "^1.0.4",
+		"coinbase": "^2.0.6",
 		"compression": "^1.6.2",
 		"connect-mongo": "^1.3.2",
 		"cookie-parser": "^1.3.3",
@@ -1577,7 +1612,7 @@ module.exports = {
 		"lru-cache": "^4.0.2",
 		"method-override": "^2.3.8",
 		"mongodb": "^2.2.25",
-		"mongoose": "^4.9.2",
+		"mongoose": "^4.9.4",
 		"morgan": "^1.8.1",
 		"nodemailer": "3.1.7",
 		"request": "^2.81.0",

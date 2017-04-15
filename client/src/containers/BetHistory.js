@@ -38,7 +38,7 @@ class BetHistory extends Component {
         this.setState({ allBets: this.addToList(bet, this.state.allBets) });
         //add high rollers to the list
         if (bet.amount >= 0.001)
-            bet.setState({ highRollers: this.addToList(bet, this.state.highRollers) });
+            this.setState({ highRollers: this.addToList(bet, this.state.highRollers) });
 
     }
 
