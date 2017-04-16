@@ -9,7 +9,8 @@ class BetHistory extends Component {
         this.state = {
             myBets: [],
             allBets: [],
-            highRollers: []
+            highRollers: [],
+            sort: 1
         };
 
         this.addToHistory = this.addToHistory.bind(this);
@@ -19,11 +20,13 @@ class BetHistory extends Component {
         const self = this;
         socketEmit('getAllBets');
         socketOn('getAllBets', (bets) => {
+            self.setState({ sort: -1 });
             bets.forEach((bet) => {
                 self.addToHistory(bet);
             });
         });
         socketOn('allBets', (bet) => {
+            self.setState({ sort: 1 });
             self.addToHistory(bet);
         });
     }
@@ -44,7 +47,7 @@ class BetHistory extends Component {
 
     addToList(bet, list) {
         let bets = list.slice(0, 99);
-        bets.unshift(bet);
+        this.state.sort == 1 ? bets.unshift(bet) : bets.push(bet);
 
         return bets;
     }
