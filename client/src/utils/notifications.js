@@ -1,6 +1,7 @@
 import toastr from '../lib/toastr.min';
+import * as messages from './messages';
 
-export const showNotification = (title, content, type) => {
+export const show = (title, content, type) => {
     toastr.options = { positionClass: "toast-bottom-right", preventDuplicates: true, progressBar: true, newestOnTop: false };
 
     switch (type) {
@@ -17,4 +18,12 @@ export const showNotification = (title, content, type) => {
             toastr.info(content, title); break;
     }
 
+};
+
+export const UserNotLoggedin = () => {
+    show(messages.USERNOTLOGGEDINTITLE, messages.USERNOTLOGGEDINTEXT, "warning");
+};
+
+export const Loggedin = () => {
+    show(messages.USERLOGGEDINTITLE, messages.USERLOGGEDINTEXT, 'success');
 };

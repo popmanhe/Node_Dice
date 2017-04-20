@@ -134,3 +134,16 @@ ul.sidebar-menu li a.btn, ul.sidebar-menu li.active a.btn {
 div.login .modal-header{
     color: #fff;
 }
+.nav.left-position{
+    padding-right: 0px;
+    }
+.lobbyChart {
+    width: 300px;
+    height: 300px;
+}
+
+.timeLeft {
+    display: inline-block;
+    line-height: 300px;
+    z-index: 2;
+}

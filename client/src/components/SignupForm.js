@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketOn } from '../utils/socketIoHelper';
+import { socketOn } from '../utils/diceSocketHelper';
 import '../styles/bootstrapValidator.css';
 import '../lib/bootstrapValidator';
 import CheckBox from './Basic/CheckBox';
-import { showNotification } from '../utils/tools';
+import { show } from '../utils/notifications';
 
 class SignupForm extends React.Component {
 
@@ -76,10 +76,10 @@ class SignupForm extends React.Component {
                 if (result.error) {
                     switch (result.error.code) {
                         case 11000:
-                            showNotification('User name exists', 'Choose different one.', 'error');
+                            show('User name exists', 'Choose different one.', 'error');
                             break;
                         default:
-                            showNotification('Error', result.error, 'error');
+                            show('Error', result.error, 'error');
                             this.props.setUser(null, false);
                     }
                 }
@@ -90,7 +90,7 @@ class SignupForm extends React.Component {
 
         }
         else
-            showNotification('', 'Please check "I accept" before registering.', 'warning');
+            show('', 'Please check "I accept" before registering.', 'warning');
     }
 
     clearData() {

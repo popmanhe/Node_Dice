@@ -1,8 +1,8 @@
 import React from 'react';
-import OUBet from '../components/OUBet';
-import AutoBet from '../components/AutoBet';
+import OUBet from '../components/dice/OUBet';
+import AutoBet from '../components/dice/AutoBet';
 import Chat from '../components/Chat';
-import Salt from '../components/Salt';
+import Salt from '../components/dice/Salt';
 import BetHistory from './BetHistory';
 const HomePage = () => {
     return (

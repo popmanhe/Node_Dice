@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import config from "../config";
-console.log('Connecting to web socket: ' + config.socketUrl);
-const socket = io.connect(config.socketUrl,
+console.log('Connecting dice to web socket: ' + config.diceSocketUrl);
+const socket = io.connect(config.diceSocketUrl,
     {
         transports: ['websocket']
     }

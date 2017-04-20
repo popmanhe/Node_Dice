@@ -1,6 +1,6 @@
 import initialState from './initialState';
-import { socketEmit } from '../utils/socketIoHelper';
-export default (state = initialState.ou, action) => {
+import { socketEmit } from '../utils/diceSocketHelper';
+export default (state = initialState.dice, action) => {
     switch (action.type) {
         case 'GET_COINNAMES':
             socketEmit('coinNames', {});
@@ -19,8 +19,6 @@ export default (state = initialState.ou, action) => {
             return { ...state, selectedCoin: action.coin };
         case 'SET_AUTOBETTING':
             {
-
-
                 return { ...state, isRolling: action.stop ? state.isRolling : action.stop, autoBet: action.autoBet };
             }
         case 'ROLL':

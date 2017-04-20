@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Login from '../containers/UserLogin';
-import { socketOn } from '../utils/socketIoHelper';
+import { socketOn } from '../utils/diceSocketHelper';
 
 class App extends React.Component {
     componentDidMount() {
@@ -59,9 +59,10 @@ class App extends React.Component {
 
                                     <ul className="nav navbar-nav navbar-left">
                                         <li>
-                                            <Link to="/">
-                                                Home
-                                </Link>
+                                            <Link to="/">Dice</Link>
+                                        </li>
+                                         <li>
+                                            <Link to="/raffle">Raffle</Link>
                                         </li>
                                         <li>
                                             <Link to="/investment">Investment</Link>

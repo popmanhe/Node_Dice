@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import CoinPicker from './CoinPicker';
-import { socketOn } from '../utils/socketIoHelper';
-import { showNotification } from '../utils/tools';
-import * as commonText from '../utils/commonText';
+import CoinPicker from '../CoinPicker';
+import { socketOn } from '../../utils/diceSocketHelper';
+import { show,UserNotLoggedin } from '../../utils/notifications';
 
 class OUBet extends React.Component {
     constructor(props) {
@@ -43,13 +42,13 @@ class OUBet extends React.Component {
         if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1)
             || (result.selNum * 1 >= 50.49 && result.rollNum * 1 >= result.selNum * 1)) {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
-                showNotification('', 'Dice:' + result.rollNum + '. You won', 'success');
+                show('', 'Dice:' + result.rollNum + '. You won', 'success');
             this.setState({ balance: (this.state.balance * 1 + result.profit * 1).toFixed(8) });
             return true;
         }
         else {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
-                showNotification('', 'Dice:' + result.rollNum + '. You lost', 'error');
+                show('', 'Dice:' + result.rollNum + '. You lost', 'error');
             this.setState({ balance: (this.state.balance - result.amount).toFixed(8) });
             return false;
         }
@@ -99,16 +98,16 @@ class OUBet extends React.Component {
         socketOn('rollError', function (result) {
             switch (result.code) {
                 case -1:
-                    showNotification('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
+                    show('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
                     break;
                 case -2:
                 case -3:
-                    showNotification('Invalid', 'Bet amount is invalid', 'warning');
+                    show('Invalid', 'Bet amount is invalid', 'warning');
                     break;
                 case -4:
                 case -5:
                 case -6:
-                    showNotification('ERROR', 'Internal error.', 'warning');
+                    show('ERROR', 'Internal error.', 'warning');
                     break;
             }
             self.endRoll();
@@ -134,7 +133,7 @@ class OUBet extends React.Component {
         if (this.props.loggedIn)
             this.getBalance(this.props.selectedCoin.coinName);
         else
-            showNotification(commonText.USERNOTLOGGEDINTITLE, commonText.USERNOTLOGGEDINTEXT, "warning");
+           UserNotLoggedin();
     }
     multiplyAmount(n) {
         let betAmount = this.state.betAmount * n;
@@ -162,11 +161,11 @@ class OUBet extends React.Component {
     }
     roll(rollNum) {
         if (!this.props.loggedIn) {
-            showNotification(commonText.USERNOTLOGGEDINTITLE, commonText.USERNOTLOGGEDINTEXT, "warning");
+            UserNotLoggedin();
             return;
         }
         if (this.state.betAmount > this.state.balance) {
-            showNotification('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
+            show('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
             return;
         }
         this.setState({ rollNum });
@@ -266,12 +265,12 @@ OUBet.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        coins: state.ou.coins,
-        selectedCoin: state.ou.selectedCoin,
+        coins: state.dice.coins,
+        selectedCoin: state.dice.selectedCoin,
         loggedIn: state.user.userName != null,
         user: state.user,
-        autoBet: state.ou.autoBet,
-        isRolling: state.ou.isRolling
+        autoBet: state.dice.autoBet,
+        isRolling: state.dice.isRolling
     };
 };
 const mapDispatchToProps = (dispatch) => {

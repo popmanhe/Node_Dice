@@ -12,26 +12,17 @@ export default (io) => {
 
     //socket.io events
     io.on('connection', (socket) => {
-        const validateUser = (user) => {
-            if (!user || !user.userid) {
-                socket.emit('invalidUser',{});
-                return false;
-            }
-            return true;
-        };
 
-        // const session = socket.handshake.session;
         socket.on('coinNames', () =>
             socket.emit('coinNames', coinsConfig.getCoinNames())
         );
-
 
         //return a new user
         socket.on('newUser', async (u) => {
 
             try {
                 const user = await userModel.CreateNewUser(u.userName, u.password);
-                 const newUser = {
+                const newUser = {
                     userid: user._id,
                     userName: user.userName,
                     clientSalt: user.clientSalt,
@@ -55,8 +46,6 @@ export default (io) => {
 
         //return an existing user
         socket.on('existingUser', async () => {
-            if (!validateUser(socket.user)) return;
-
             try {
                 const u = await userModel.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce");
 
@@ -82,7 +71,7 @@ export default (io) => {
 
         //update client salt
         socket.on('clientSalt', async (clientSalt) => {
-            if (!validateUser(socket.user)) return;
+
             try {
                 const oldSalt = await userModel.SaveClientSalt(socket.user.userid, clientSalt);
 
@@ -95,7 +84,7 @@ export default (io) => {
 
         //get new bitcion address
         socket.on('newCoinAddr', async (coinName) => {
-            if (!validateUser(socket.user)) return;
+
             try {
                 const addr = await userModel.GetNewAddress(socket.user.userid, coinName);
                 socket.emit('newCoinAddr', addr);
@@ -108,7 +97,7 @@ export default (io) => {
 
         //get user balance
         socket.on('getBalance', async (coinName) => {
-            if (!validateUser(socket.user)) return;
+
             try {
                 const balance = await userModel.GetBalance(socket.user.userid, coinName);
                 socket.emit('getBalance', balance);

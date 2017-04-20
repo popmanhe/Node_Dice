@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import BetList from '../components/BetList';
-import { socketEmit, socketOn } from '../utils/socketIoHelper';
+import BetList from '../components/dice/BetList';
+import { socketEmit, socketOn } from '../utils/diceSocketHelper';
 import moment from 'moment';
 class BetHistory extends Component {
     constructor(props) {

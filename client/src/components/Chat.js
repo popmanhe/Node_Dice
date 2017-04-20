@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketEmit, socketOn } from '../utils/socketIoHelper';
+import { socketEmit, socketOn } from '../utils/diceSocketHelper';
 import moment from 'moment';
 import '../lib/jquery.nicescroll.min';
 

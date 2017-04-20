@@ -6,12 +6,20 @@ services:
       - ./client/dist:/usr/www
     ports:
       - "80:80"
-  server:
+  dice:
     build: ./server
     volumes:
       - ./server:/usr/nodedice
     ports:
-      - "4000:4000"
+      - "3000:3000"
+    links:
+      - mongo
+  raffle:
+    build: ./raffle
+    volumes:
+      - ./raffle:/usr/raffle
+    ports:
+      - "3100:3100"
     links:
       - mongo
   mongo:

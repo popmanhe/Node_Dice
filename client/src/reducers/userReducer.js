@@ -1,5 +1,5 @@
 import initialState from './initialState';
-import { socketEmit } from '../utils/socketIoHelper';
+import { socketEmit } from '../utils/diceSocketHelper';
 export default (state = initialState.user, action) => {
     switch (action.type) {
         case 'SET_USER': {

@@ -10,22 +10,16 @@ import betHelper from '../Models/betModel';
 import rollDice from '../helper/cryptoroll';
 import logger from '../helper/logger';
 import _ from 'lodash';
-const overunder = (io) => {
+const dice = (io) => {
 
 
     io.on('connection', (socket) => {
-        const gameName = 'overunder';
+        const gameName = 'dice';
         socket.join(gameName);
-        const validateUser = (user) => {
-            if (!user || !user.userid) {
-                socket.emit('invalidUser', {});
-                return false;
-            }
-            return true;
-        };
+       
         //return a 
         socket.on('roll', async (clientBet) => {
-            if (!validateUser(socket.user)) return;
+            
             try {
                 let u = await userHelper.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
                 //validate input
@@ -99,7 +93,7 @@ const overunder = (io) => {
                     payout
                 };
 
-                io.to(gameName).emit('allBets', result);
+                io.volatile.to(gameName).emit('allBets', result);
             }
             catch (err) {
                 logger.error(err);
@@ -108,7 +102,7 @@ const overunder = (io) => {
         });
 
         socket.on('getMyBets', async () => {
-            if (!validateUser(socket.user)) return;
+            
             try {
                 const bets = await betHelper.getBetsByUser(socket.user.userid);
                 socket.emit('getMyBets', bets);
@@ -143,4 +137,4 @@ const overunder = (io) => {
     });
 };
 
-export default overunder;
+export default dice;

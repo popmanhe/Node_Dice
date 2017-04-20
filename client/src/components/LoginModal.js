@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import CheckBox from './Basic/CheckBox';
 import { connect } from 'react-redux';
-import { socketOn } from '../utils/socketIoHelper';
-import { showNotification } from '../utils/tools';
+import { socketOn } from '../utils/diceSocketHelper';
+import * as notifications from '../utils/notifications';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -24,11 +24,11 @@ class LoginModal extends React.Component {
         socketOn('loggedUser', (result) => {
             if (result.error) {
                 this.props.setUser(null, false);
-                showNotification('', result.error, 'error');
+                notifications.show('', result.error, 'error');
             }
             else {
                 this.props.setUser(result, true);
-                 showNotification('Logged in', 'You have logged in. Start rolling.', 'success');
+                notifications.Loggedin();
             }
         });
     }

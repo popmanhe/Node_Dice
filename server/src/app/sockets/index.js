@@ -1,21 +1,11 @@
-﻿import common from './s_common';
-import overunder from './s_overunder';
-import chat from './s_chat.js';
-import config from '../../config';
-import logger from '../helper/logger';
-// import uuid from 'uuid';
-// import socketSession from './handshake.js';
-
-// const assignSessionID = (socket, next) =>{
-//          logger.info('foo='+socket.handshake.query.foo);
-//         return next();
-// };
+﻿import auth from './auth';
+import common from './common';
+import dice from './dice';
+import chat from './chat';
 
 export default (io) => {
-    logger.info("Web socket is enabled for following domain(s): " + config.origins);
-    io.origins(config.origins);
-   
+    auth(io);
     common(io);
-    overunder(io);
+    dice(io);
     chat(io);
 };

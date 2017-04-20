@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import CoinPicker from './CoinPicker';
-import { showNotification } from '../utils/tools';
-import * as commonText from '../utils/commonText';
+import CoinPicker from '../CoinPicker';
+import * as notifications from '../../utils/notifications';
+
 class AutoBet extends React.Component {
     constructor() {
         super();
@@ -24,16 +24,16 @@ class AutoBet extends React.Component {
 
     autoBetting() {
         if (!this.props.loggedIn) {
-            showNotification(commonText.USERNOTLOGGEDINTITLE, commonText.USERNOTLOGGEDINTEXT, "warning");
+            notifications.UserNotLoggedin();
             return;
         }
-        if (this.props.ou.isRolling) {
+        if (this.props.dice.isRolling) {
             this.props.setAutoBetting({ ...this.props.autoBet, numberOfRolls: 1, stop: true });
         }
     }
 
     render() {
-        const coinName = this.props.ou.selectedCoin ? this.props.ou.selectedCoin.coinName : "";
+        const coinName = this.props.dice.selectedCoin ? this.props.dice.selectedCoin.coinName : "";
         const autoBet = this.props.autoBet;
         return (
 
@@ -83,7 +83,7 @@ class AutoBet extends React.Component {
                 </div>
                 <div>
                     <button className="btn btn-warning btn-perspective btn-md"
-                        disabled={this.props.autoBet.numberOfRolls == 1 || !this.props.ou.isRolling} onClick={() => this.autoBetting()}>
+                        disabled={this.props.autoBet.numberOfRolls == 1 || !this.props.dice.isRolling} onClick={() => this.autoBetting()}>
                         Stop Auto Betting</button>
                 </div>
             </div>
@@ -92,7 +92,7 @@ class AutoBet extends React.Component {
 }
 AutoBet.propTypes = {
     loggedIn: PropTypes.bool,
-    ou: PropTypes.object,
+    dice: PropTypes.object,
     autoBet: PropTypes.object,
     roll: PropTypes.func,
     setAutoBetting: PropTypes.func
@@ -100,8 +100,8 @@ AutoBet.propTypes = {
 const mapStateToProps = (state) => {
     return {
         loggedIn: state.user.userName != null,
-        ou: state.ou,
-        autoBet: state.ou.autoBet
+        dice: state.dice,
+        autoBet: state.dice.autoBet
     };
 };
 const mapDispatchToProps = (dispatch) => {

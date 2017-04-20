@@ -27,7 +27,6 @@ const app = express();
 const server = http.createServer(app);
 
 const io = socketio(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
- 
 //config express in all environments
 app.disable('x-powered-by');
 

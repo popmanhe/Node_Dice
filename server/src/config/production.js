@@ -12,7 +12,7 @@ const config = {
     //     autoRemove: 'interval',
     //     autoRemoveInterval: 10 // In minutes. Default 
     // },
-    port: 4000,
+    port: 3000,
     origins: "*:*", //For security, it's better to set origins in prod
     bitcoin:
     {

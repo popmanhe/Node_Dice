@@ -25,7 +25,7 @@ CoinPicker.propTypes = {
 };
 const mapStateToProps = (state) => {
   return {
-    coins: state.ou.coins
+    coins: state.dice.coins
   };
 };
 const mapDispatchToProps = (dispatch) => {

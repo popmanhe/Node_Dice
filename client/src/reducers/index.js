@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux';
-import ou from './ouBetReducer';
+import dice from './diceReducer';
+import raffle from './raffleReducer';
 import chat from './chatReducer';
 import user from './userReducer';
 const rootReducer = combineReducers({
-  ou,
+  dice,
+  raffle,
   chat,
   user,
   routing: routerReducer

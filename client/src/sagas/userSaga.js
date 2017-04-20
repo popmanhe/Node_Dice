@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import { socketEmit } from '../utils/socketIoHelper';
+import { socketEmit } from '../utils/diceSocketHelper';
 //import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { takeEvery } from "redux-saga/effects";
 

@@ -75,6 +75,9 @@ TABLET < 1025px
 		-o-overflow-scrolling: touch;
 		overflow-scrolling: touch;
 	}
+	.top-nav-content{
+		margin-left: 0px;
+	}
 }
 
 

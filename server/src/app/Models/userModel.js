@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     }]
 }, { autoIndex: config.mongodb.autoIndex });
 //Instance methods
-userSchema.methods.getFund = (coinName) => {
+userSchema.methods.getFund = function (coinName) {
     for (let i in this.funds) {
         let fund = this.funds[i];
         if (fund.coinName == coinName)
@@ -40,7 +40,7 @@ userSchema.methods.getFund = (coinName) => {
     return null;
 };
 
-userSchema.methods.getBalance = (coinName) => {
+userSchema.methods.getBalance = function (coinName) {
 
     let fund = this.getFund(coinName);
     if (fund)
@@ -49,7 +49,7 @@ userSchema.methods.getBalance = (coinName) => {
     return 0;
 };
 
-userSchema.methods.addProfit = (coinName, profit) => {
+userSchema.methods.addProfit = function (coinName, profit) {
 
     let fund = this.getFund(coinName);
     if (fund) {
@@ -58,7 +58,7 @@ userSchema.methods.addProfit = (coinName, profit) => {
     }
 };
 
-userSchema.methods.setDeposit = (coinName, amount) => {
+userSchema.methods.setDeposit = function (coinName, amount) {
 
     let fund = this.getFund(coinName);
     if (fund && amount) {
@@ -68,7 +68,7 @@ userSchema.methods.setDeposit = (coinName, amount) => {
     return fund;
 };
 
-userSchema.methods.getDepositAddr = async (coinName) => {
+userSchema.methods.getDepositAddr = async function (coinName) {
     let helper = coinsConfig[coinName];
     const addr = await helper.GetNewAddress(this._id, coinName);
 
@@ -76,7 +76,7 @@ userSchema.methods.getDepositAddr = async (coinName) => {
     return addr;
 };
 
-userSchema.methods.setDepositAddr = (coinName, addr) => {
+userSchema.methods.setDepositAddr = function (coinName, addr) {
 
     let fund = this.getFund(coinName);
     if (fund) {
@@ -131,9 +131,9 @@ userSchema.statics = {
 
     },
     GetNewAddress: async (userid, coinName) => {
-        let helper = coinsConfig[coinName];
+
         let u = await userModel.findOne({ _id: userid }, "funds");
-        u.getDepositAddr('BTC');
+        const addr = u.getDepositAddr(coinName);
         await u.save();
         return addr;
     },
