@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CoinPicker from '../CoinPicker';
-import { socketOn } from '../../utils/diceSocketHelper';
-import { show,UserNotLoggedin } from '../../utils/notifications';
 
-class OUBet extends React.Component {
+class Dice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +14,6 @@ class OUBet extends React.Component {
     }
     componentDidMount() {
         this.getCoinNames();
-        this.receiveMyBet();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -28,6 +25,10 @@ class OUBet extends React.Component {
         //Set min betAmount when changing coin
         if (!this.props.selectedCoin || nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName) {
             this.setBetAmount(nextProps.selectedCoin.min);
+        }
+        if (nextProps.currentBet && this.props.currentBet &&
+            nextProps.currentBet._id != this.props.currentBet._id) {
+            this.receiveMyBet();
         }
     }
     handleChange(event) {
@@ -42,77 +43,57 @@ class OUBet extends React.Component {
         if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1)
             || (result.selNum * 1 >= 50.49 && result.rollNum * 1 >= result.selNum * 1)) {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
-                show('', 'Dice:' + result.rollNum + '. You won', 'success');
+                this.props.won(result.rollNum);
             this.setState({ balance: (this.state.balance * 1 + result.profit * 1).toFixed(8) });
             return true;
         }
         else {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
-                show('', 'Dice:' + result.rollNum + '. You lost', 'error');
+                this.props.lost(result.rollNum);
+
             this.setState({ balance: (this.state.balance - result.amount).toFixed(8) });
             return false;
         }
 
     }
 
-    receiveMyBet() {
-        const self = this;
-        socketOn('allBets', function (result) {
-            const s = self.state;
-            const p = self.props;
-            let stop = false;
-            if (p.user.userid == result.userid) {
-                const win = self.showResult(result);
+    receiveMyBet(result) {
+        const s = this.state;
+        const p = this.props;
+        let stop = false;
+        if (p.user.userid == result.userid) {
+            const win = this.showResult(result);
 
-                if (win) {
-                    if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
-                        stop = true;
-                    }
-                    else if (p.autoBet.increaseOnWin == 0) {
-                        self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
-                    }
-                    else {
-                        self.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnWin / 100)).toFixed(8) });
-                    }
+            if (win) {
+                if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
+                    stop = true;
+                }
+                else if (p.autoBet.increaseOnWin == 0) {
+                    this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
                 }
                 else {
-                    if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
-                        stop = true;
-                    }
-                    else if (p.autoBet.increaseOnLose == 0) {
-                        self.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
-                    }
-                    else {
-                        self.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
-                    }
+                    this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnWin / 100)).toFixed(8) });
                 }
+            }
+            else {
+                if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
+                    stop = true;
+                }
+                else if (p.autoBet.increaseOnLose == 0) {
+                    this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
+                }
+                else {
+                    this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
+                }
+            }
 
-                if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
-                    self.roll(s.rollNum);
-            }
-            self.endRoll();
-        });
+            if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
+                this.roll(s.rollNum);
+        }
+        this.endRoll();
+
     }
-    receiveErrorRoll() {
-        const self = this;
-        socketOn('rollError', function (result) {
-            switch (result.code) {
-                case -1:
-                    show('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
-                    break;
-                case -2:
-                case -3:
-                    show('Invalid', 'Bet amount is invalid', 'warning');
-                    break;
-                case -4:
-                case -5:
-                case -6:
-                    show('ERROR', 'Internal error.', 'warning');
-                    break;
-            }
-            self.endRoll();
-        });
-    }
+
     endRoll() {
         if (this.props.autoBet.numberOfRolls == 1)
             this.props.endRoll();
@@ -120,20 +101,19 @@ class OUBet extends React.Component {
     getCoinNames() {
         if (!this.props.coins || this.props.coins.length == 0) {
             this.props.getCoinNames();
-            socketOn('coinNames', (result) => { this.props.setCoinNames(result); });
         }
     }
     getBalance(coinName) {
         if (coinName) {
             this.props.refreshBalance(coinName);
-            socketOn('getBalance', (result) => this.setState({ balance: result.toFixed(8) }));
+            // socketOn('getBalance', (result) => this.setState({ balance: result.toFixed(8) }));
         }
     }
     refreshBalance() {
         if (this.props.loggedIn)
             this.getBalance(this.props.selectedCoin.coinName);
         else
-           UserNotLoggedin();
+            this.props.userNotLoggedin();
     }
     multiplyAmount(n) {
         let betAmount = this.state.betAmount * n;
@@ -161,11 +141,11 @@ class OUBet extends React.Component {
     }
     roll(rollNum) {
         if (!this.props.loggedIn) {
-            UserNotLoggedin();
+            this.props.userNotLoggedin();
             return;
         }
         if (this.state.betAmount > this.state.balance) {
-            show('Fund not enough', 'Your balance is not enough. Deposit more fund.', 'warning');
+            this.props.fundNotEnough();
             return;
         }
         this.setState({ rollNum });
@@ -177,12 +157,13 @@ class OUBet extends React.Component {
         this.props.setBetAmount(betAmount);
     }
     render() {
-        const coinName = this.props.selectedCoin ? this.props.selectedCoin.coinName : "";
+        const p = this.props;
+        const coinName = p.selectedCoin ? p.selectedCoin.coinName : "";
         const profitOnWin = (this.state.betAmount * (this.state.payout - 1)).toFixed(8);
 
         const rollUnder = (100 / this.state.payout * 0.99).toFixed(2);
         const rollOver = (99.99 - rollUnder).toFixed(2);
-
+        const coin = p.user.funds.filter((coin) => { return coin.coinName == p.selectedCoin.coinName });
         return (
             <div className="the-box">
                 <div className="form-group">
@@ -248,39 +229,49 @@ class OUBet extends React.Component {
     }
 }
 
-OUBet.propTypes = {
+Dice.propTypes = {
+    //functions
     getCoinNames: PropTypes.func,
-    setCoinNames: PropTypes.func,
     refreshBalance: PropTypes.func,
     roll: PropTypes.func,
+    endRoll: PropTypes.func,
+    setBetAmount: PropTypes.func,
+    userNotLoggedin: PropTypes.func,
+    fundNotEnough: PropTypes.func,
+    won: PropTypes.func,
+    lost: PropTypes.func,
+    //properties
     coins: PropTypes.array,
     selectedCoin: PropTypes.object,
     loggedIn: PropTypes.bool,
     user: PropTypes.object,
     autoBet: PropTypes.object,
-    isRolling: PropTypes.bool,
-    endRoll: PropTypes.func,
-    setBetAmount: PropTypes.func
+    currentBet: PropTypes.object,
+    isRolling: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
     return {
         coins: state.dice.coins,
         selectedCoin: state.dice.selectedCoin,
-        loggedIn: state.user.userName != null,
+        loggedIn: state.user.isLoggedIn,
         user: state.user,
         autoBet: state.dice.autoBet,
-        isRolling: state.dice.isRolling
+        isRolling: state.dice.isRolling,
+        currentBet: state.dice.currentBet
     };
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        getCoinNames: () => dispatch({ type: 'GET_COINNAMES' }),
-        setCoinNames: (coins) => dispatch({ type: 'SET_COINNAMES', coins }),
-        refreshBalance: (coinName) => dispatch({ type: 'REFRESH_BALANCE', coinName }),
+        won: (rollNum) => dispatch({ type: 'SUCCESS', message: 'Dice:' + rollNum + '. You won' }),
+        lost: (rollNum) => dispatch({ type: 'ERROR', message: 'Dice:' + rollNum + '. You lost' }),
+        userNotLoggedin: () => dispatch({ type: 'USER_NOT_LOGGEDIN' }),
+        fundNotEnough: () => dispatch({ type: 'WARNING', title: 'Fund not enough', message: 'Your balance is not enough. Deposit more fund.' }),
+        getCoinNames: () => dispatch({ socket: 'dice', type: 'GET_COINNAMES' }),
+        refreshBalance: (coinName) => dispatch({ socket: 'dice', type: 'REFRESH_BALANCE', coinName }),
         endRoll: () => dispatch({ type: 'END_ROLL' }),
         setBetAmount: (betAmount) => dispatch({ type: 'SET_BETAMOUNT', betAmount }),
-        roll: (betAmount, selectedNumber, coinName) => dispatch({ type: 'ROLL', bet: { w: betAmount, sn: selectedNumber, coinName: coinName } })
+        roll: (betAmount, selectedNumber, coinName) => dispatch({ socket: 'dice', type: 'ROLL', bet: { w: betAmount, sn: selectedNumber, coinName: coinName } })
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(OUBet);
+export default connect(mapStateToProps, mapDispatchToProps)(Dice);

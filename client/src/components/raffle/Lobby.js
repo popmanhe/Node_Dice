@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketOn, socketEmit } from '../../utils/raffleSocketHelper';
+// import { socketOn, socketEmit } from '../../sockets/raffleSocketHelper';
 import CountDown from './CountDown';
 import * as notifications from '../../utils/notifications';
 

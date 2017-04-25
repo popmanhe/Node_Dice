@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketOn } from '../utils/diceSocketHelper';
 import '../styles/bootstrapValidator.css';
 import '../lib/bootstrapValidator';
 import CheckBox from './Basic/CheckBox';
@@ -71,22 +70,22 @@ class SignupForm extends React.Component {
         e.preventDefault();
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
-            socketOn('newUser', (result) => {
+            // socketOn('newUser', (result) => {
 
-                if (result.error) {
-                    switch (result.error.code) {
-                        case 11000:
-                            show('User name exists', 'Choose different one.', 'error');
-                            break;
-                        default:
-                            show('Error', result.error, 'error');
-                            this.props.setUser(null, false);
-                    }
-                }
-                else {
-                    this.props.setUser(result, true);
-                }
-            });
+            //     if (result.error) {
+            //         switch (result.error.code) {
+            //             case 11000:
+            //                 show('User name exists', 'Choose different one.', 'error');
+            //                 break;
+            //             default:
+            //                 show('Error', result.error, 'error');
+            //                 this.props.setUser(null, false);
+            //         }
+            //     }
+            //     else {
+            //         this.props.setUser(result, true);
+            //     }
+            // });
 
         }
         else
@@ -156,7 +155,7 @@ SignupForm.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSignup: (userName, password) => dispatch({ type: 'SIGNUP_USER', userName, password }),
+        onSignup: (userName, password) => dispatch({ socket: 'dice', type: 'SIGNUP_USER', user: { userName, password } }),
         setUser: (user, isLoggedIn) => dispatch({ type: "SET_USER", user, isLoggedIn })
     };
 };

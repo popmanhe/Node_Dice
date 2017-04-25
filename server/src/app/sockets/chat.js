@@ -3,26 +3,28 @@ import logger from '../helper/logger';
 
 const chat = (io) => {
     io.on('connection', (socket) => {
-        socket.on('getChats', async () => {
+        socket.on('GET_CHATS', async () => {
             try {
-                const chats = await chatModel.GetChats();
-                socket.emit('getChats', chats);
+                const messages = await chatModel.GetChats();
+                socket.emit('action', { type: 'RECV_MESSAGES', messages });
             }
             catch (err) {
                 logger.error(err);
             }
         });
 
-        socket.on('sendChat',async (chat) => {
+        socket.on('SEND_MESSAGE', async (chat) => {
             if (socket.user) {
                 chat.userName = socket.user.userName;
                 chat.timeStamp = new Date();
                 try {
                     await chatModel.AddChat(chat);
-                    io.emit('recvChat', {
-                        userName: chat.userName,
-                        timeStamp: chat.timeStamp,
-                        message: chat.message
+                    io.emit('action', {
+                        type: 'RECV_MESSAGE', message: {
+                            userName: chat.userName,
+                            timeStamp: chat.timeStamp,
+                            message: chat.message
+                        }
                     });
                 }
                 catch (err) {

@@ -1,8 +1,17 @@
-import initialState from './initialState';
-import { socketEmit } from '../utils/diceSocketHelper';
-export default (state = initialState.user, action) => {
+
+const initState = {
+    userName: null,
+    userid: null,
+    clientSalt: '',
+    funds: null,
+    nonce: 0,
+    hashedServerSalt: '',
+    isLoggedIn: false
+};
+
+export default (state = initState, action) => {
     switch (action.type) {
-        case 'SET_USER': {
+        case 'LOGGED_USER': {
             if (action.user)
                 return {
                     ...state,
@@ -12,7 +21,7 @@ export default (state = initialState.user, action) => {
                     funds: action.user.funds,
                     nonce: 0,
                     hashedServerSalt: action.user.hashedServerSalt,
-                    isLoggedIn: action.isLoggedIn
+                    isLoggedIn: true
                 };
             else
                 return {
@@ -26,18 +35,6 @@ export default (state = initialState.user, action) => {
                     isLoggedIn: false
                 };
         }
-        case 'SIGNUP_USER':
-            socketEmit('newUser', { userName: action.userName, password: action.password });
-            return state;
-        case 'LOGIN_USER':
-            socketEmit('loginUser', { userName: action.userName, password: action.password });
-            return state;
-        case 'REFRESH_BALANCE':
-            socketEmit('getBalance', action.coinName);
-            return state;
-        case 'SAVE_CLIENTSALT':
-            socketEmit('clientSalt', action.clientSalt);
-            return state;
         default:
             return state;
     }

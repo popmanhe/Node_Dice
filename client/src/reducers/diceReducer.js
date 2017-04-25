@@ -1,10 +1,23 @@
-import initialState from './initialState';
-import { socketEmit } from '../utils/diceSocketHelper';
-export default (state = initialState.dice, action) => {
+
+import moment from 'moment';
+const initState = {
+    isRolling: false,
+    autoBet: { numberOfRolls: 1, stopWin: 0, stopLoss: 0, increaseOnLose: 0, increaseOnWin: 0 },
+    coins: [],
+    allBets: []
+};
+
+export default (state = initState, action) => {
     switch (action.type) {
-        case 'GET_COINNAMES':
-            socketEmit('coinNames', {});
-            return state;
+        case 'RECV_ALLBETS': //Get previous 100 bets when page loading
+            return {
+                ...state,
+                allBets: action.bets
+                    .map((bet) => { return { ...bet, betTime: moment(bet.betTime).format('MM-DD HH:mm:ss') }; })
+            };
+        // case 'GET_COINNAMES':
+        //     socketEmit('coinNames', {});
+        //     return state;
         case 'SET_COINNAMES':
             {
                 let selectedCoin = state.selectedCoin;
@@ -23,14 +36,14 @@ export default (state = initialState.dice, action) => {
             }
         case 'ROLL':
             {
-                socketEmit('roll', action.bet);
+                
                 let numberOfRolls = state.autoBet.numberOfRolls;
                 if (numberOfRolls > 1)
                     numberOfRolls -= 1;
 
                 return {
                     ...state, isRolling: true, betAmout: action.bet.w, selectedNumber: action.bet.sn
-                    , autoBet: { ...state.autoBet, numberOfRolls }
+                    , autoBet: { ...state.autoBet, numberOfRolls }, currentBet: action.bet
                 };
             }
         case 'END_ROLL':

@@ -2,8 +2,6 @@ import React, { PropTypes } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import CheckBox from './Basic/CheckBox';
 import { connect } from 'react-redux';
-import { socketOn } from '../utils/diceSocketHelper';
-import * as notifications from '../utils/notifications';
 
 class LoginModal extends React.Component {
     constructor(props) {
@@ -17,21 +15,8 @@ class LoginModal extends React.Component {
     onLogin(e) {
         e.preventDefault();
         this.props.onLogin(this.state.userName, this.state.password, this.state.rememberMe);
-        this.loggedUser();
     }
 
-    loggedUser() {
-        socketOn('loggedUser', (result) => {
-            if (result.error) {
-                this.props.setUser(null, false);
-                notifications.show('', result.error, 'error');
-            }
-            else {
-                this.props.setUser(result, true);
-                notifications.Loggedin();
-            }
-        });
-    }
 
     onCancel() {
         this.clearData();
@@ -88,14 +73,12 @@ class LoginModal extends React.Component {
 LoginModal.propTypes = {
     show: PropTypes.bool,
     onLogin: PropTypes.func,
-    setUser: PropTypes.func,
     onCancel: PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogin: (userName, password, rememberMe) => dispatch({ type: 'LOGIN_USER', userName, password, rememberMe }),
-        setUser: (user, isLoggedIn) => dispatch({ type: "SET_USER", user, isLoggedIn })
+        onLogin: (userName, password, rememberMe) => dispatch({ socket: 'dice', type: 'AUTHENTICATE', user: { userName, password, rememberMe } })
     };
 };
 export default connect(null, mapDispatchToProps)(LoginModal);

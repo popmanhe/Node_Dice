@@ -1,10 +1,10 @@
 import React from 'react';
-import OUBet from '../components/dice/OUBet';
+import Dice from '../components/dice/Dice';
 import AutoBet from '../components/dice/AutoBet';
 import Chat from '../components/Chat';
 import Salt from '../components/dice/Salt';
 import BetHistory from './BetHistory';
-const HomePage = () => {
+const DiceGame = () => {
     return (
         <div className="row">
             <div className="col-sm-9 col-md-9 col-lg-9">
@@ -22,7 +22,7 @@ const HomePage = () => {
                                 <div className="tab-content">
                                     <div className="tab-pane fade active in" id="rollDice">
                                         <div className="panel-body">
-                                            <OUBet />
+                                            <Dice />
                                             <label>Source code: <a href="https://github.com/popmanhe/Node_Dice" target="_blank">https://github.com/popmanhe/Node_Dice</a></label>
                                         </div>
 
@@ -49,4 +49,4 @@ const HomePage = () => {
         </div>
     );
 };
-export default HomePage;
+export default DiceGame;

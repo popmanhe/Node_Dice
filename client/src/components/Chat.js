@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketEmit, socketOn } from '../utils/diceSocketHelper';
-import moment from 'moment';
 import '../lib/jquery.nicescroll.min';
 
 class Chat extends React.Component {
@@ -11,8 +9,7 @@ class Chat extends React.Component {
       }
 
       componentDidMount() {
-            this.initChat();
-            this.receiveChats();
+            this.props.onGetChats();
             $('#chatList').niceScroll({
                   cursorcolor: "#121212",
                   cursorborder: "0px solid #fff",
@@ -20,6 +17,10 @@ class Chat extends React.Component {
                   cursorwidth: "5px",
                   cursoropacitymax: 0.2
             });
+      }
+       
+      componentDidUpdate(prevProps, prevState) {
+            this.scrollToBottom();
       }
       // componentWillUnmount() {
       //       this.leaveChat();
@@ -29,33 +30,9 @@ class Chat extends React.Component {
       //       //   socket.close();
       //       console.log('leaveChat');
       // }
-      receiveChats() {
-            const self = this;
-            socketOn('recvChat', (result) => {
-                  this.props.onReceiveMessage({
-                        userName: result.userName
-                        , timeStamp: moment(result.timeStamp).format('MM-DD HH:mm')
-                        , message: result.message
-                  });
 
-                  self.scrollToBottom();
-            });
-      }
       initChat() {
-
-            const self = this;
-            socketEmit('getChats', '');
-            socketOn('getChats', function (result) {
-                  if (result.length > 0) {
-                        result.sort((a, b) => a.timeStamp > b.timeStamp ? 1 : -1);
-                        result.map((r) => self.props.onReceiveMessage({
-                              userName: r.userName
-                              , timeStamp: moment(r.timeStamp).format('MM-DD HH:mm')
-                              , message: r.message
-                        }));
-                  }
-                  self.scrollToBottom();
-            });
+            this.props.onGetChats();
       }
       scrollToBottom() {
             const container = $('#chatList');
@@ -100,7 +77,7 @@ class Chat extends React.Component {
 }
 Chat.propTypes = {
       onSendMessage: PropTypes.func,
-      onReceiveMessage: PropTypes.func,
+      onGetChats: PropTypes.func,
       messages: PropTypes.arrayOf(PropTypes.shape({
             userName: PropTypes.string.isRequired,
             message: PropTypes.string.isRequired,
@@ -113,14 +90,15 @@ Chat.propTypes = {
 const mapStateToProps = (state) => {
       return {
             messages: state.chat.messages,
-            enabled: state.user.userName != null
+            enabled: state.user.isLoggedIn
       };
 };
 
 const mapDispatchToProps = (dispatch) => {
       return {
-            onSendMessage: (text) => dispatch({ type: 'SEND_MESSAGE', message: text }),
-            onReceiveMessage: (message) => dispatch({ type: 'RECV_MESSAGE', message: message })
+            onGetChats: () => dispatch({ socket: 'dice', type: 'GET_CHATS' }),
+            onSendMessage: (text) => dispatch({ socket: 'dice', type: 'SEND_MESSAGE', message: text })
+
       };
 
 };

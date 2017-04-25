@@ -5,7 +5,7 @@
  */
 
 //import config from '../../config';
-import userHelper from '../Models/userModel';
+import userModel from '../Models/userModel';
 import betHelper from '../Models/betModel';
 import rollDice from '../helper/cryptoroll';
 import logger from '../helper/logger';
@@ -16,24 +16,24 @@ const dice = (io) => {
     io.on('connection', (socket) => {
         const gameName = 'dice';
         socket.join(gameName);
-       
+
         //return a 
         socket.on('roll', async (clientBet) => {
-            
+
             try {
-                let u = await userHelper.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
+                let u = await userModel.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
                 //validate input
                 if (!_.isNumber(clientBet.w - 0)) {
-                    socket.emit('rollError', { code: -3 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -3 });
                     return;
                 }
 
                 if (clientBet.w <= 0) {
-                    socket.emit('rollError', { code: -2 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -2 });
                     return;
                 }
                 if (u.getBalance(clientBet.coinName) < clientBet.w) {// not enough fund
-                    socket.emit('rollError', { code: -1 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -1 });
                     return;
                 }
 
@@ -59,11 +59,11 @@ const dice = (io) => {
                     payout
                 });
                 try {
-                    await bet.save();
+                    bet = await bet.save();
                 }
                 catch (err) {
                     logger.error('Saving bet error:' + err);
-                    socket.emit('rollError', { code: -4 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -4 });
                     return;
                 }
 
@@ -75,7 +75,7 @@ const dice = (io) => {
                 }
                 catch (err) {
                     logger.error('Saving user profit error:' + err);
-                    socket.emit('rollError', { code: -5 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -5 });
                     return;
                 }
 
@@ -85,6 +85,7 @@ const dice = (io) => {
                     userName: socket.user.userName,
                     rollNum,
                     nonce: u.nonce,
+                    betid: bet._id,
                     betTime: bet.betTime,
                     selNum: bet.selNum,
                     amount: bet.amount,
@@ -93,16 +94,16 @@ const dice = (io) => {
                     payout
                 };
 
-                io.volatile.to(gameName).emit('allBets', result);
+                io.volatile.to(gameName).emit('action', { type: 'ROLL', bet: result });
             }
             catch (err) {
                 logger.error(err);
-                socket.emit('rollError', { code: -6 });
+                socket.emit('action', { type: 'ERROR', errorCode: -6 });
             }
         });
 
         socket.on('getMyBets', async () => {
-            
+
             try {
                 const bets = await betHelper.getBetsByUser(socket.user.userid);
                 socket.emit('getMyBets', bets);
@@ -112,16 +113,28 @@ const dice = (io) => {
             }
         });
 
-        socket.on('getAllBets', async () => {
+        socket.on('GET_ALLBETS', async () => {
             try {
                 const bets = await betHelper.getAllBets();
-                socket.emit('getAllBets', bets);
+                socket.emit('action', { type: 'RECV_ALLBETS', bets });
             }
             catch (err) {
                 logger.error('getAllBets error:' + err);
             }
         });
 
+        //update client salt
+        socket.on('SAVE_CLIENTSALT', async (clientSalt) => {
+
+            try {
+                const oldSalt = await userModel.SaveClientSalt(socket.user.userid, clientSalt);
+
+                socket.emit('action', { type: 'CLIENT_SALT', salt: oldSalt });
+            }
+            catch (err) {
+                socket.emit('action', { type: 'ERROR', message: err });
+            }
+        });
 
         //functions
         const GetProfit = (rollNum, selNum, amount, payout) => {

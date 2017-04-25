@@ -1,5 +1,5 @@
 import toastr from '../lib/toastr.min';
-import * as messages from './messages';
+import * as messages from '../constants/messages';
 
 export const show = (title, content, type) => {
     toastr.options = { positionClass: "toast-bottom-right", preventDuplicates: true, progressBar: true, newestOnTop: false };
@@ -24,6 +24,6 @@ export const UserNotLoggedin = () => {
     show(messages.USERNOTLOGGEDINTITLE, messages.USERNOTLOGGEDINTEXT, "warning");
 };
 
-export const Loggedin = () => {
+export const UserLoggedin = () => {
     show(messages.USERLOGGEDINTITLE, messages.USERLOGGEDINTEXT, 'success');
 };

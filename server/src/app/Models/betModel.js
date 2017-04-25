@@ -32,7 +32,7 @@ betSchema.statics = {
 
     },
     getAllBets: async () => {
-        return await betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout')
+        return await betModel.find({}, '_id userid userName rollNum nonce betTime selNum amount unit profit payout')
         .sort({ betTime: -1 }).limit(100);
     },
     getPayout: function (selNum) {

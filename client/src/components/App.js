@@ -2,14 +2,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Login from '../containers/UserLogin';
-import { socketOn } from '../utils/diceSocketHelper';
 
 class App extends React.Component {
-    componentDidMount() {
-        socketOn('invalidUser', () => {
-            this.props.userNotLogin();
-        });
-    }
     render() {
         const p = this.props;
         return (

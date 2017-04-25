@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { socketOn } from '../../utils/diceSocketHelper';
 import R from 'ramda';
-import { show } from '../../utils/notifications';
+// import { show } from '../../utils/notifications';
 class Salt extends React.Component {
     constructor(props) {
         super(props);
@@ -12,18 +11,6 @@ class Salt extends React.Component {
             preServerSalt: ""
         };
         this.handleChange = this.handleChange.bind(this);
-    }
-    componentDidMount() {
-        const self = this;
-        socketOn('clientSalt', function (data) {
-            if (data.error) {
-                show('ERROR',data.error, 'error');
-            }
-            else {
-                self.setState({ preClientSalt: data.clientSalt, preServerSalt: data.serverSalt });
-                show('','Client salt has been updated.');
-            }
-        });
     }
     componentWillReceiveProps(nextProps) {
 
@@ -77,7 +64,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveClientSalt: (clientSalt) => { if (clientSalt && R.trim(clientSalt) != "") dispatch({ "type": "SAVE_CLIENTSALT", clientSalt: R.trim(clientSalt) }); }
+        saveClientSalt: (clientSalt) => { if (clientSalt && R.trim(clientSalt) != "") dispatch({ socket: "dice", type: "SAVE_CLIENTSALT", clientSalt: R.trim(clientSalt) }); }
     };
 };
 

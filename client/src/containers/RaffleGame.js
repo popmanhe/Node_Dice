@@ -8,7 +8,7 @@ const propTypes = {};
 
 const defaultProps = {};
 
-class Raffle extends Component {
+class RaffleGame extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,8 +35,8 @@ class Raffle extends Component {
     }
 }
 
-Raffle.propTypes = propTypes;
+RaffleGame.propTypes = propTypes;
 
-Raffle.defaultProps = defaultProps;
+RaffleGame.defaultProps = defaultProps;
 
-export default Raffle;
+export default RaffleGame;
