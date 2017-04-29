@@ -9,7 +9,11 @@
             "request": "launch",
             "name": "Launch Chrome",
             "url": "http://localhost:3010",
-            "webRoot": "${workspaceRoot}"
+            "webRoot": "${workspaceRoot}/client",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${webRoot}/*"
+            }
         }
     ]
 }

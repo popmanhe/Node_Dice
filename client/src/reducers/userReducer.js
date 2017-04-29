@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 const initState = {
     userName: null,
     userid: null,
@@ -6,11 +6,38 @@ const initState = {
     funds: null,
     nonce: 0,
     hashedServerSalt: '',
-    isLoggedIn: false
+    isLoggedIn: false,
+    myBets: []
 };
 
 export default (state = initState, action) => {
     switch (action.type) {
+        case 'ROLLED':
+            if (action.bet.userid == state.userid) {
+                action.bet.betTime = moment(action.bet.betTime).format('MM-DD HH:mm:ss');
+                let myBets = [action.bet, ...state.myBets];
+                if (myBets.length > 100)
+                    myBets.splice(99);
+                const funds = state.funds.map((fund) => {
+                    if (fund.coinName == action.bet.coinName) {
+                        fund.profit += action.bet.profit * 1;
+                    }
+                    return fund;
+                });
+
+                return { ...state, funds, myBets };
+            }
+            return state;
+        case 'REFRESH_BALANCE':
+            return { ...state, funds: action.funds };
+        // case 'SET_BALANCE':
+        //     {
+        //         const funds = state.funds;
+
+        //         let fund = funds.filter((fund) => { return fund.coinName == action.coinName; });
+        //         fund.profit += action.value * 1;
+        //         return { ...state, funds };
+        //     }
         case 'LOGGED_USER': {
             if (action.user)
                 return {

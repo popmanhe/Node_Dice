@@ -8,7 +8,8 @@ class Dice extends React.Component {
         this.state = {
             balance: 0,
             betAmount: 0,
-            payout: 2
+            payout: 2,
+            betid: 0
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -18,17 +19,18 @@ class Dice extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         //Get coin balance
-        if (nextProps.loggedIn && ((nextProps.loggedIn != this.props.loggedIn) ||
-            (nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName))) {
-            this.getBalance(nextProps.selectedCoin.coinName);
+        if ((nextProps.loggedIn && nextProps.loggedIn != this.props.loggedIn) ||
+            (nextProps.selectedCoin && this.props.selectedCoin && (nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName))) {
+            this.setState({ balance: this.getBalance(nextProps) });
         }
+
         //Set min betAmount when changing coin
         if (!this.props.selectedCoin || nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName) {
             this.setBetAmount(nextProps.selectedCoin.min);
         }
-        if (nextProps.currentBet && this.props.currentBet &&
-            nextProps.currentBet._id != this.props.currentBet._id) {
-            this.receiveMyBet();
+        if ((nextProps.currentBet && nextProps.currentBet.userid == this.props.user.userid && nextProps.currentBet.betid != this.state.betid)) {
+            this.setState({ betid: nextProps.currentBet.betid });
+            this.receiveMyBet(nextProps.currentBet);
         }
     }
     handleChange(event) {
@@ -40,18 +42,18 @@ class Dice extends React.Component {
         });
     }
     showResult(result) {
-        if ((result.selNum * 1 <= 49.5 && result.rollNum * 1 <= result.selNum * 1)
-            || (result.selNum * 1 >= 50.49 && result.rollNum * 1 >= result.selNum * 1)) {
+        if (result.profit > 0) {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
                 this.props.won(result.rollNum);
-            this.setState({ balance: (this.state.balance * 1 + result.profit * 1).toFixed(8) });
+            this.setBalance(result.profit);
+
             return true;
         }
         else {
             if (this.props.autoBet.numberOfRolls == 1) //Don't show notification when auto betting
                 this.props.lost(result.rollNum);
+            this.setBalance(result.profit);
 
-            this.setState({ balance: (this.state.balance - result.amount).toFixed(8) });
             return false;
         }
 
@@ -61,35 +63,35 @@ class Dice extends React.Component {
         const s = this.state;
         const p = this.props;
         let stop = false;
-        if (p.user.userid == result.userid) {
-            const win = this.showResult(result);
 
-            if (win) {
-                if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
-                    stop = true;
-                }
-                else if (p.autoBet.increaseOnWin == 0) {
-                    this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
-                }
-                else {
-                    this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnWin / 100)).toFixed(8) });
-                }
+        const win = this.showResult(result);
+
+        if (win) {
+            if (p.autoBet.stopWin * 1 > 0 && s.betAmount >= p.autoBet.stopWin) {
+                stop = true;
+            }
+            else if (p.autoBet.increaseOnWin == 0) {
+                this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
             }
             else {
-                if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
-                    stop = true;
-                }
-                else if (p.autoBet.increaseOnLose == 0) {
-                    this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
-                }
-                else {
-                    this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
-                }
+                this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnWin / 100)).toFixed(8) });
             }
-
-            if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
-                this.roll(s.rollNum);
         }
+        else {
+            if (p.autoBet.stopLoss * 1 > 0 && s.betAmount >= p.autoBet.stopLoss) {
+                stop = true;
+            }
+            else if (p.autoBet.increaseOnLose == 0) {
+                this.setState({ betAmount: (s.baseAmount * 1).toFixed(8) });
+            }
+            else {
+                this.setState({ betAmount: (s.betAmount * (1 + p.autoBet.increaseOnLose / 100)).toFixed(8) });
+            }
+        }
+
+        if (!stop && (p.autoBet.numberOfRolls > 1 || p.autoBet.numberOfRolls == 0))
+            this.roll(s.rollNum);
+
         this.endRoll();
 
     }
@@ -103,15 +105,20 @@ class Dice extends React.Component {
             this.props.getCoinNames();
         }
     }
-    getBalance(coinName) {
-        if (coinName) {
-            this.props.refreshBalance(coinName);
-            // socketOn('getBalance', (result) => this.setState({ balance: result.toFixed(8) }));
+    getBalance(props) {
+        const p = props;
+        if (p.user.funds) {
+            const fund = p.user.funds.find((fund) => { return fund.coinName == p.selectedCoin.coinName; });
+
+            return fund ? (fund.depositAmount - fund.withdrawAmount + fund.profit * 1).toFixed(8) : 0;
         }
+    }
+    setBalance(profit) {
+        this.setState({ balance: (this.state.balance * 1 + profit * 1).toFixed(8) });
     }
     refreshBalance() {
         if (this.props.loggedIn)
-            this.getBalance(this.props.selectedCoin.coinName);
+            this.props.refreshBalance();
         else
             this.props.userNotLoggedin();
     }
@@ -144,7 +151,7 @@ class Dice extends React.Component {
             this.props.userNotLoggedin();
             return;
         }
-        if (this.state.betAmount > this.state.balance) {
+        if (this.state.betAmount > this.getBalance(this.props)) {
             this.props.fundNotEnough();
             return;
         }
@@ -153,9 +160,10 @@ class Dice extends React.Component {
             this.props.roll(this.state.betAmount, rollNum, this.props.selectedCoin.coinName);
     }
     setBetAmount(betAmount) {
-        this.setState({ betAmount: betAmount.toFixed(8) });
+        this.setState({ betAmount: betAmount.toFixed(8), baseAmount: betAmount.toFixed(8) });
         this.props.setBetAmount(betAmount);
     }
+
     render() {
         const p = this.props;
         const coinName = p.selectedCoin ? p.selectedCoin.coinName : "";
@@ -163,7 +171,7 @@ class Dice extends React.Component {
 
         const rollUnder = (100 / this.state.payout * 0.99).toFixed(2);
         const rollOver = (99.99 - rollUnder).toFixed(2);
-        const coin = p.user.funds.filter((coin) => { return coin.coinName == p.selectedCoin.coinName });
+
         return (
             <div className="the-box">
                 <div className="form-group">
@@ -216,11 +224,11 @@ class Dice extends React.Component {
 
                 <div className="row">
                     <div className="col-xs-5 col-sm-4 col-sm-offset-2">
-                        <button className="btn btn-success btn-perspective" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollOver); }} >Over {rollOver}</button>
+                        <button className="btn btn-success btn-perspective" disabled={this.props.isRolling} onClick={() => { this.roll(rollOver); }} >Over {rollOver}</button>
                     </div>
 
                     <div className="col-xs-5 col-sm-4">
-                        <button className="btn btn-danger btn-perspective" disabled={this.props.isRolling} onClick={() => { this.setState({ baseAmount: this.state.betAmount }); this.roll(rollUnder); }}  >Under {rollUnder}</button>
+                        <button className="btn btn-danger btn-perspective" disabled={this.props.isRolling} onClick={() => { this.roll(rollUnder); }}  >Under {rollUnder}</button>
                     </div>
                 </div>
             </div>
@@ -263,15 +271,15 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        won: (rollNum) => dispatch({ type: 'SUCCESS', message: 'Dice:' + rollNum + '. You won' }),
-        lost: (rollNum) => dispatch({ type: 'ERROR', message: 'Dice:' + rollNum + '. You lost' }),
+        won: (rollNum) => dispatch({ type: 'SUCCESS', title: 'You won', message: 'Dice:' + rollNum + '.' }),
+        lost: (rollNum) => dispatch({ type: 'ERROR', title: 'You lost', message: 'Dice:' + rollNum + '.' }),
         userNotLoggedin: () => dispatch({ type: 'USER_NOT_LOGGEDIN' }),
         fundNotEnough: () => dispatch({ type: 'WARNING', title: 'Fund not enough', message: 'Your balance is not enough. Deposit more fund.' }),
         getCoinNames: () => dispatch({ socket: 'dice', type: 'GET_COINNAMES' }),
-        refreshBalance: (coinName) => dispatch({ socket: 'dice', type: 'REFRESH_BALANCE', coinName }),
+        refreshBalance: () => dispatch({ socket: 'dice', type: 'REFRESH_BALANCE' }),
         endRoll: () => dispatch({ type: 'END_ROLL' }),
         setBetAmount: (betAmount) => dispatch({ type: 'SET_BETAMOUNT', betAmount }),
-        roll: (betAmount, selectedNumber, coinName) => dispatch({ socket: 'dice', type: 'ROLL', bet: { w: betAmount, sn: selectedNumber, coinName: coinName } })
+        roll: (betAmount, selectedNumber, coinName) => dispatch({ socket: 'dice', type: 'ROLL', bet: { w: betAmount, sn: selectedNumber, coinName } })
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Dice);

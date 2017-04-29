@@ -51,8 +51,7 @@ class BetHistory extends Component {
     }
 
     render() {
-        const myBets = this.props.user.userid == null ? [] : this.props.allBets.filter((bet) => { return bet.userid == this.props.user.userid; });
-        const highRollers = this.props.allBets.filter((bet) => { return bet.amount >= 0.001; });
+       
         return (
             <div >
                 <div className="panel with-nav-tabs panel-default">
@@ -68,7 +67,7 @@ class BetHistory extends Component {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="table-responsive the-box">
-                                        <BetList betList={myBets} showUserName={false} />
+                                        <BetList betList={this.props.myBets} showUserName={false} />
                                     </div>
                                 </div>
                             </div>
@@ -86,7 +85,7 @@ class BetHistory extends Component {
                             <div className="row">
                                 <div className="col-sm-12">
                                     <div className="table-responsive the-box">
-                                        <BetList betList={highRollers} />
+                                        <BetList betList={this.props.highRollers} />
                                     </div>
                                 </div>
                             </div>
@@ -102,13 +101,17 @@ class BetHistory extends Component {
 BetHistory.propTypes = {
     user: PropTypes.object,
     allBets: PropTypes.array,
+    myBets: PropTypes.array,
+    highRollers: PropTypes.array,
     getAllBets: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
     return {
         user: state.user,
-        allBets: state.dice.allBets
+        allBets: state.dice.allBets,
+        highRollers: state.dice.highRollers,
+        myBets: state.user.myBets
     };
 };
 

@@ -137,16 +137,11 @@ userSchema.statics = {
         await u.save();
         return addr;
     },
-    GetBalance: async (userid, coinName) => {
-        const helper = coinsConfig[coinName];
-        const amount = helper.GetBalance(userid);
+    GetBalance: async (userid) => {
+
 
         const u = await userModel.findOne({ _id: userid }, "funds");
-
-        u.setDeposit(coinName, amount);
-        await u.save();
-
-        return u.getBalance(coinName);
+        return u.funds;
     },
     LoginUser: async (userName, password) => {
         password = crypto.createHash('sha512').update(password).digest('hex');

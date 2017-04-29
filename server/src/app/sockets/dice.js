@@ -18,8 +18,8 @@ const dice = (io) => {
         socket.join(gameName);
 
         //return a 
-        socket.on('roll', async (clientBet) => {
-
+        socket.on('ROLL', async (action) => {
+            const clientBet = action.bet;
             try {
                 let u = await userModel.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
                 //validate input
@@ -94,7 +94,7 @@ const dice = (io) => {
                     payout
                 };
 
-                io.volatile.to(gameName).emit('action', { type: 'ROLL', bet: result });
+                io.volatile.to(gameName).emit('action', { type: 'ROLLED', bet: result });
             }
             catch (err) {
                 logger.error(err);

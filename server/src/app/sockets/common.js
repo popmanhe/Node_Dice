@@ -83,11 +83,11 @@ export default (io) => {
         });
 
         //get user balance
-        socket.on('GET_BALANCE', async (coinName) => {
+        socket.on('REFRESH_BALANCE', async () => {
 
             try {
-                const balance = await userModel.GetBalance(socket.user.userid, coinName);
-                socket.emit('action', {type: 'GET_BALANCE', balance});
+                const funds = await userModel.GetBalance(socket.user.userid);
+                socket.emit('action', {type: 'REFRESH_BALANCE', funds});
             }
             catch (err) {
                 logger.info(err);
