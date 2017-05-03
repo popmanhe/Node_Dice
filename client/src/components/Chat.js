@@ -19,7 +19,7 @@ class Chat extends React.Component {
             });
       }
        
-      componentDidUpdate(prevProps, prevState) {
+      componentDidUpdate(/*prevProps, prevState*/) {
             this.scrollToBottom();
       }
       // componentWillUnmount() {

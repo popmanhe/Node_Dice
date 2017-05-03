@@ -1,8 +1,3 @@
-/**
- * Copyright 2014 eRealm Info & Tech.
- *
- * Created by Ken on 8/08/2014
- */
 import path from 'path';
 import config from '../../config';
 import winston from 'winston';

@@ -77,15 +77,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _all = __webpack_require__(27);
+var _all = __webpack_require__(28);
 
 var _all2 = _interopRequireDefault(_all);
 
-var _development = __webpack_require__(28);
+var _development = __webpack_require__(29);
 
 var _development2 = _interopRequireDefault(_development);
 
-var _production = __webpack_require__(29);
+var _production = __webpack_require__(30);
 
 var _production2 = _interopRequireDefault(_production);
 
@@ -118,13 +118,13 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _winston = __webpack_require__(35);
+var _winston = __webpack_require__(36);
 
 var _winston2 = _interopRequireDefault(_winston);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_winston2.default.transports.DailyRotateFile = __webpack_require__(36); /**
+_winston2.default.transports.DailyRotateFile = __webpack_require__(37); /**
                                                                                       * Copyright 2014 eRealm Info & Tech.
                                                                                       *
                                                                                       * Created by Ken on 8/08/2014
@@ -156,7 +156,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _mongoose = __webpack_require__(33);
+var _mongoose = __webpack_require__(34);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -275,6 +275,14 @@ userSchema.methods.setDeposit = function (coinName, amount) {
     return fund;
 };
 
+userSchema.methods.getDepositAddr = async function (coinName) {
+    let helper = _coinsConfig2.default[coinName];
+    const addr = await helper.GetNewAddress(this._id, coinName);
+
+    this.setDepositAddr(coinName, addr);
+    return addr;
+};
+
 userSchema.methods.setDepositAddr = function (coinName, addr) {
 
     let fund = this.getFund(coinName);
@@ -327,24 +335,16 @@ userSchema.statics = {
         return { clientSalt: _clientSalt, serverSalt: _serverSalt };
     },
     GetNewAddress: async (userid, coinName) => {
-        let helper = _coinsConfig2.default[coinName];
-        const addr = await helper.GetNewAddress(userid);
 
         let u = await userModel.findOne({ _id: userid }, "funds");
-        u.setDepositAddr('BTC', addr);
+        const addr = u.getDepositAddr(coinName);
         await u.save();
         return addr;
     },
-    GetBalance: async (userid, coinName) => {
-        const helper = _coinsConfig2.default[coinName];
-        const amount = helper.GetBalance(userid);
+    GetBalance: async userid => {
 
         const u = await userModel.findOne({ _id: userid }, "funds");
-
-        u.setDeposit(coinName, amount);
-        await u.save();
-
-        return u.getBalance(coinName);
+        return u.funds;
     },
     LoginUser: async (userName, password) => {
         password = _crypto2.default.createHash('sha512').update(password).digest('hex');
@@ -495,43 +495,29 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _s_common = __webpack_require__(25);
+var _auth = __webpack_require__(24);
 
-var _s_common2 = _interopRequireDefault(_s_common);
+var _auth2 = _interopRequireDefault(_auth);
 
-var _s_overunder = __webpack_require__(26);
+var _common = __webpack_require__(26);
 
-var _s_overunder2 = _interopRequireDefault(_s_overunder);
+var _common2 = _interopRequireDefault(_common);
 
-var _s_chat = __webpack_require__(24);
+var _dice = __webpack_require__(27);
 
-var _s_chat2 = _interopRequireDefault(_s_chat);
+var _dice2 = _interopRequireDefault(_dice);
 
-var _config = __webpack_require__(0);
+var _chat = __webpack_require__(25);
 
-var _config2 = _interopRequireDefault(_config);
-
-var _logger = __webpack_require__(1);
-
-var _logger2 = _interopRequireDefault(_logger);
+var _chat2 = _interopRequireDefault(_chat);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import uuid from 'uuid';
-// import socketSession from './handshake.js';
-
-// const assignSessionID = (socket, next) =>{
-//          logger.info('foo='+socket.handshake.query.foo);
-//         return next();
-// };
-
 exports.default = io => {
-    _logger2.default.info("Web socket is enabled for following domain(s): " + _config2.default.origins);
-    io.origins(_config2.default.origins);
-
-    (0, _s_common2.default)(io);
-    (0, _s_overunder2.default)(io);
-    (0, _s_chat2.default)(io);
+    (0, _auth2.default)(io);
+    (0, _common2.default)(io);
+    (0, _dice2.default)(io);
+    (0, _chat2.default)(io);
 };
 
 /***/ }),
@@ -640,7 +626,6 @@ const app = (0, _express2.default)();
 const server = _http2.default.createServer(app);
 
 const io = (0, _socket2.default)(server, { cookie: 'dSession', cookiePath: '/', cookieHttpOnly: true });
-
 //config express in all environments
 app.disable('x-powered-by');
 
@@ -648,8 +633,8 @@ app.disable('x-powered-by');
 //app.use(favicon(config.clientRoot + '/favicon.ico'));
 //Only used in development. In production, use nginx to serve static files
 if (false) {
-  app.use(_express2.default.static(_config2.default.clientRoot));
-  app.use((0, _compression2.default)({ threshold: 512 }));
+    app.use(_express2.default.static(_config2.default.clientRoot));
+    app.use((0, _compression2.default)({ threshold: 512 }));
 }
 app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
@@ -661,7 +646,7 @@ app.use((0, _expressValidator2.default)([]));
 (0, _sockets2.default)(io);
 
 server.listen(_config2.default.port, function () {
-  _logger2.default.info('Server running on port ' + _config2.default.port);
+    _logger2.default.info('Server running on port ' + _config2.default.port);
 });
 
 /***/ }),
@@ -675,7 +660,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _request = __webpack_require__(34);
+var _request = __webpack_require__(35);
 
 var _request2 = _interopRequireDefault(_request);
 
@@ -763,7 +748,7 @@ betSchema.statics = {
         return await betModel.find({ userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
     },
     getAllBets: async () => {
-        return await betModel.find({}, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
+        return await betModel.find({}, '_id userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
     },
     getPayout: function (selNum) {
         return selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
@@ -904,7 +889,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoin = __webpack_require__(31);
+var _bitcoin = __webpack_require__(32);
 
 var _bitcoin2 = _interopRequireDefault(_bitcoin);
 
@@ -1048,6 +1033,80 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _userModel = __webpack_require__(3);
+
+var _userModel2 = _interopRequireDefault(_userModel);
+
+var _crypto = __webpack_require__(4);
+
+var _crypto2 = _interopRequireDefault(_crypto);
+
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = io => {
+    //Add all events that need user to be authenticated
+    const authEvents = [
+    //user profile
+    'existingUser', 'clientSalt', 'newCoinAddr', 'getBalance',
+    //chat
+    'sendChat',
+    //dice
+    'roll', 'getMyBets'];
+    _logger2.default.info("Web socket is enabled for following domain1(s): " + _config2.default.origins);
+    io.origins(_config2.default.origins);
+    io.on('connection', socket => {
+        socket.use(function (packet, next) {
+            if (authEvents.indexOf(packet[0]) > -1 && (!socket.user || !socket.user.userid)) {
+                socket.emit('invalidUser');
+                return;
+            }
+            next();
+        });
+        socket.on('AUTHENTICATE', async ({ user }) => {
+            try {
+                let loggedUser = await _userModel2.default.LoginUser(user.userName, user.password);
+
+                if (!loggedUser) {
+                    socket.emit('action', { type: 'ERROR', message: 'Wrong user name and password combination.' });
+                    return;
+                }
+                loggedUser = {
+                    userid: loggedUser._id,
+                    userName: loggedUser.userName,
+                    clientSalt: loggedUser.clientSalt,
+                    funds: loggedUser.funds,
+                    nonce: loggedUser.nonce,
+                    hashedServerSalt: _crypto2.default.createHash('sha512').update(loggedUser.serverSalt).digest('hex')
+                };
+                socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
+                socket.emit('action', { type: 'LOGGED_USER', user: loggedUser });
+            } catch (err) {
+                _logger2.default.info(err);
+                socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
+            }
+        });
+    });
+};
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _chatModel = __webpack_require__(19);
 
 var _chatModel2 = _interopRequireDefault(_chatModel);
@@ -1060,25 +1119,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const chat = io => {
     io.on('connection', socket => {
-        socket.on('getChats', async () => {
+        socket.on('GET_CHATS', async () => {
             try {
-                const chats = await _chatModel2.default.GetChats();
-                socket.emit('getChats', chats);
+                const messages = await _chatModel2.default.GetChats();
+                socket.emit('action', { type: 'RECV_MESSAGES', messages });
             } catch (err) {
                 _logger2.default.error(err);
             }
         });
 
-        socket.on('sendChat', async chat => {
+        socket.on('SEND_MESSAGE', async chat => {
             if (socket.user) {
                 chat.userName = socket.user.userName;
                 chat.timeStamp = new Date();
                 try {
                     await _chatModel2.default.AddChat(chat);
-                    io.emit('recvChat', {
-                        userName: chat.userName,
-                        timeStamp: chat.timeStamp,
-                        message: chat.message
+                    io.emit('action', {
+                        type: 'RECV_MESSAGE', message: {
+                            userName: chat.userName,
+                            timeStamp: chat.timeStamp,
+                            message: chat.message
+                        }
                     });
                 } catch (err) {
                     _logger2.default.error(err);
@@ -1091,7 +1152,7 @@ const chat = io => {
 exports.default = chat;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1105,10 +1166,6 @@ var _userModel = __webpack_require__(3);
 
 var _userModel2 = _interopRequireDefault(_userModel);
 
-var _crypto = __webpack_require__(4);
-
-var _crypto2 = _interopRequireDefault(_crypto);
-
 var _coinsConfig = __webpack_require__(5);
 
 var _coinsConfig2 = _interopRequireDefault(_coinsConfig);
@@ -1119,28 +1176,15 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Copyright 2017 Node Dice
- *
- * Created by Neo on 2017/01/17.
- */
 exports.default = io => {
 
     //socket.io events
     io.on('connection', socket => {
-        const validateUser = user => {
-            if (!user || !user.userid) {
-                socket.emit('invalidUser', {});
-                return false;
-            }
-            return true;
-        };
 
-        // const session = socket.handshake.session;
-        socket.on('coinNames', () => socket.emit('coinNames', _coinsConfig2.default.getCoinNames()));
+        socket.on('GET_COINNAMES', () => socket.emit('action', { type: 'SET_COINNAMES', coins: _coinsConfig2.default.getCoinNames() }));
 
         //return a new user
-        socket.on('newUser', async u => {
+        socket.on('SIGNUP_USER', async u => {
 
             try {
                 const user = await _userModel2.default.CreateNewUser(u.userName, u.password);
@@ -1150,108 +1194,76 @@ exports.default = io => {
                     clientSalt: user.clientSalt,
                     funds: user.funds,
                     nonce: 0,
-                    hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
+                    hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
                 };
                 socket.user = { userid: newUser.userid, userName: newUser.userName };
-                socket.emit('newUser', newUser);
+                socket.emit('action', { type: 'NEW_USER', user: newUser });
             } catch (err) {
-                if (err.code == 11000) socket.emit('newUser', { error: { code: 11000 } });else {
+                if (err.code == 11000) socket.emit('action', { type: 'ERROR', errorCode: 11000 });else {
                     _logger2.default.error(err);
-                    socket.emit('newUser', { error: 'Internal error. Try later.' });
+                    socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
                 }
             }
         });
 
         //return an existing user
-        socket.on('existingUser', async () => {
-            if (!validateUser(socket.user)) return;
+        // socket.on('existingUser', async () => {
+        //     try {
+        //         const u = await userModel.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce");
 
-            try {
-                const u = await _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt _id userName funds nonce");
+        //         if (u) {
+        //             socket.emit('existingUser', {
+        //                 userid: u._id,
+        //                 userName: u.userName,
+        //                 clientSalt: u.clientSalt,
+        //                 funds: u.funds,
+        //                 nonce: u.nonce,
+        //                 hashedServerSalt: crypto.createHash('sha512').update(u.serverSalt).digest('hex')
+        //             });
+        //         }
+        //         else {
+        //             socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
+        //         }
+        //     }
+        //     catch (err) {
+        //         logger.error(err);
+        //         socket.emit('action', {type: 'ERROR', message: err });
+        //     }
+        // });
 
-                if (u) {
-                    socket.emit('existingUser', {
-                        userid: u._id,
-                        userName: u.userName,
-                        clientSalt: u.clientSalt,
-                        funds: u.funds,
-                        nonce: u.nonce,
-                        hashedServerSalt: _crypto2.default.createHash('sha512').update(u.serverSalt).digest('hex')
-                    });
-                } else {
-                    socket.emit('existingUser', { clientSalt: '', error: 'session expired' });
-                }
-            } catch (err) {
-                _logger2.default.error(err);
-                socket.emit('existingUser', { clientSalt: '', error: err });
-            }
-        });
-
-        //update client salt
-        socket.on('clientSalt', async clientSalt => {
-            if (!validateUser(socket.user)) return;
-            try {
-                const oldSalt = await _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt);
-
-                socket.emit('clientSalt', oldSalt);
-            } catch (err) {
-                socket.emit('clientSalt', err);
-            }
-        });
 
         //get new bitcion address
         socket.on('newCoinAddr', async coinName => {
-            if (!validateUser(socket.user)) return;
+
             try {
                 const addr = await _userModel2.default.GetNewAddress(socket.user.userid, coinName);
                 socket.emit('newCoinAddr', addr);
             } catch (err) {
                 _logger2.default.error(err);
-                socket.emit('newCoinAddr', err);
+                socket.emit('action', { type: 'ERROR', message: err });
             }
         });
 
         //get user balance
-        socket.on('getBalance', async coinName => {
-            if (!validateUser(socket.user)) return;
+        socket.on('REFRESH_BALANCE', async () => {
+
             try {
-                const balance = await _userModel2.default.GetBalance(socket.user.userid, coinName);
-                socket.emit('getBalance', balance);
+                const funds = await _userModel2.default.GetBalance(socket.user.userid);
+                socket.emit('action', { type: 'REFRESH_BALANCE', funds });
             } catch (err) {
                 _logger2.default.info(err);
-                socket.emit('loggedUser', { error: 'Internal error. Try later.' });
-            }
-        });
-
-        //get user balance
-        socket.on('loginUser', async u => {
-            try {
-                const user = await _userModel2.default.LoginUser(u.userName, u.password);
-
-                if (!user) {
-                    socket.emit('loggedUser', { error: 'Wrong user name and password combination.' });
-                    return;
-                }
-                const loggedUser = {
-                    userid: user._id,
-                    userName: user.userName,
-                    clientSalt: user.clientSalt,
-                    funds: user.funds,
-                    nonce: user.nonce,
-                    hashedServerSalt: _crypto2.default.createHash('sha512').update(user.serverSalt).digest('hex')
-                };
-                socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
-                socket.emit('loggedUser', loggedUser);
-            } catch (err) {
-                _logger2.default.info(err);
-                socket.emit('loggedUser', { error: 'Internal error. Try later.' });
+                socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
             }
         });
     });
-};
+}; /**
+    * Copyright 2017 Node Dice
+    *
+    * Created by Neo on 2017/01/17.
+    */
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1277,42 +1289,36 @@ var _logger = __webpack_require__(1);
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _lodash = __webpack_require__(32);
+var _lodash = __webpack_require__(33);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const overunder = io => {
+const dice = io => {
 
     io.on('connection', socket => {
-        const gameName = 'overunder';
+        const gameName = 'dice';
         socket.join(gameName);
-        const validateUser = user => {
-            if (!user || !user.userid) {
-                socket.emit('invalidUser', {});
-                return false;
-            }
-            return true;
-        };
+
         //return a 
-        socket.on('roll', async clientBet => {
-            if (!validateUser(socket.user)) return;
+        socket.on('ROLL', async action => {
+            const clientBet = action.bet;
             try {
                 let u = await _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
                 //validate input
                 if (!_lodash2.default.isNumber(clientBet.w - 0)) {
-                    socket.emit('rollError', { code: -3 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -3 });
                     return;
                 }
 
                 if (clientBet.w <= 0) {
-                    socket.emit('rollError', { code: -2 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -2 });
                     return;
                 }
                 if (u.getBalance(clientBet.coinName) < clientBet.w) {
                     // not enough fund
-                    socket.emit('rollError', { code: -1 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -1 });
                     return;
                 }
 
@@ -1338,10 +1344,10 @@ const overunder = io => {
                     payout
                 });
                 try {
-                    await bet.save();
+                    bet = await bet.save();
                 } catch (err) {
                     _logger2.default.error('Saving bet error:' + err);
-                    socket.emit('rollError', { code: -4 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -4 });
                     return;
                 }
 
@@ -1352,7 +1358,7 @@ const overunder = io => {
                     await u.save();
                 } catch (err) {
                     _logger2.default.error('Saving user profit error:' + err);
-                    socket.emit('rollError', { code: -5 });
+                    socket.emit('action', { type: 'ERROR', errorCode: -5 });
                     return;
                 }
 
@@ -1362,6 +1368,7 @@ const overunder = io => {
                     userName: socket.user.userName,
                     rollNum,
                     nonce: u.nonce,
+                    betid: bet._id,
                     betTime: bet.betTime,
                     selNum: bet.selNum,
                     amount: bet.amount,
@@ -1370,15 +1377,15 @@ const overunder = io => {
                     payout
                 };
 
-                io.to(gameName).emit('allBets', result);
+                io.volatile.to(gameName).emit('action', { type: 'ROLLED', bet: result });
             } catch (err) {
                 _logger2.default.error(err);
-                socket.emit('rollError', { code: -6 });
+                socket.emit('action', { type: 'ERROR', errorCode: -6 });
             }
         });
 
         socket.on('getMyBets', async () => {
-            if (!validateUser(socket.user)) return;
+
             try {
                 const bets = await _betModel2.default.getBetsByUser(socket.user.userid);
                 socket.emit('getMyBets', bets);
@@ -1387,12 +1394,24 @@ const overunder = io => {
             }
         });
 
-        socket.on('getAllBets', async () => {
+        socket.on('GET_ALLBETS', async () => {
             try {
                 const bets = await _betModel2.default.getAllBets();
-                socket.emit('getAllBets', bets);
+                socket.emit('action', { type: 'RECV_ALLBETS', bets });
             } catch (err) {
                 _logger2.default.error('getAllBets error:' + err);
+            }
+        });
+
+        //update client salt
+        socket.on('SAVE_CLIENTSALT', async clientSalt => {
+
+            try {
+                const oldSalt = await _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt);
+
+                socket.emit('action', { type: 'CLIENT_SALT', salt: oldSalt });
+            } catch (err) {
+                socket.emit('action', { type: 'ERROR', message: err });
             }
         });
 
@@ -1413,10 +1432,10 @@ const overunder = io => {
     */
 
 //import config from '../../config';
-exports.default = overunder;
+exports.default = dice;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1430,7 +1449,7 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _package = __webpack_require__(30);
+var _package = __webpack_require__(31);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -1474,7 +1493,7 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1499,8 +1518,8 @@ const config = {
         host: 'rpc.blockchain.info',
         port: 443,
         ssl: true,
-        user: 'your identification',
-        pass: 'your password'
+        user: process.env.bitcoinUser,
+        pass: process.env.bitcoinPwd
     },
     faucet: {
         interval: 15 * 60 * 1000,
@@ -1514,7 +1533,7 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1535,14 +1554,14 @@ const config = {
     //     autoRemove: 'interval',
     //     autoRemoveInterval: 10 // In minutes. Default 
     // },
-    port: 4000,
+    port: 3000,
     origins: "*:*", //For security, it's better to set origins in prod
     bitcoin: {
         host: 'rpc.blockchain.info',
         port: 443,
         ssl: true,
-        user: 'your identification',
-        pass: 'your password'
+        user: process.env.bitcoinUser,
+        pass: process.env.bitcoinPwd
     },
     faucet: {
         interval: 15 * 60 * 1000,
@@ -1556,17 +1575,17 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = {
 	"name": "nodedice_server",
 	"description": "An open source dice game faucet built on node.js for BTC/NXT",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"keywords": [
 		"open source",
 		"node.js",
-		"nodejs dice btc faucet"
+		"nodejs dice bitcoin btc faucet"
 	],
 	"homepage": "https://github.com/popmanhe/node_dice",
 	"author": "Neo He",
@@ -1595,25 +1614,25 @@ module.exports = {
 	"license": "MIT BSD",
 	"dependencies": {
 		"bitcoin": "^3.0.1",
+		"blockchain.info": "^2.6.0",
 		"body-parser": "^1.16.0",
 		"bson": "^1.0.4",
 		"compression": "^1.6.2",
 		"connect-mongo": "^1.3.2",
 		"cookie-parser": "^1.3.3",
 		"cookieparser": "^0.1.0",
-		"cors": "^2.8.1",
 		"debug": "^2.6.0",
-		"errorhandler": "^1.3.5",
+		"errorhandler": "^1.5.0",
 		"express": "^4.15.2",
 		"express-session": "^1.15.0",
 		"express-validator": "^3.1.2",
 		"lodash": "^4.17.4",
 		"lru-cache": "^4.0.2",
 		"method-override": "^2.3.8",
-		"mongodb": "^2.2.25",
-		"mongoose": "^4.9.4",
+		"mongodb": "^2.2.26",
+		"mongoose": "^4.9.5",
 		"morgan": "^1.8.1",
-		"nodemailer": "3.1.7",
+		"nodemailer": "4.0.1",
 		"request": "^2.81.0",
 		"serve-favicon": "^2.4.2",
 		"should": "^11.2.1",
@@ -1623,21 +1642,19 @@ module.exports = {
 		"winston-daily-rotate-file": "^1.4.6"
 	},
 	"devDependencies": {
-		"babel-cli": "^6.24.0",
-		"babel-eslint": "7.1.1",
+		"babel-cli": "^6.24.1",
+		"babel-eslint": "^7.2.2",
 		"babel-loader": "^6.4.1",
-		"babel-preset-es2015": "^6.24.0",
-		"babel-preset-env": "^1.3.2",
-		"babel-preset-stage-0": "^6.22.0",
-		"debug": "~0.7.4",
-		"eslint": "3.17.1",
+		"babel-preset-env": "^1.3.3",
+		"debug": "2.6.3",
+		"eslint": "3.19.0",
 		"eslint-plugin-import": "2.2.0",
-		"eslint-plugin-node": "4.2.1",
-		"eslint-watch": "3.0.1",
+		"eslint-plugin-node": "4.2.2",
+		"eslint-watch": "3.1.0",
 		"nodemon": "^1.11.0",
 		"npm-run-all": "4.0.2",
-		"webpack": "2.3.2",
-		"webpack-bundle-analyzer": "2.3.1",
+		"webpack": "2.3.3",
+		"webpack-bundle-analyzer": "2.4.0",
 		"webpack-dev-middleware": "1.10.1",
 		"webpack-hot-middleware": "2.18.0",
 		"webpack-md5-hash": "0.0.5"
@@ -1645,37 +1662,37 @@ module.exports = {
 };
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("bitcoin");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("request");
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston-daily-rotate-file");

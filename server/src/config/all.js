@@ -1,6 +1,3 @@
-'use strict';
-
-
 import path from 'path';
 import pkg  from  '../../package.json';
 

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { socketOn, socketEmit } from '../../sockets/raffleSocketHelper';
 import CountDown from './CountDown';
 import * as notifications from '../../utils/notifications';
 
@@ -8,7 +7,9 @@ const propTypes = {
     lobbyId: PropTypes.string,
     max: PropTypes.number,
     minimum: PropTypes.number,
-    loggedIn: PropTypes.bool
+    loggedIn: PropTypes.bool,
+    buyTickets: PropTypes.func,
+    getLobby: PropTypes.func
 };
 
 const defaultProps = {
@@ -27,6 +28,9 @@ class Lobby extends Component {
         this.startCountdown = this.startCountdown.bind(this);
         this.resetCountdown = this.resetCountdown.bind(this);
     }
+    componentDidMount() {
+        this.props.getLobby(this.props.lobbyId);
+    }
     handleChange(event) {
         const target = event.target;
         const value = target.value * 1;
@@ -40,14 +44,9 @@ class Lobby extends Component {
             notifications.UserNotLoggedin();
             return;
         }
-        socketEmit('buyTicket', {
-            amount: this.state.amount,
-            lobbyId: this.props.lobbyId
-        });
+        this.props.buyTickets(this.state.amount, this.props.lobbyId);
     }
-    getLobby() {
-        socketEmit('getLobby', this.props.lobbyId);
-    }
+
     startCountdown() {
         this.setState({ startCountdown: true });
     }
@@ -103,4 +102,16 @@ const mapStateToProps = (state) => {
         user: state.user
     };
 };
-export default connect(mapStateToProps)(Lobby);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        buyTickets: (amount, lobbyId) => dispatch({
+            socket: 'raffle', type: 'BUY_TICKETS', amount, lobbyId
+        }),
+        getLobby: (lobbyId) => dispatch({
+            socket: 'raffle', type: 'GET_LOBBY', lobbyId
+        }),
+
+    };
+
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
