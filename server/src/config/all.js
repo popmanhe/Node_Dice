@@ -6,7 +6,7 @@ const config = {
     root: rootPath,
     serverRoot: rootPath + '/',
     clientRoot: rootPath + '/html/',
-    cookieSecret: 'node_DICE',
+    jwtSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {
         name: process.env.NODE_ENV === 'production' ? pkg.name + ' (' + pkg.version + ')' : pkg.name + ' [' + pkg.version + ']',

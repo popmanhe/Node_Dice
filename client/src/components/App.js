@@ -55,9 +55,9 @@ class App extends React.Component {
                                         <li>
                                             <Link to="/">Dice</Link>
                                         </li>
-                                         <li>
+                                         {/*<li>
                                             <Link to="/raffle">Raffle</Link>
-                                        </li>
+                                        </li>*/}
                                         <li>
                                             <Link to="/investment">Investment</Link>
                                         </li>

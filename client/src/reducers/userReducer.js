@@ -1,4 +1,5 @@
 import moment from 'moment';
+import update from 'immutability-helper';
 const initState = {
     userName: null,
     userid: null,
@@ -18,13 +19,12 @@ export default (state = initState, action) => {
                 let myBets = [action.bet, ...state.myBets];
                 if (myBets.length > 100)
                     myBets.splice(99);
-                const funds = state.funds.map((fund) => {
-                    if (fund.coinName == action.bet.coinName) {
-                        fund.profit += action.bet.profit * 1;
-                    }
-                    return fund;
+                const i = state.funds.findIndex((fund) => { return fund.coinName == action.bet.coinName; });
+                const profit = state.funds[i].profit + action.bet.profit * 1;
+                const fund = update(state.funds[i], { profit: { $set: profit } });
+                const funds = update(state.funds, {
+                    $splice: [[i, 1, fund]]
                 });
-
                 return { ...state, funds, myBets };
             }
             return state;

@@ -18,12 +18,6 @@ class Dice extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        //Get coin balance
-        if ((nextProps.loggedIn && nextProps.loggedIn != this.props.loggedIn) ||
-            (nextProps.selectedCoin && this.props.selectedCoin && (nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName))) {
-            this.setState({ balance: this.getBalance(nextProps) });
-        }
-
         //Set min betAmount when changing coin
         if (!this.props.selectedCoin || nextProps.selectedCoin.coinName != this.props.selectedCoin.coinName) {
             this.setBetAmount(nextProps.selectedCoin.min);
@@ -63,7 +57,6 @@ class Dice extends React.Component {
         const s = this.state;
         const p = this.props;
         let stop = false;
-
         const win = this.showResult(result);
 
         if (win) {
@@ -105,13 +98,14 @@ class Dice extends React.Component {
             this.props.getCoinNames();
         }
     }
-    getBalance(props) {
-        const p = props;
-        if (p.user.funds) {
+    getBalance() {
+        const p = this.props;
+        if (p.user && p.user.funds && p.selectedCoin) {
             const fund = p.user.funds.find((fund) => { return fund.coinName == p.selectedCoin.coinName; });
-
             return fund ? (fund.depositAmount - fund.withdrawAmount + fund.profit * 1).toFixed(8) : 0;
+
         }
+        return 0;
     }
     setBalance(profit) {
         this.setState({ balance: (this.state.balance * 1 + profit * 1).toFixed(8) });
@@ -131,10 +125,10 @@ class Dice extends React.Component {
             this.setBetAmount(betAmount);
     }
     minBetAmount() {
-        this.setBetAmount(this.props.selectedCoin.min);
+        this.setBetAmount(this.props.selectedCoin ? this.props.selectedCoin.min : 0);
     }
     maxBetAmount() {
-        this.setBetAmount(this.props.selectedCoin.max);
+        this.setBetAmount(this.props.selectedCoin ? this.props.selectedCoin.max : 0);
     }
     increasePayout() {
         let payout = this.state.payout + 0.1;
@@ -151,7 +145,7 @@ class Dice extends React.Component {
             this.props.userNotLoggedin();
             return;
         }
-        if (this.state.betAmount > this.getBalance(this.props)) {
+        if (this.state.betAmount > this.getBalance()) {
             this.props.fundNotEnough();
             return;
         }
@@ -165,10 +159,14 @@ class Dice extends React.Component {
     }
 
     render() {
+
         const p = this.props;
         const coinName = p.selectedCoin ? p.selectedCoin.coinName : "";
         const profitOnWin = (this.state.betAmount * (this.state.payout - 1)).toFixed(8);
-
+        let balance = 0;
+        if (this.props.loggedIn) {
+            balance = this.getBalance();
+        }
         const rollUnder = (100 / this.state.payout * 0.99).toFixed(2);
         const rollOver = (99.99 - rollUnder).toFixed(2);
 
@@ -181,7 +179,7 @@ class Dice extends React.Component {
                             <a className="dropdown-toggle hand" data-toggle="dropdown">{coinName}<span className="caret" /></a>
                             <CoinPicker />
                         </span>
-                        <input type="text" value={this.state.balance} className="form-control hand" readOnly="readonly" />
+                        <input type="text" value={balance} className="form-control hand" readOnly="readonly" />
                         <span className="input-group-addon hand" onClick={() => this.refreshBalance()}><i className="fa fa-refresh" title="Refresh balance" /></span>
                     </div>
                 </div>

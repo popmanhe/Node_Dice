@@ -70,11 +70,11 @@ export default (io) => {
 
 
         //get new bitcion address
-        socket.on('newCoinAddr', async (coinName) => {
+        socket.on('NEW_COINADDR', async (coinName) => {
 
             try {
                 const addr = await userModel.GetNewAddress(socket.user.userid, coinName);
-                socket.emit('newCoinAddr', addr);
+                socket.emit('NEW_COINADDR', addr);
             }
             catch (err) {
                 logger.error(err);

@@ -65,7 +65,7 @@ class Lobby extends Component {
         const p = this.props;
         return (
             <div>
-                <div className="col-sm-4">
+                <div className="col-sm-5 col-md-4">
                     <div className="input-group">
                         <span className="input-group-addon">{p.minimum} BTC x </span>
                         <input type="text" name="amount" className="form-control lobbyAmount" placeholder="Number of tickets" onChange={this.handleChange} value={this.state.amount} />

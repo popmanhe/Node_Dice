@@ -52,7 +52,7 @@ const dice = (io) => {
                     nonce: u.nonce,
                     amount: clientBet.w,
                     selNum: clientBet.sn,
-                    unit: clientBet.coinName,
+                    coinName: clientBet.coinName,
                     betTime: new Date(),
                     rollNum,
                     profit,
@@ -89,7 +89,7 @@ const dice = (io) => {
                     betTime: bet.betTime,
                     selNum: bet.selNum,
                     amount: bet.amount,
-                    unit: bet.unit,
+                    coinName: clientBet.coinName,
                     profit,
                     payout
                 };
@@ -102,7 +102,7 @@ const dice = (io) => {
             }
         });
 
-        socket.on('getMyBets', async () => {
+        socket.on('GET_MYBETS', async () => {
 
             try {
                 const bets = await betHelper.getBetsByUser(socket.user.userid);

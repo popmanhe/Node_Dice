@@ -11,8 +11,8 @@ import io from "socket.io-client";
 import rootSaga from '../sagas';
 const diceSocketMiddleware = createSocketIoMiddleware(io.connect(config.diceSocketUrl
   , { transports: ['websocket'] }), 'dice');
-const raffleSocketMiddleware = createSocketIoMiddleware(io.connect(config.raffleSocketUrl
-  , { transports: ['websocket'] }), 'raffle');
+// const raffleSocketMiddleware = createSocketIoMiddleware(io.connect(config.raffleSocketUrl
+//   , { transports: ['websocket'] }), 'raffle');
 
 function configureStoreProd(initialState) {
   const sagaMiddleware = createSagaMiddleware();
@@ -20,7 +20,7 @@ function configureStoreProd(initialState) {
   const middlewares = [
     // Add other middleware on this line...
     diceSocketMiddleware,
-    raffleSocketMiddleware,
+    // raffleSocketMiddleware,
     sagaMiddleware
   ];
 
@@ -38,7 +38,7 @@ function configureStoreDev(initialState) {
   const middlewares = [
     // Add other middleware on this line...
     diceSocketMiddleware,
-    raffleSocketMiddleware,
+    // raffleSocketMiddleware,
     // Redux middleware that spits an error on you when you try to mutate your state either inside a dispatch or between dispatches.
     reduxImmutableStateInvariant(),
     sagaMiddleware
