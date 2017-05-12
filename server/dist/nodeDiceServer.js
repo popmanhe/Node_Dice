@@ -77,15 +77,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _all = __webpack_require__(28);
+var _all = __webpack_require__(29);
 
 var _all2 = _interopRequireDefault(_all);
 
-var _development = __webpack_require__(29);
+var _development = __webpack_require__(30);
 
 var _development2 = _interopRequireDefault(_development);
 
-var _production = __webpack_require__(30);
+var _production = __webpack_require__(31);
 
 var _production2 = _interopRequireDefault(_production);
 
@@ -118,17 +118,14 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _winston = __webpack_require__(36);
+var _winston = __webpack_require__(38);
 
 var _winston2 = _interopRequireDefault(_winston);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_winston2.default.transports.DailyRotateFile = __webpack_require__(37); /**
-                                                                                      * Copyright 2014 eRealm Info & Tech.
-                                                                                      *
-                                                                                      * Created by Ken on 8/08/2014
-                                                                                      */
+_winston2.default.transports.DailyRotateFile = __webpack_require__(39);
+
 exports.default = new _winston2.default.Logger({
     transports: [new _winston2.default.transports.Console({
         level: 'debug',
@@ -156,7 +153,7 @@ var _config = __webpack_require__(0);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _mongoose = __webpack_require__(34);
+var _mongoose = __webpack_require__(36);
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
@@ -213,13 +210,14 @@ var _crypto2 = _interopRequireDefault(_crypto);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import logger from '../helper/logger';
-const mongoose = _dbConnect2.default.mongoose; /**
-                                                * Copyright 2017 Node Dice
-                                                *
-                                                * Created by Neo on 2017/01/19.
-                                                */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Copyright 2017 Node Dice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Created by Neo on 2017/01/19.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
 
+// import logger from '../helper/logger';
+const mongoose = _dbConnect2.default.mongoose;
 mongoose.Promise = global.Promise;
 /*view models*/
 /*user schema*/
@@ -275,13 +273,19 @@ userSchema.methods.setDeposit = function (coinName, amount) {
     return fund;
 };
 
-userSchema.methods.getDepositAddr = async function (coinName) {
-    let helper = _coinsConfig2.default[coinName];
-    const addr = await helper.GetNewAddress(this._id, coinName);
+userSchema.methods.getDepositAddr = (() => {
+    var _ref = _asyncToGenerator(function* (coinName) {
+        let helper = _coinsConfig2.default[coinName];
+        const addr = yield helper.GetNewAddress(this._id, coinName);
 
-    this.setDepositAddr(coinName, addr);
-    return addr;
-};
+        this.setDepositAddr(coinName, addr);
+        return addr;
+    });
+
+    return function (_x) {
+        return _ref.apply(this, arguments);
+    };
+})();
 
 userSchema.methods.setDepositAddr = function (coinName, addr) {
 
@@ -294,62 +298,98 @@ userSchema.methods.setDepositAddr = function (coinName, addr) {
 
 //Static methods
 userSchema.statics = {
-    CreateNewUser: async (userName, password) => {
-        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
-        let user = new userModel({
-            userName: userName,
-            password: password,
-            serverSalt: _uuid2.default.v4(),
-            clientSalt: _uuid2.default.v4(),
-            nonce: 0,
-            createTime: new Date(),
-            funds: [{
-                coinName: 'BTC',
-                depositAddress: '', depositAmount: 0,
-                withdrawAddress: '', withdrawAmount: 0,
-                profit: 0
-            }, {
-                coinName: 'NXT',
-                depositAddress: '', depositAmount: 0,
-                withdrawAddress: '', withdrawAmount: 0,
-                profit: 0
-            }]
+    CreateNewUser: (() => {
+        var _ref2 = _asyncToGenerator(function* (userName, password) {
+            password = _crypto2.default.createHash('sha512').update(password).digest('hex');
+            let user = new userModel({
+                userName: userName,
+                password: password,
+                serverSalt: _uuid2.default.v4(),
+                clientSalt: _uuid2.default.v4(),
+                nonce: 0,
+                createTime: new Date(),
+                funds: [{
+                    coinName: 'BTC',
+                    depositAddress: '', depositAmount: 0,
+                    withdrawAddress: '', withdrawAmount: 0,
+                    profit: 0
+                }, {
+                    coinName: 'NXT',
+                    depositAddress: '', depositAmount: 0,
+                    withdrawAddress: '', withdrawAmount: 0,
+                    profit: 0
+                }]
+            });
+
+            return yield user.save();
         });
 
-        return await user.save();
-    },
-    GetUserById: async (userid, fields) => {
-        return await userModel.findOne({ _id: userid }, fields);
-    },
-    SaveClientSalt: async (userid, clientSalt) => {
+        return function CreateNewUser(_x2, _x3) {
+            return _ref2.apply(this, arguments);
+        };
+    })(),
+    GetUserById: (() => {
+        var _ref3 = _asyncToGenerator(function* (userid, fields) {
+            return yield userModel.findOne({ _id: userid }, fields);
+        });
 
-        let u = await userModel.findOne({ _id: userid }, "clientSalt serverSalt");
-        let _clientSalt, _serverSalt;
-        _clientSalt = u.clientSalt;
-        _serverSalt = u.serverSalt;
+        return function GetUserById(_x4, _x5) {
+            return _ref3.apply(this, arguments);
+        };
+    })(),
+    SaveClientSalt: (() => {
+        var _ref4 = _asyncToGenerator(function* (userid, clientSalt) {
 
-        u.clientSalt = clientSalt;
-        u.serverSalt = _uuid2.default.v4();
-        u.nonce = 0;
-        await u.save();
-        return { clientSalt: _clientSalt, serverSalt: _serverSalt };
-    },
-    GetNewAddress: async (userid, coinName) => {
+            let u = yield userModel.findOne({ _id: userid }, "clientSalt serverSalt");
+            let _clientSalt, _serverSalt;
+            _clientSalt = u.clientSalt;
+            _serverSalt = u.serverSalt;
 
-        let u = await userModel.findOne({ _id: userid }, "funds");
-        const addr = u.getDepositAddr(coinName);
-        await u.save();
-        return addr;
-    },
-    GetBalance: async userid => {
+            u.clientSalt = clientSalt;
+            u.serverSalt = _uuid2.default.v4();
+            u.nonce = 0;
+            yield u.save();
+            return { clientSalt: _clientSalt, serverSalt: _serverSalt };
+        });
 
-        const u = await userModel.findOne({ _id: userid }, "funds");
-        return u.funds;
-    },
-    LoginUser: async (userName, password) => {
-        password = _crypto2.default.createHash('sha512').update(password).digest('hex');
-        return await userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds");
-    }
+        return function SaveClientSalt(_x6, _x7) {
+            return _ref4.apply(this, arguments);
+        };
+    })(),
+    GetNewAddress: (() => {
+        var _ref5 = _asyncToGenerator(function* (userid, coinName) {
+
+            let u = yield userModel.findOne({ _id: userid }, "funds");
+            const addr = u.getDepositAddr(coinName);
+            yield u.save();
+            return addr;
+        });
+
+        return function GetNewAddress(_x8, _x9) {
+            return _ref5.apply(this, arguments);
+        };
+    })(),
+    GetBalance: (() => {
+        var _ref6 = _asyncToGenerator(function* (userid) {
+
+            const u = yield userModel.findOne({ _id: userid }, "funds");
+            return u.funds;
+        });
+
+        return function GetBalance(_x10) {
+            return _ref6.apply(this, arguments);
+        };
+    })(),
+    LoginUser: (() => {
+        var _ref7 = _asyncToGenerator(function* (userName, password) {
+            password = _crypto2.default.createHash('sha512').update(password).digest('hex');
+            return yield userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds");
+        });
+
+        return function LoginUser(_x11, _x12) {
+            return _ref7.apply(this, arguments);
+        };
+    })()
 };
 
 const userModel = mongoose.model('User', userSchema);
@@ -495,6 +535,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _middleware = __webpack_require__(28);
+
+var _middleware2 = _interopRequireDefault(_middleware);
+
 var _auth = __webpack_require__(24);
 
 var _auth2 = _interopRequireDefault(_auth);
@@ -514,6 +558,7 @@ var _chat2 = _interopRequireDefault(_chat);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = io => {
+    (0, _middleware2.default)(io);
     (0, _auth2.default)(io);
     (0, _common2.default)(io);
     (0, _dice2.default)(io);
@@ -660,7 +705,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _request = __webpack_require__(35);
+var _request = __webpack_require__(37);
 
 var _request2 = _interopRequireDefault(_request);
 
@@ -719,11 +764,11 @@ var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Copyright 2017 Node Dice
- *
- * Created by Neo on 2017/02/24.
- */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Copyright 2017 Node Dice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Created by Neo on 2017/02/24.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
 
 const mongoose = _dbConnect2.default.mongoose;
 //const db = dbConnect.db;
@@ -744,12 +789,24 @@ const betSchema = new mongoose.Schema({
 }, { autoIndex: _config2.default.mongodb.autoIndex });
 //Static methods
 betSchema.statics = {
-    getBetsByUser: async userid => {
-        return await betModel.find({ userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
-    },
-    getAllBets: async () => {
-        return await betModel.find({}, '_id userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
-    },
+    getBetsByUser: (() => {
+        var _ref = _asyncToGenerator(function* (userid) {
+            return yield betModel.find({ userid }, 'userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
+        });
+
+        return function getBetsByUser(_x) {
+            return _ref.apply(this, arguments);
+        };
+    })(),
+    getAllBets: (() => {
+        var _ref2 = _asyncToGenerator(function* () {
+            return yield betModel.find({}, '_id userid userName rollNum nonce betTime selNum amount unit profit payout').sort({ betTime: -1 }).limit(100);
+        });
+
+        return function getAllBets() {
+            return _ref2.apply(this, arguments);
+        };
+    })(),
     getPayout: function (selNum) {
         return selNum <= 49.5 ? 99 / selNum : 99 / (99.99 - selNum);
     }
@@ -777,6 +834,8 @@ var _dbConnect2 = _interopRequireDefault(_dbConnect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 const mongoose = _dbConnect2.default.mongoose;
 mongoose.Promise = global.Promise;
 /*chat schema*/
@@ -790,18 +849,30 @@ const chatModel = mongoose.model('Chat', chatSchema);
 
 exports.default = {
     Chat: chatModel,
-    GetChats: async () => {
-        return await chatModel.find({}, 'userName timeStamp message').sort({ timeStamp: -1 }).limit(100);
-    },
-    AddChat: async chat => {
-        const c = new chatModel({
-            userName: chat.userName,
-            timeStamp: chat.timeStamp,
-            message: chat.message
+    GetChats: (() => {
+        var _ref = _asyncToGenerator(function* () {
+            return yield chatModel.find({}, 'userName timeStamp message').sort({ timeStamp: -1 }).limit(100);
         });
 
-        await c.save();
-    }
+        return function GetChats() {
+            return _ref.apply(this, arguments);
+        };
+    })(),
+    AddChat: (() => {
+        var _ref2 = _asyncToGenerator(function* (chat) {
+            const c = new chatModel({
+                userName: chat.userName,
+                timeStamp: chat.timeStamp,
+                message: chat.message
+            });
+
+            yield c.save();
+        });
+
+        return function AddChat(_x) {
+            return _ref2.apply(this, arguments);
+        };
+    })()
 };
 
 /***/ }),
@@ -889,7 +960,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bitcoin = __webpack_require__(32);
+var _bitcoin = __webpack_require__(33);
 
 var _bitcoin2 = _interopRequireDefault(_bitcoin);
 
@@ -1049,50 +1120,48 @@ var _logger = __webpack_require__(1);
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _jsonwebtoken = __webpack_require__(34);
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = io => {
-    //Add all events that need user to be authenticated
-    const authEvents = [
-    //user profile
-    'existingUser', 'clientSalt', 'newCoinAddr', 'getBalance',
-    //chat
-    'sendChat',
-    //dice
-    'roll', 'getMyBets'];
-    _logger2.default.info("Web socket is enabled for following domain1(s): " + _config2.default.origins);
-    io.origins(_config2.default.origins);
-    io.on('connection', socket => {
-        socket.use(function (packet, next) {
-            if (authEvents.indexOf(packet[0]) > -1 && (!socket.user || !socket.user.userid)) {
-                socket.emit('invalidUser');
-                return;
-            }
-            next();
-        });
-        socket.on('AUTHENTICATE', async ({ user }) => {
-            try {
-                let loggedUser = await _userModel2.default.LoginUser(user.userName, user.password);
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
-                if (!loggedUser) {
-                    socket.emit('action', { type: 'ERROR', message: 'Wrong user name and password combination.' });
-                    return;
+exports.default = io => {
+
+    io.on('connection', socket => {
+
+        socket.on('AUTHENTICATE', (() => {
+            var _ref = _asyncToGenerator(function* ({ user }) {
+                try {
+                    let loggedUser = yield _userModel2.default.LoginUser(user.userName, user.password);
+
+                    if (!loggedUser) {
+                        socket.emit('action', { type: 'ERROR', message: 'Wrong user name and password combination.' });
+                        return;
+                    }
+                    loggedUser = {
+                        userid: loggedUser._id,
+                        userName: loggedUser.userName,
+                        clientSalt: loggedUser.clientSalt,
+                        funds: loggedUser.funds,
+                        nonce: loggedUser.nonce,
+                        hashedServerSalt: _crypto2.default.createHash('sha512').update(loggedUser.serverSalt).digest('hex')
+                    };
+                    socket.user = { userid: loggedUser.userid, userName: loggedUser.userName, loginTime: new Date().toUTCString() };
+                    const token = _jsonwebtoken2.default.sign(socket.user, _config2.default.jwtSecret, { algorithm: 'HS256', expiresIn: 60 });
+                    socket.emit('action', { socket: 'broadcast', type: 'LOGGED_USER', user: loggedUser, token });
+                } catch (err) {
+                    _logger2.default.error(err);
+                    socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
                 }
-                loggedUser = {
-                    userid: loggedUser._id,
-                    userName: loggedUser.userName,
-                    clientSalt: loggedUser.clientSalt,
-                    funds: loggedUser.funds,
-                    nonce: loggedUser.nonce,
-                    hashedServerSalt: _crypto2.default.createHash('sha512').update(loggedUser.serverSalt).digest('hex')
-                };
-                socket.user = { userid: loggedUser.userid, userName: loggedUser.userName };
-                socket.emit('action', { type: 'LOGGED_USER', user: loggedUser });
-            } catch (err) {
-                _logger2.default.info(err);
-                socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
-            }
-        });
+            });
+
+            return function (_x) {
+                return _ref.apply(this, arguments);
+            };
+        })());
     });
 };
 
@@ -1117,35 +1186,43 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 const chat = io => {
     io.on('connection', socket => {
-        socket.on('GET_CHATS', async () => {
+        socket.on('GET_CHATS', _asyncToGenerator(function* () {
             try {
-                const messages = await _chatModel2.default.GetChats();
+                const messages = yield _chatModel2.default.GetChats();
                 socket.emit('action', { type: 'RECV_MESSAGES', messages });
             } catch (err) {
                 _logger2.default.error(err);
             }
-        });
+        }));
 
-        socket.on('SEND_MESSAGE', async chat => {
-            if (socket.user) {
-                chat.userName = socket.user.userName;
-                chat.timeStamp = new Date();
-                try {
-                    await _chatModel2.default.AddChat(chat);
-                    io.emit('action', {
-                        type: 'RECV_MESSAGE', message: {
-                            userName: chat.userName,
-                            timeStamp: chat.timeStamp,
-                            message: chat.message
-                        }
-                    });
-                } catch (err) {
-                    _logger2.default.error(err);
+        socket.on('SEND_MESSAGE', (() => {
+            var _ref2 = _asyncToGenerator(function* (chat) {
+                if (socket.user) {
+                    chat.userName = socket.user.userName;
+                    chat.timeStamp = new Date();
+                    try {
+                        yield _chatModel2.default.AddChat(chat);
+                        io.emit('action', {
+                            type: 'RECV_MESSAGE', message: {
+                                userName: chat.userName,
+                                timeStamp: chat.timeStamp,
+                                message: chat.message
+                            }
+                        });
+                    } catch (err) {
+                        _logger2.default.error(err);
+                    }
                 }
-            }
-        });
+            });
+
+            return function (_x) {
+                return _ref2.apply(this, arguments);
+            };
+        })());
     });
 };
 
@@ -1176,6 +1253,13 @@ var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Copyright 2017 Node Dice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Created by Neo on 2017/01/17.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+
 exports.default = io => {
 
     //socket.io events
@@ -1184,27 +1268,33 @@ exports.default = io => {
         socket.on('GET_COINNAMES', () => socket.emit('action', { type: 'SET_COINNAMES', coins: _coinsConfig2.default.getCoinNames() }));
 
         //return a new user
-        socket.on('SIGNUP_USER', async u => {
+        socket.on('SIGNUP_USER', (() => {
+            var _ref = _asyncToGenerator(function* (u) {
 
-            try {
-                const user = await _userModel2.default.CreateNewUser(u.userName, u.password);
-                const newUser = {
-                    userid: user._id,
-                    userName: user.userName,
-                    clientSalt: user.clientSalt,
-                    funds: user.funds,
-                    nonce: 0,
-                    hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
-                };
-                socket.user = { userid: newUser.userid, userName: newUser.userName };
-                socket.emit('action', { type: 'NEW_USER', user: newUser });
-            } catch (err) {
-                if (err.code == 11000) socket.emit('action', { type: 'ERROR', errorCode: 11000 });else {
-                    _logger2.default.error(err);
-                    socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
+                try {
+                    const user = yield _userModel2.default.CreateNewUser(u.userName, u.password);
+                    const newUser = {
+                        userid: user._id,
+                        userName: user.userName,
+                        clientSalt: user.clientSalt,
+                        funds: user.funds,
+                        nonce: 0,
+                        hashedServerSalt: crypto.createHash('sha512').update(user.serverSalt).digest('hex')
+                    };
+                    socket.user = { userid: newUser.userid, userName: newUser.userName };
+                    socket.emit('action', { type: 'NEW_USER', user: newUser });
+                } catch (err) {
+                    if (err.code == 11000) socket.emit('action', { type: 'ERROR', errorCode: 11000 });else {
+                        _logger2.default.error(err);
+                        socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
+                    }
                 }
-            }
-        });
+            });
+
+            return function (_x) {
+                return _ref.apply(this, arguments);
+            };
+        })());
 
         //return an existing user
         // socket.on('existingUser', async () => {
@@ -1233,34 +1323,36 @@ exports.default = io => {
 
 
         //get new bitcion address
-        socket.on('newCoinAddr', async coinName => {
+        socket.on('NEW_COINADDR', (() => {
+            var _ref2 = _asyncToGenerator(function* (coinName) {
 
-            try {
-                const addr = await _userModel2.default.GetNewAddress(socket.user.userid, coinName);
-                socket.emit('newCoinAddr', addr);
-            } catch (err) {
-                _logger2.default.error(err);
-                socket.emit('action', { type: 'ERROR', message: err });
-            }
-        });
+                try {
+                    const addr = yield _userModel2.default.GetNewAddress(socket.user.userid, coinName);
+                    socket.emit('NEW_COINADDR', addr);
+                } catch (err) {
+                    _logger2.default.error(err);
+                    socket.emit('action', { type: 'ERROR', message: err });
+                }
+            });
+
+            return function (_x2) {
+                return _ref2.apply(this, arguments);
+            };
+        })());
 
         //get user balance
-        socket.on('REFRESH_BALANCE', async () => {
+        socket.on('REFRESH_BALANCE', _asyncToGenerator(function* () {
 
             try {
-                const funds = await _userModel2.default.GetBalance(socket.user.userid);
+                const funds = yield _userModel2.default.GetBalance(socket.user.userid);
                 socket.emit('action', { type: 'REFRESH_BALANCE', funds });
             } catch (err) {
                 _logger2.default.info(err);
                 socket.emit('action', { type: 'ERROR', message: 'Internal error. Try later.' });
             }
-        });
+        }));
     });
-}; /**
-    * Copyright 2017 Node Dice
-    *
-    * Created by Neo on 2017/01/17.
-    */
+};
 
 /***/ }),
 /* 27 */
@@ -1289,11 +1381,20 @@ var _logger = __webpack_require__(1);
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _lodash = __webpack_require__(33);
+var _lodash = __webpack_require__(35);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Copyright 2017 Node Dice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * Created by Neo on 2017/03/27.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
+
+//import config from '../../config';
+
 
 const dice = io => {
 
@@ -1302,118 +1403,130 @@ const dice = io => {
         socket.join(gameName);
 
         //return a 
-        socket.on('ROLL', async action => {
-            const clientBet = action.bet;
-            try {
-                let u = await _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
-                //validate input
-                if (!_lodash2.default.isNumber(clientBet.w - 0)) {
-                    socket.emit('action', { type: 'ERROR', errorCode: -3 });
-                    return;
-                }
-
-                if (clientBet.w <= 0) {
-                    socket.emit('action', { type: 'ERROR', errorCode: -2 });
-                    return;
-                }
-                if (u.getBalance(clientBet.coinName) < clientBet.w) {
-                    // not enough fund
-                    socket.emit('action', { type: 'ERROR', errorCode: -1 });
-                    return;
-                }
-
-                //increase nonce
-                u.nonce++;
-
-                //get lucky number
-                let rollNum = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
-                const payout = _betModel2.default.getPayout(clientBet.sn);
-                const profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
-                let bet = new _betModel2.default({
-                    userid: socket.user.userid,
-                    userName: socket.user.userName,
-                    clientSalt: u.clientSalt,
-                    serverSalt: u.serverSalt,
-                    nonce: u.nonce,
-                    amount: clientBet.w,
-                    selNum: clientBet.sn,
-                    unit: clientBet.coinName,
-                    betTime: new Date(),
-                    rollNum,
-                    profit,
-                    payout
-                });
+        socket.on('ROLL', (() => {
+            var _ref = _asyncToGenerator(function* (action) {
+                const clientBet = action.bet;
                 try {
-                    bet = await bet.save();
+                    let u = yield _userModel2.default.GetUserById(socket.user.userid, "clientSalt serverSalt nonce funds");
+                    //validate input
+                    if (!_lodash2.default.isNumber(clientBet.w - 0)) {
+                        socket.emit('action', { type: 'ERROR', errorCode: -3 });
+                        return;
+                    }
+
+                    if (clientBet.w <= 0) {
+                        socket.emit('action', { type: 'ERROR', errorCode: -2 });
+                        return;
+                    }
+                    if (u.getBalance(clientBet.coinName) < clientBet.w) {
+                        // not enough fund
+                        socket.emit('action', { type: 'ERROR', errorCode: -1 });
+                        return;
+                    }
+
+                    //increase nonce
+                    u.nonce++;
+
+                    //get lucky number
+                    let rollNum = (0, _cryptoroll2.default)(u.serverSalt, u.clientSalt + '-' + u.nonce);
+                    const payout = _betModel2.default.getPayout(clientBet.sn);
+                    const profit = GetProfit(rollNum, clientBet.sn, clientBet.w, payout);
+                    let bet = new _betModel2.default({
+                        userid: socket.user.userid,
+                        userName: socket.user.userName,
+                        clientSalt: u.clientSalt,
+                        serverSalt: u.serverSalt,
+                        nonce: u.nonce,
+                        amount: clientBet.w,
+                        selNum: clientBet.sn,
+                        coinName: clientBet.coinName,
+                        betTime: new Date(),
+                        rollNum,
+                        profit,
+                        payout
+                    });
+                    try {
+                        bet = yield bet.save();
+                    } catch (err) {
+                        _logger2.default.error('Saving bet error:' + err);
+                        socket.emit('action', { type: 'ERROR', errorCode: -4 });
+                        return;
+                    }
+
+                    //Todo: process bet's result here
+                    u.addProfit(clientBet.coinName, profit);
+                    try {
+
+                        yield u.save();
+                    } catch (err) {
+                        _logger2.default.error('Saving user profit error:' + err);
+                        socket.emit('action', { type: 'ERROR', errorCode: -5 });
+                        return;
+                    }
+
+                    //Every bet is sent to everyone who is in over/under game. 
+                    const result = {
+                        userid: socket.user.userid,
+                        userName: socket.user.userName,
+                        rollNum,
+                        nonce: u.nonce,
+                        betid: bet._id,
+                        betTime: bet.betTime,
+                        selNum: bet.selNum,
+                        amount: bet.amount,
+                        coinName: clientBet.coinName,
+                        profit,
+                        payout
+                    };
+
+                    io.volatile.to(gameName).emit('action', { type: 'ROLLED', bet: result });
                 } catch (err) {
-                    _logger2.default.error('Saving bet error:' + err);
-                    socket.emit('action', { type: 'ERROR', errorCode: -4 });
-                    return;
+                    _logger2.default.error(err);
+                    socket.emit('action', { type: 'ERROR', errorCode: -6 });
                 }
+            });
 
-                //Todo: process bet's result here
-                u.addProfit(clientBet.coinName, profit);
-                try {
+            return function (_x) {
+                return _ref.apply(this, arguments);
+            };
+        })());
 
-                    await u.save();
-                } catch (err) {
-                    _logger2.default.error('Saving user profit error:' + err);
-                    socket.emit('action', { type: 'ERROR', errorCode: -5 });
-                    return;
-                }
-
-                //Every bet is sent to everyone who is in over/under game. 
-                const result = {
-                    userid: socket.user.userid,
-                    userName: socket.user.userName,
-                    rollNum,
-                    nonce: u.nonce,
-                    betid: bet._id,
-                    betTime: bet.betTime,
-                    selNum: bet.selNum,
-                    amount: bet.amount,
-                    unit: bet.unit,
-                    profit,
-                    payout
-                };
-
-                io.volatile.to(gameName).emit('action', { type: 'ROLLED', bet: result });
-            } catch (err) {
-                _logger2.default.error(err);
-                socket.emit('action', { type: 'ERROR', errorCode: -6 });
-            }
-        });
-
-        socket.on('getMyBets', async () => {
+        socket.on('GET_MYBETS', _asyncToGenerator(function* () {
 
             try {
-                const bets = await _betModel2.default.getBetsByUser(socket.user.userid);
+                const bets = yield _betModel2.default.getBetsByUser(socket.user.userid);
                 socket.emit('getMyBets', bets);
             } catch (err) {
                 _logger2.default.error('GetBetsByUser error:' + err);
             }
-        });
+        }));
 
-        socket.on('GET_ALLBETS', async () => {
+        socket.on('GET_ALLBETS', _asyncToGenerator(function* () {
             try {
-                const bets = await _betModel2.default.getAllBets();
+                const bets = yield _betModel2.default.getAllBets();
                 socket.emit('action', { type: 'RECV_ALLBETS', bets });
             } catch (err) {
                 _logger2.default.error('getAllBets error:' + err);
             }
-        });
+        }));
 
         //update client salt
-        socket.on('SAVE_CLIENTSALT', async clientSalt => {
+        socket.on('SAVE_CLIENTSALT', (() => {
+            var _ref4 = _asyncToGenerator(function* (clientSalt) {
 
-            try {
-                const oldSalt = await _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt);
+                try {
+                    const oldSalt = yield _userModel2.default.SaveClientSalt(socket.user.userid, clientSalt);
 
-                socket.emit('action', { type: 'CLIENT_SALT', salt: oldSalt });
-            } catch (err) {
-                socket.emit('action', { type: 'ERROR', message: err });
-            }
-        });
+                    socket.emit('action', { type: 'CLIENT_SALT', salt: oldSalt });
+                } catch (err) {
+                    socket.emit('action', { type: 'ERROR', message: err });
+                }
+            });
+
+            return function (_x2) {
+                return _ref4.apply(this, arguments);
+            };
+        })());
 
         //functions
         const GetProfit = (rollNum, selNum, amount, payout) => {
@@ -1425,13 +1538,8 @@ const dice = io => {
             }
         };
     });
-}; /**
-    * Copyright 2017 Node Dice
-    *
-    * Created by Neo on 2017/03/27.
-    */
+};
 
-//import config from '../../config';
 exports.default = dice;
 
 /***/ }),
@@ -1445,11 +1553,62 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _config = __webpack_require__(0);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _logger = __webpack_require__(1);
+
+var _logger2 = _interopRequireDefault(_logger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = io => {
+    //Add all events that need user to be authenticated
+    const authEvents = [
+    //user profile
+    'SAVE_CLIENTSALT', 'NEW_COINADDR', 'REFRESH_BALANCE',
+    //chat
+    'SEND_MESSAGE',
+    //dice
+    'ROLL', 'GET_MYBETS'];
+    _logger2.default.info("Web socket is enabled for following domain1(s): " + _config2.default.origins);
+    io.origins(_config2.default.origins);
+
+    io.on('connection', socket => {
+        //authenticate users for specified events
+        socket.use(function (packet, next) {
+            if (authEvents.indexOf(packet[0]) > -1 && (!socket.user || !socket.user.userid)) {
+                socket.emit('INVALID_USER');
+                return;
+            }
+            next();
+        });
+
+        //throttle control
+        socket.use(function (packet, next) {
+
+            next();
+        });
+    });
+};
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _package = __webpack_require__(31);
+var _package = __webpack_require__(32);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -1460,7 +1619,7 @@ const config = {
     root: rootPath,
     serverRoot: rootPath + '/',
     clientRoot: rootPath + '/html/',
-    cookieSecret: 'node_DICE',
+    jwtSecret: 'node_DICE',
     port: process.env.PORT || 3000,
     app: {
         name:  true ? _package2.default.name + ' (' + _package2.default.version + ')' : _package2.default.name + ' [' + _package2.default.version + ']',
@@ -1493,7 +1652,7 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1533,7 +1692,7 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1575,7 +1734,7 @@ const config = {
 exports.default = config;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1626,6 +1785,7 @@ module.exports = {
 		"express": "^4.15.2",
 		"express-session": "^1.15.0",
 		"express-validator": "^3.1.2",
+		"jsonwebtoken": "^7.4.0",
 		"lodash": "^4.17.4",
 		"lru-cache": "^4.0.2",
 		"method-override": "^2.3.8",
@@ -1644,7 +1804,7 @@ module.exports = {
 	"devDependencies": {
 		"babel-cli": "^6.24.1",
 		"babel-eslint": "^7.2.2",
-		"babel-loader": "^6.4.1",
+		"babel-loader": "^7.0.0",
 		"babel-preset-env": "^1.3.3",
 		"debug": "2.6.3",
 		"eslint": "3.19.0",
@@ -1662,37 +1822,43 @@ module.exports = {
 };
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("bitcoin");
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-module.exports = require("lodash");
-
-/***/ }),
 /* 34 */
 /***/ (function(module, exports) {
 
-module.exports = require("mongoose");
+module.exports = require("jsonwebtoken");
 
 /***/ }),
 /* 35 */
 /***/ (function(module, exports) {
 
-module.exports = require("request");
+module.exports = require("lodash");
 
 /***/ }),
 /* 36 */
 /***/ (function(module, exports) {
 
-module.exports = require("winston");
+module.exports = require("mongoose");
 
 /***/ }),
 /* 37 */
+/***/ (function(module, exports) {
+
+module.exports = require("request");
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+module.exports = require("winston");
+
+/***/ }),
+/* 39 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston-daily-rotate-file");
