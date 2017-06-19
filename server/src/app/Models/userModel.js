@@ -99,13 +99,13 @@ userSchema.statics = {
                 createTime: new Date(),
                 funds: [{
                     coinName: 'BTC',
-                    depositAddress: '', depositAmount: 0,
+                    depositAddress: '', depositAmount: config.initBTCAmount, 
                     withdrawAddress: '', withdrawAmount: 0,
                     profit: 0
                 },
                 {
                     coinName: 'NXT',
-                    depositAddress: '', depositAmount: 0,
+                    depositAddress: '', depositAmount: config.initNXTAmount,
                     withdrawAddress: '', withdrawAmount: 0,
                     profit: 0
                 }]

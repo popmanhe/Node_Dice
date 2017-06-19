@@ -38,6 +38,7 @@ export default (state = initState, action) => {
         //         fund.profit += action.value * 1;
         //         return { ...state, funds };
         //     }
+        case 'NEW_USER': 
         case 'LOGGED_USER': {
             if (action.user)
                 return {

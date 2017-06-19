@@ -28,7 +28,9 @@ const config = {
         min: 100,
         max: 500,
         proxy: null //try to use proxy to connect to google if blocked
-    }
+    },
+    initBTCAmount: 0,
+    initNXTAmount: 0
 
 };
 

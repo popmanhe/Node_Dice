@@ -23,7 +23,9 @@ const config = {
         max: 500,
         proxy: null //try to use proxy to connect to google if blocked
     },
-    origins: "*:*"
+    origins: "*:*",
+    initBTCAmount: 10,
+    initNXTAmount: 10000
 };
 
 export default config;

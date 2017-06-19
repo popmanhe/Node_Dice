@@ -6,7 +6,7 @@
 import userModel from '../Models/userModel';
 import coinsConfig from '../../config/coinsConfig.js';
 import logger from '../helper/logger';
-
+import crypto from 'crypto';
 export default (io) => {
 
     //socket.io events
@@ -20,7 +20,7 @@ export default (io) => {
         socket.on('SIGNUP_USER', async (u) => {
 
             try {
-                const user = await userModel.CreateNewUser(u.userName, u.password);
+                const user = await userModel.CreateNewUser(u.user.userName, u.user.password);
                 const newUser = {
                     userid: user._id,
                     userName: user.userName,

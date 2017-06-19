@@ -1,7 +1,7 @@
 {
   "name": "nodedice_server",
   "description": "An open source dice game faucet built on node.js for BTC/NXT",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "keywords": [
     "open source",
     "node.js",
