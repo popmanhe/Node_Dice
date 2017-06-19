@@ -14,14 +14,14 @@ services:
       - "3000:3000"
     links:
       - mongo
-  raffle:
-    build: ./raffle
-    volumes:
-      - ./raffle:/usr/raffle
-    ports:
-      - "3100:3100"
-    links:
-      - mongo
+  # raffle:
+  #   build: ./raffle
+  #   volumes:
+  #     - ./raffle:/usr/raffle
+  #   ports:
+  #     - "3100:3100"
+  #   links:
+  #     - mongo
   mongo:
     image: mongo
     volumes:
