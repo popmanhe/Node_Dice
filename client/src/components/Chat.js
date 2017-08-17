@@ -18,7 +18,7 @@ class Chat extends React.Component {
                   cursoropacitymax: 0.2
             });
       }
-       
+
       componentDidUpdate(/*prevProps, prevState*/) {
             this.scrollToBottom();
       }
@@ -57,11 +57,13 @@ class Chat extends React.Component {
                         <ul id="chatList" className="list-group" style={{ "maxHeight": "600px", "overflowY": "auto" }}>
                               {
                                     messages.map((msg, i) =>
-                                          <li className="list-group-item" key={i}>
+                                          (<li className="list-group-item" key={i}>
                                                 <span>{msg.timeStamp}</span> <span className="text-danger" >{msg.userName}</span>:
                                                 <div className="text-info" >{msg.message}</div>
                                           </li>
-                                    )}
+                                          )
+                                    )
+                              }
 
                         </ul>
                         <form onSubmit={this.sendMsg} className="the-box">

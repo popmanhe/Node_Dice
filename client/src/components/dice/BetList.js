@@ -23,7 +23,7 @@ const BetList = (props) => {
             <tbody>
                 {
                     props.betList.map((bet, i) =>
-                        <tr key={i}>
+                        (<tr key={i}>
                             {props.showUserName && <td>{bet.userName}</td>}
                             <td>{bet.betTime}</td>
                             <td>{bet.selNum >= 50.49 ? 'Over ' + bet.selNum : 'Under ' + bet.selNum}</td>
@@ -34,6 +34,7 @@ const BetList = (props) => {
                             <td>{bet.payout && bet.payout.toFixed(0)}x</td>
                             <td className={bet.profit < 0 ? 'text-danger' : 'text-success'}><strong>{bet.profit && bet.profit.toFixed(8)}</strong></td>
                         </tr>
+                        )
                     )
                 }
             </tbody>

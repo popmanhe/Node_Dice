@@ -1,7 +1,7 @@
 /**
  * Copyright 2017 Node Dice
  *
- * Created by Neo on 2017/01/19.
+ * Created by Neo on 2017/08/19.
  */
 
 import dbConnect from './dbConnect';
@@ -21,6 +21,8 @@ const userSchema = new mongoose.Schema({
     serverSalt: String,
     nonce: Number,
     createTime: { type: Date },
+    userType: Number,
+    isLocked: Boolean,
     funds: [{
         coinName: String,
         depositAmount: Number,
@@ -145,7 +147,7 @@ userSchema.statics = {
     },
     LoginUser: async (userName, password) => {
         password = crypto.createHash('sha512').update(password).digest('hex');
-        return await userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds");
+        return await userModel.findOne({ userName, password }, "_id userName serverSalt clientSalt nonce funds userType isLocked");
     }
 };
 

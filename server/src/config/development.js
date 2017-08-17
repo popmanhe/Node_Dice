@@ -3,7 +3,8 @@ const config = {
     mongodb: {
         hostaddress: 'mongodb://localhost',
         port: 27017,
-        dbname: 'node_dice'
+        dbname: 'node_dice',
+        autoIndex: true
     },
     // mongoStore: {
     //     url: 'mongodb://localhost/node_dice',

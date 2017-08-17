@@ -71,7 +71,6 @@ class SignupForm extends React.Component {
         if (this.state.acceptTerm) {
             this.props.onSignup(this.state.userName, this.state.password);
             // socketOn('newUser', (result) => {
-
             //     if (result.error) {
             //         switch (result.error.code) {
             //             case 11000:
