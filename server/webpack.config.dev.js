@@ -14,7 +14,7 @@ const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('development'),
   __DEV__: true
 };
-module.exports = {
+export default {
   entry: './src/app.js',
   target: 'node',
   output: {

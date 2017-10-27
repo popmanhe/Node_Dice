@@ -15,9 +15,9 @@ export default new (winston.Logger)({
             datePattern: 'yyyy-MM-dd.log',
             maxsize: 5242880 /* 5MB */
         }),
-        new (winston.transports.MongoDB, {
-            db: config.mongodb.hostaddress + '/' + config.mongodb.dbname
-            , storeHost: true
-        })
+        // new (winston.transports.MongoDB, {
+        //     db: config.mongodb.hostaddress + '/' + config.mongodb.dbname
+        //     , storeHost: true
+        // })
     ]
 });

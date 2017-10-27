@@ -2,6 +2,7 @@
 environment:
   matrix:
   # node.js
+  - nodejs_version: "8"
   - nodejs_version: "7"
   - nodejs_version: "6"
   - nodejs_version: "5"
@@ -31,7 +32,7 @@ build: off
 notifications:
 - provider: Email
   to:
-  - housecor@gmail.com
+  - popman.he@gmail.com
   subject: 'Build failed: react-slingshot'
   message: The continuous integration build failed. See https://ci.appveyor.com/project/CoryHouse/react-slingshot/ for details.
   on_build_success: false
