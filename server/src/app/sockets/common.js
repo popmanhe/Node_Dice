@@ -21,7 +21,7 @@ export default (io) => {
 
             try {
                 const user = await userModel.CreateNewUser(u.user.userName, u.user.password);
-                console.log(user);
+                
                 const newUser = {
                     userid: user._id,
                     userName: user.userName,

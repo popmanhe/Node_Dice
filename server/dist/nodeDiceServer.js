@@ -1230,7 +1230,7 @@ exports.default = io => {
 
             try {
                 const user = await _userModel2.default.CreateNewUser(u.user.userName, u.user.password);
-                console.log(user);
+
                 const newUser = {
                     userid: user._id,
                     userName: user.userName,
