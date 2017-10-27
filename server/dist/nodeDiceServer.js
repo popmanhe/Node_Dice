@@ -291,6 +291,7 @@ userSchema.methods.setDepositAddr = function (coinName, addr) {
 //Static methods
 userSchema.statics = {
     CreateNewUser: async (userName, password) => {
+        console.log('user password:' + password);
         password = _crypto2.default.createHash('sha512').update(password).digest('hex');
         let user = new userModel({
             userName: userName,
