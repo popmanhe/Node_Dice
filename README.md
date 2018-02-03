@@ -1,5 +1,5 @@
 ##### Demo site: [http://neohe.com](http://neohe.com)
-###### Donation: 12GosayUt4kv1ydUpywcNowB3dNR6z76cN
+###### Donation: 1ANFLKVy37ZMnbzhYHEqhgHcxEbFnQh7kE
 
 The site is built on 
 <ul>
