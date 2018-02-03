@@ -20,6 +20,7 @@ The site is built on
 <li>2015-03-29:  Move to ubuntu and use nginx as web server.</li>
 <li>2017-01-25:  Start rewriting in ES6 and react. Use babel to transform ES6 to ES5. Node.js acts as restful api/socket.io server and does not render front-end html any more. Will use docker to host application in the future.</li>
 <li>2017-04-07:  Use docker containers to deploy a working beta.</li>
+<li>2018-01-15:  Support multiple languages.</li>
 <li>2018-01-21:  Add user management, forget pasword, country blocker, 2FA, back office and more features. Send me email for back office access.</li>
 </ul>
 <p>The whole site uses three docker containers. One is for front-end, hosted by nginx images. The second one is for back-end, hosted by node 7.8 and socket.io. The third one is using mongo db images. You can see three containers in docker-compose.yml.  </p>
