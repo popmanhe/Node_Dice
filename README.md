@@ -22,6 +22,7 @@ The site is built on
 <li>2017-04-07:  Use docker containers to deploy a working beta.</li>
 <li>2018-01-15:  Support multiple languages.</li>
 <li>2018-01-21:  Add user management, forget pasword, country blocker, 2FA, back office and more features. Send me email for back office access.</li>
+<li>2018-02-01: Bug fixes.</li>
 </ul>
 <p>The whole site uses three docker containers. One is for front-end, hosted by nginx images. The second one is for back-end, hosted by node 7.8 and socket.io. The third one is using mongo db images. You can see three containers in docker-compose.yml.  </p>
 <h4>How to setup the site? </h4>
